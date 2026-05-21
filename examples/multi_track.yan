@@ -1,0 +1,291 @@
+# 多轨制语法示例
+# 展示言律语言的多语言嵌入能力
+
+# ===== 数学轨 =====
+
+# 使用数学公式计算圆的面积
+定计算圆面积是函半径：
+  算π乘以半径的平方。
+
+# 使用数学公式计算二次方程
+定解二次方程是函a、b、c：
+  算负b加根号下b平方减4ac，除以2a。
+  算负b减根号下b平方减4ac，除以2a。
+
+# 复杂数学表达式
+定计算积分是函f、a、b：
+  算∫从a到b的f(x)dx。
+
+# 测试数学轨
+5，计算圆面积，印。  # 输出：78.53981633974483
+1、负5、6，解二次方程，印。  # 输出：2和3
+
+# ===== Python轨 =====
+
+# 使用Python进行数据处理
+定数据分析是函数据：
+  {{
+import pandas as pd
+import numpy as np
+
+# 转换为DataFrame
+df = pd.DataFrame(data)
+
+# 计算统计信息
+result = {
+    'mean': df.mean(),
+    'median': df.median(),
+    'std': df.std()
+}
+
+return result
+  }}
+
+# 使用Python进行机器学习
+定训练模型是函训练数据、标签：
+  {{
+from sklearn.linear_model import LinearRegression
+
+model = LinearRegression()
+model.fit(training_data, labels)
+
+return model
+  }}
+
+# 使用Python进行网络请求
+定获取网页是函网址：
+  {{
+import requests
+
+response = requests.get(url)
+return response.text
+  }}
+
+# 测试Python轨
+定测试数据是列典姓名是"张三"、年龄是25，典姓名是"李四"、年龄是30。
+测试数据，数据分析，印。
+
+# ===== JavaScript轨 =====
+
+# 使用JavaScript进行前端操作
+定操作DOM是函元素ID、内容：
+  [[
+document.getElementById(elementId).innerHTML = content;
+return true;
+  ]]
+
+# 使用JavaScript进行异步请求
+定异步获取是函网址：
+  [[
+async function fetchData(url) {
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+return fetchData(url);
+  ]]
+
+# 使用JavaScript操作Canvas
+定绘制图形是函画布ID：
+  [[
+const canvas = document.getElementById(canvasId);
+const ctx = canvas.getContext('2d');
+
+ctx.fillStyle = 'blue';
+ctx.fillRect(10, 10, 100, 100);
+
+return '绘制完成';
+  ]]
+
+# ===== SQL轨 =====
+
+# 使用SQL查询数据库
+定查询用户是函数据库、用户ID：
+  <<<
+SELECT * FROM users WHERE id = {user_id}
+  >>>
+
+# 使用SQL插入数据
+定插入订单是函数据库、订单：
+  <<<
+INSERT INTO orders (user_id, product, quantity)
+VALUES ({order.user_id}, {order.product}, {order.quantity})
+  >>>
+
+# 使用SQL更新数据
+定更新库存是函数据库、商品ID、数量：
+  <<<
+UPDATE inventory
+SET quantity = quantity - {quantity}
+WHERE product_id = {product_id}
+  >>>
+
+# 使用SQL聚合查询
+定统计销售是函数据库、开始日期、结束日期：
+  <<<
+SELECT
+  product_name,
+  SUM(quantity) as total_sold,
+  SUM(price * quantity) as total_revenue
+FROM sales
+WHERE sale_date BETWEEN '{start_date}' AND '{end_date}'
+GROUP BY product_name
+ORDER BY total_revenue DESC
+  >>>
+
+# ===== 多轨协作 =====
+
+# 中文 + 数学 + Python
+定科学计算是函数据：
+  # 中文：逻辑流程
+  定清洗后的数据是数据，清洗。
+  定标准化数据是清洗后的数据，标准化。
+  
+  # 数学：公式计算
+  定均值是算Σxi除以n。
+  定方差是算Σ(xi减均值)平方除以n。
+  
+  # Python：可视化
+  {{
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 6))
+plt.plot(data)
+plt.title('数据可视化')
+plt.savefig('output.png')
+
+return '图表已保存'
+  }}
+
+# 中文 + JavaScript + SQL
+定实时监控是函：
+  # SQL：查询数据
+  定最新数据是<<<
+SELECT * FROM sensors
+ORDER BY timestamp DESC
+LIMIT 100
+  >>>
+  
+  # JavaScript：实时更新
+  [[
+const updateInterval = setInterval(() => {
+  fetch('/api/sensors/latest')
+    .then(res => res.json())
+    .then(data => {
+      updateDashboard(data);
+    });
+}, 5000);
+  ]]
+  
+  # 中文：业务逻辑
+  若最新数据·温度大于50就：
+    发送警报。
+    记录异常。
+
+# ===== 跨语言数据传递 =====
+
+# Python → 中文 → JavaScript
+定数据处理流水线是函原始数据：
+  # Python：数据预处理
+  定处理后的数据是{{
+import pandas as pd
+
+df = pd.DataFrame(raw_data)
+df = df.dropna()
+df = df.normalize()
+
+return df.to_dict()
+  }}
+  
+  # 中文：业务逻辑
+  定筛选结果是处理后的数据，筛选条件是值大于0。
+  定排序结果是筛选结果，按字段"日期"排序。
+  
+  # JavaScript：前端展示
+  [[
+const displayData = (sorted_result) => {
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: sorted_result
+  });
+  return chart;
+};
+return displayData(sorted_result);
+  ]]
+
+# ===== 多轨制最佳实践 =====
+
+# 规则1：中文负责流程控制
+定数据处理流程是函数据：
+  # 中文：定义流程
+  定步骤1是数据，验证。
+  定步骤2是步骤1，转换。
+  定步骤3是步骤2，分析。
+  定步骤4是步骤3，输出。
+  
+  # 数学：计算指标
+  定准确率是算正确数除以总数。
+  定召回率是算真阳性除以真阳性加假阴性。
+  
+  # Python：具体实现
+  {{
+# 实现细节
+def validate(data):
+    return data.dropna()
+
+def transform(data):
+    return data.normalize()
+
+def analyze(data):
+    return data.describe()
+
+def output(data):
+    print(data)
+    return data
+  }}
+
+# 规则2：数学负责数值计算
+定统计分析是函数据集：
+  # 中文：业务逻辑
+  定样本数是数据集，长度。
+  定有效数据是数据集，过滤无效值。
+  
+  # 数学：统计计算
+  定均值是算Σxi除以n。
+  定标准差是算根号下Σ(xi减均值)平方除以n。
+  定置信区间是算均值加减1.96乘以标准差除以根号n。
+
+# 规则3：Python负责复杂操作
+定机器学习流程是函训练数据、测试数据：
+  # 中文：流程控制
+  定模型是训练数据，训练模型。
+  定预测结果是测试数据，模型，预测。
+  定评估指标是预测结果，测试数据，评估。
+  
+  # Python：具体实现
+  {{
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+model = RandomForestClassifier()
+model.fit(training_data.features, training_data.labels)
+
+predictions = model.predict(test_data.features)
+accuracy = accuracy_score(test_data.labels, predictions)
+
+return {'model': model, 'accuracy': accuracy}
+  }}
+
+# ===== 测试多轨制 =====
+
+# 测试数学轨
+定半径是5。
+半径，计算圆面积，印。
+
+# 测试Python轨
+定数据是列1、2、3、4、5。
+数据，数据分析，印。
+
+# 测试多轨协作
+定科学数据是列1.2、2.3、3.4、4.5、5.6。
+科学数据，科学计算，印。
