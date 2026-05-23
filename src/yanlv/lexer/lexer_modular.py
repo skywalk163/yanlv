@@ -5,15 +5,15 @@
 """
 
 from typing import List, Optional, Dict, Any, Literal
-from base import YanLuLexerBase
-from lexer_token import Token, TokenType
-from tokenizer import YanLuTokenizer
-from matcher import create_token_matcher
-from error_handler import ErrorHandler, create_error_handler
-from context_manager import ContextManager, create_context_manager
-from pattern_manager import PatternManager, create_pattern_manager
-from performance_optimizer import PerformanceOptimizer, OptimizationConfig, OptimizationLevel
-from utils import PerformanceMonitor, Logger, normalize_text
+from .base import YanLuLexerBase
+from .lexer_token import Token, TokenType
+from .tokenizer import YanLuTokenizer
+from .matcher import create_token_matcher
+from .error_handler import ErrorHandler, create_error_handler
+from .context_manager import ContextManager, create_context_manager
+from .pattern_manager import PatternManager, create_pattern_manager
+from .performance_optimizer import PerformanceOptimizer, OptimizationConfig, OptimizationLevel
+from .utils import PerformanceMonitor, Logger, normalize_text
 
 
 class ModularYanLuLexer(YanLuLexerBase):

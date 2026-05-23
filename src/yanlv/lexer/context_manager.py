@@ -7,9 +7,9 @@
 from typing import List, Optional, Dict, Any, Set
 from dataclasses import dataclass, field
 from enum import Enum
-from lexer_token import Token, TokenType
-from utils import Position, Range, ErrorInfo
-from error_handler import ErrorHandler, ErrorSeverity
+from .lexer_token import Token, TokenType
+from .utils import Position, Range, ErrorInfo
+from .error_handler import ErrorHandler, ErrorSeverity
 
 
 class ContextType(Enum):

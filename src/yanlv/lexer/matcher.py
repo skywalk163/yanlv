@@ -7,8 +7,8 @@
 import re
 from abc import ABC, abstractmethod
 from typing import Optional, Dict, Any, Set, Pattern
-from lexer_token import Token, TokenType
-from constants import (
+from .lexer_token import Token, TokenType
+from .constants import (
     CHINESE_PUNCTUATION, OPERATORS, GROUPING_SYMBOLS, KEYWORDS,
     CHINESE_NUMBERS, BAI_JIA_XING, CONFLICT_SURNAMES,
     NUMBER_PATTERN, IDENTIFIER_PATTERN, STRING_PATTERN,

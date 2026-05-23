@@ -8,7 +8,7 @@ import time
 from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass
 from enum import Enum
-from utils import Cache, PerformanceMonitor, Logger
+from .utils import Cache, PerformanceMonitor, Logger
 
 
 class OptimizationLevel(Enum):

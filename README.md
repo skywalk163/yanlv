@@ -5,7 +5,8 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/yanlv/yanlv)
-[![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen.svg)](https://github.com/yanlv/yanlv)
+[![Tests](https://img.shields.io/badge/tests-140%20passed-brightgreen.svg)](https://github.com/yanlv/yanlv)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)](https://github.com/yanlv/yanlv)
 
 **一个现代化的中文编程语言**
 
@@ -39,7 +40,7 @@
 pip install yanlv
 
 # 或从源码安装
-git clone https://github.com/yanlv/yanlv.git
+git clone https://github.com/skywalk163/yanlv.git
 cd yanlv
 pip install -e .
 ```
@@ -294,11 +295,13 @@ mypy src/yanlv
 - [Python](https://www.python.org/) - 编程语言
 - [GitHub](https://github.com/) - 代码托管
 
+感谢CodeArts、Dumate、文心等AI辅助编程
 ---
 
 ## 📧 联系方式
 
-- **项目地址**: https://github.com/yanlv/yanlv
+- **项目地址**: https://github.com/yanlv/
+- **项目地址**: https://gitcode.com/skywalk163/yanlv/
 - **文档地址**: https://yanlv.readthedocs.io
 - **问题反馈**: https://github.com/yanlv/yanlv/issues
 

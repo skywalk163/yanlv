@@ -10,19 +10,20 @@ import os
 import unittest
 from typing import List
 
-# 添加当前目录到Python路径
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# 添加项目根目录到Python路径
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, project_root)
 
 # 导入模块
-from lexer_token import Token, TokenType
-from tokenizer import YanLuTokenizer, JiebaTokenizer
-from matcher import TokenMatcher, create_token_matcher
-from error_handler import ErrorHandler, ErrorCode, ErrorSeverity
-from context_manager import ContextManager, ContextType
-from pattern_manager import PatternManager, PatternType
-from performance_optimizer import PerformanceOptimizer, OptimizationConfig, OptimizationLevel
-from utils import Position, Range, ErrorInfo, PerformanceStats, Cache
-from lexer_modular import ModularYanLuLexer, create_lexer
+from yanlv.lexer.lexer_token import Token, TokenType
+from yanlv.lexer.tokenizer import YanLuTokenizer, JiebaTokenizer
+from yanlv.lexer.matcher import TokenMatcher, create_token_matcher
+from yanlv.lexer.error_handler import ErrorHandler, ErrorCode, ErrorSeverity
+from yanlv.lexer.context_manager import ContextManager, ContextType
+from yanlv.lexer.pattern_manager import PatternManager, PatternType
+from yanlv.lexer.performance_optimizer import PerformanceOptimizer, OptimizationConfig, OptimizationLevel
+from yanlv.lexer.utils import Position, Range, ErrorInfo, PerformanceStats, Cache
+from yanlv.lexer.lexer_modular import ModularYanLuLexer, create_lexer
 
 
 class TestLexerToken(unittest.TestCase):

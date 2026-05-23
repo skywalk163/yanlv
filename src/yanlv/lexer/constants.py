@@ -5,7 +5,7 @@
 """
 
 from typing import Dict, Set, Tuple, List, Any
-from lexer_token import TokenType
+from .lexer_token import TokenType
 
 
 # ============================================================================

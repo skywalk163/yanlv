@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Tuple, Pattern, Any, Callable
 from dataclasses import dataclass, field
 from enum import Enum
-from lexer_token import TokenType
+from .lexer_token import TokenType
 
 
 class PatternType(Enum):

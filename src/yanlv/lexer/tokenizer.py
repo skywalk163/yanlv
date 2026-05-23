@@ -7,7 +7,7 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Dict, Any
 import jieba
-from constants import DEFAULT_CONFIG, SEGMENTER_CONFIG
+from .constants import DEFAULT_CONFIG, SEGMENTER_CONFIG
 
 
 class ITokenizer(ABC):

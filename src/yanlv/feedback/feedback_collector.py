@@ -7,8 +7,8 @@
 from typing import Dict, List, Optional, Any
 import uuid
 from datetime import datetime
-import feedback_model
-from feedback_model import (
+from . import feedback_model
+from .feedback_model import (
     UserFeedback, AmbiguityFeedback, AmbiguityPattern, LearningRule,
     FeedbackType, FeedbackSeverity, FeedbackStatus, FeedbackDataModel
 )

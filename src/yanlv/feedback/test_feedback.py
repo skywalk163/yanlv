@@ -7,21 +7,22 @@ import sys
 import os
 import unittest
 
-# 添加当前目录到Python路径
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# 添加项目根目录到Python路径
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, project_root)
 
-# 使用绝对导入
-import feedback_model
-import feedback_collector
-import pattern_analyzer
+# 使用包导入
+from yanlv.feedback import feedback_model
+from yanlv.feedback import feedback_collector
+from yanlv.feedback import pattern_analyzer
 
-from feedback_model import (
+from yanlv.feedback.feedback_model import (
     FeedbackType, FeedbackSeverity, FeedbackStatus,
     UserFeedback, AmbiguityFeedback, AmbiguityPattern, LearningRule,
     FeedbackDataModel
 )
-from feedback_collector import FeedbackCollector, FeedbackEnabledCompiler
-from pattern_analyzer import PatternAnalyzer, LearningEngine, DynamicRuleAdjuster
+from yanlv.feedback.feedback_collector import FeedbackCollector, FeedbackEnabledCompiler
+from yanlv.feedback.pattern_analyzer import PatternAnalyzer, LearningEngine, DynamicRuleAdjuster
 
 
 class TestFeedbackModel(unittest.TestCase):

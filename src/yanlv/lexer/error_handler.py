@@ -7,8 +7,8 @@
 from typing import List, Optional, Dict, Any, Union
 from dataclasses import dataclass, field
 from enum import Enum
-from utils import ErrorInfo, Position, Range
-from lexer_token import Token, TokenType
+from .utils import ErrorInfo, Position, Range
+from .lexer_token import Token, TokenType
 
 
 class ErrorSeverity(Enum):

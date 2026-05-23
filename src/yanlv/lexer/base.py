@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple, Dict, Any, Literal
 import re
 import jieba
-from lexer_token import Token, TokenType
+from .lexer_token import Token, TokenType
 
 
 class ILexer(ABC):

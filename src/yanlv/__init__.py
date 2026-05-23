@@ -11,21 +11,77 @@
 7. 百家姓变量命名
 """
 
-__version__ = "0.1.0"
-__author__ = "言律语言设计组"
+__version__ = "2.0.0"
+__author__ = "言律语言项目组"
 __email__ = "yanlv@example.com"
 
-# 这些模块将在后续实现
-# from .compiler import YanLuCompiler
-# from .parser import YanLuParser
-# from .lexer import YanLuLexer
-# from .semantic import YanLuSemanticAnalyzer
-# from .codegen import MultiTargetCodeGenerator
+# 导入主要模块
+from . import lexer
+from . import semantic
+from . import feedback
+from . import error_handling
+
+# 导出常用类和函数
+from .lexer import (
+    create_lexer,
+    tokenize,
+    Token,
+    TokenType,
+    YanLuTokenizer,
+)
+
+from .semantic import (
+    SemanticContextTracker,
+    TypeInferenceSystem,
+    AmbiguityResolver,
+)
+
+from .feedback import (
+    FeedbackCollector,
+    FeedbackEnabledCompiler,
+    LearningEngine,
+)
+
+from .error_handling import (
+    EnhancedErrorHandler,
+    ErrorCategory,
+    ErrorSeverity,
+    create_error_context,
+)
+
 
 __all__ = [
-    # "YanLuCompiler",
-    # "YanLuParser",
-    # "YanLuLexer",
-    # "YanLuSemanticAnalyzer",
-    # "MultiTargetCodeGenerator",
+    # 版本信息
+    '__version__',
+    '__author__',
+    '__email__',
+    
+    # 模块
+    'lexer',
+    'semantic',
+    'feedback',
+    'error_handling',
+    
+    # 词法分析
+    'create_lexer',
+    'tokenize',
+    'Token',
+    'TokenType',
+    'YanLuTokenizer',
+    
+    # 语义分析
+    'SemanticContextTracker',
+    'TypeInferenceSystem',
+    'AmbiguityResolver',
+    
+    # 反馈系统
+    'FeedbackCollector',
+    'FeedbackEnabledCompiler',
+    'LearningEngine',
+    
+    # 错误处理
+    'EnhancedErrorHandler',
+    'ErrorCategory',
+    'ErrorSeverity',
+    'create_error_context',
 ]

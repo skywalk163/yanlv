@@ -8,13 +8,13 @@ from typing import Dict, List, Optional, Any, Tuple
 import uuid
 from datetime import datetime
 from collections import defaultdict
-import feedback_model
-from feedback_model import (
+from . import feedback_model
+from .feedback_model import (
     AmbiguityPattern, LearningRule,
     FeedbackDataModel
 )
-import feedback_collector
-from feedback_collector import FeedbackCollector
+from . import feedback_collector
+from .feedback_collector import FeedbackCollector
 
 
 class PatternAnalyzer:
