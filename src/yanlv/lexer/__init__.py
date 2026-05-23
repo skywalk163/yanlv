@@ -14,6 +14,9 @@ from .pattern_manager import PatternManager, create_pattern_manager
 from .performance_optimizer import PerformanceOptimizer, OptimizationConfig, OptimizationLevel
 from .lexer_modular import ModularYanLuLexer, create_lexer, tokenize, tokenize_with_stats
 
+# 为了向后兼容，提供Lexer别名
+Lexer = ModularYanLuLexer
+
 
 __all__ = [
     # 词元
@@ -47,6 +50,7 @@ __all__ = [
     'OptimizationLevel',
     
     # 主lexer类
+    'Lexer',  # 向后兼容别名
     'ModularYanLuLexer',
     'create_lexer',
     'tokenize',
