@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>言律语言 Playground</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: 600px;
+        }
+
+        .editor-panel, .output-panel {
+            padding: 30px;
+        }
+
+        .editor-panel {
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .panel-title {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-title .icon {
+            font-size: 1.5em;
+        }
+
+        .editor {
+            width: 100%;
+            height: 400px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: vertical;
+            background: #fff;
+            color: #333;
+        }
+
+        .editor:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .output {
+            width: 100%;
+            min-height: 400px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            background: #fff;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .output.success {
+            border-color: #4caf50;
+            background: #f1f8f4;
+        }
+
+        .output.error {
+            border-color: #f44336;
+            background: #fef1f1;
+        }
+
+        .examples {
+            margin-top: 20px;
+        }
+
+        .examples-title {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .example-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .example-btn {
+            padding: 10px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .example-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .stats {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .stats-title {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #555;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #777;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .example-list {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 言律语言 Playground</h1>
+            <p>一个现代化的中文编程语言 - 在线体验</p>
+        </div>
+
+        <div class="main-content">
+            <div class="editor-panel">
+                <div class="panel-title">
+                    <span class="icon">📝</span>
+                    <span>代码编辑器</span>
+                </div>
+                <textarea class="editor" id="editor" placeholder="在这里输入言律语言代码...
+
+示例：
+如果 条件 成立 则 输出 'Hello World'
+定义 变量 x 为 10
+循环 5 次 执行 输出 '测试'"></textarea>
+
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="runCode()">▶ 运行</button>
+                    <button class="btn btn-secondary" onclick="clearEditor()">🗑 清空</button>
+                    <button class="btn btn-secondary" onclick="loadExample()">📋 示例</button>
+                </div>
+
+                <div class="examples">
+                    <div class="examples-title">快速示例：</div>
+                    <div class="example-list">
+                        <button class="example-btn" onclick="loadExample1()">输出语句</button>
+                        <button class="example-btn" onclick="loadExample2()">变量定义</button>
+                        <button class="example-btn" onclick="loadExample3()">条件语句</button>
+                        <button class="example-btn" onclick="loadExample4()">循环语句</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="output-panel">
+                <div class="panel-title">
+                    <span class="icon">📊</span>
+                    <span>输出结果</span>
+                </div>
+                <div class="output" id="output">等待运行...</div>
+
+                <div class="stats">
+                    <div class="stats-title">执行统计</div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="tokenCount">0</div>
+                            <div class="stat-label">词元数量</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="execTime">0ms</div>
+                            <div class="stat-label">执行时间</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="lineCount">0</div>
+                            <div class="stat-label">代码行数</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>言律语言 v2.0.0 | <a href="https://gitcode.com/skywalk163/yanlv" target="_blank">GitCode</a> | MIT License</p>
+        </div>
+    </div>
+
+    <script>
+        // 示例代码
+        const examples = {
+            1: "输出 'Hello, 言律语言！'\n输出 '这是一个中文编程语言'",
+            2: "定义 变量 x 为 10\n定义 变量 y 为 20\n输出 x\n输出 y",
+            3: "如果 条件 成立 则 输出 '条件为真'\n如果 条件 不成立 则 输出 '条件为假'",
+            4: "循环 5 次 执行 输出 '这是循环'\n循环 3 次 执行 输出 '另一个循环'"
+        };
+
+        // 加载示例
+        function loadExample1() { document.getElementById('editor').value = examples[1]; }
+        function loadExample2() { document.getElementById('editor').value = examples[2]; }
+        function loadExample3() { document.getElementById('editor').value = examples[3]; }
+        function loadExample4() { document.getElementById('editor').value = examples[4]; }
+
+        function loadExample() {
+            const random = Math.floor(Math.random() * 4) + 1;
+            document.getElementById('editor').value = examples[random];
+        }
+
+        // 清空编辑器
+        function clearEditor() {
+            document.getElementById('editor').value = '';
+            document.getElementById('output').textContent = '等待运行...';
+            document.getElementById('output').className = 'output';
+            updateStats(0, 0, 0);
+        }
+
+        // 更新统计
+        function updateStats(tokens, time, lines) {
+            document.getElementById('tokenCount').textContent = tokens;
+            document.getElementById('execTime').textContent = time + 'ms';
+            document.getElementById('lineCount').textContent = lines;
+        }
+
+        // 运行代码（模拟）
+        function runCode() {
+            const code = document.getElementById('editor').value;
+            const output = document.getElementById('output');
+
+            if (!code.trim()) {
+                output.textContent = '错误：请输入代码';
+                output.className = 'output error';
+                return;
+            }
+
+            const startTime = performance.now();
+
+            // 模拟词法分析
+            const lines = code.split('\n').filter(l => l.trim()).length;
+            const tokens = code.split(/[\s\n]+/).filter(t => t).length;
+
+            // 模拟执行
+            let result = [];
+            const codeLines = code.split('\n');
+
+            for (let line of codeLines) {
+                line = line.trim();
+                if (!line) continue;
+
+                // 处理输出语句
+                if (line.startsWith('输出')) {
+                    const match = line.match(/输出\s+'([^']+)'/);
+                    if (match) {
+                        result.push(`=> ${match[1]}`);
+                    } else {
+                        const varMatch = line.match(/输出\s+(\w+)/);
+                        if (varMatch) {
+                            result.push(`=> 变量 ${varMatch[1]}`);
+                        }
+                    }
+                }
+                // 处理变量定义
+                else if (line.startsWith('定义')) {
+                    const match = line.match(/定义\s+变量\s+(\w+)\s+为\s+(\d+)/);
+                    if (match) {
+                        result.push(`=> 定义变量 ${match[1]} = ${match[2]}`);
+                    }
+                }
+                // 处理条件语句
+                else if (line.startsWith('如果')) {
+                    result.push('=> [条件语句]');
+                }
+                // 处理循环语句
+                else if (line.startsWith('循环')) {
+                    const match = line.match(/循环\s+(\d+)\s+次/);
+                    if (match) {
+                        result.push(`=> [循环 ${match[1]} 次]`);
+                    }
+                }
+            }
+
+            const endTime = performance.now();
+            const execTime = Math.round(endTime - startTime);
+
+            // 显示结果
+            if (result.length > 0) {
+                output.textContent = result.join('\n');
+                output.className = 'output success';
+            } else {
+                output.textContent = '代码已分析，但没有输出语句';
+                output.className = 'output';
+            }
+
+            updateStats(tokens, execTime, lines);
+        }
+
+        // 键盘快捷键
+        document.getElementById('editor').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                runCode();
+            }
+        });
+
+        // 页面加载时显示欢迎信息
+        window.onload = function() {
+            loadExample();
+        };
+    </script>
+</body>
+</html>

@@ -62,6 +62,31 @@ for token in tokens:
     print(token)
 ```
 
+### 交互环境
+
+#### 命令行交互环境 (REPL)
+
+```bash
+# 启动REPL
+python src/yanlv/repl.py
+
+# 或作为模块运行
+python -m yanlv.repl
+```
+
+#### Web Playground
+
+```bash
+# 启动Playground
+cd playground
+python start.py
+
+# 然后在浏览器中访问
+# http://localhost:5000
+```
+
+详细使用说明请查看 [Playground使用指南](playground/README.md)
+
 ---
 
 ## 📚 文档
