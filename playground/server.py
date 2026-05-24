@@ -5,7 +5,7 @@
 提供Web API接口
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import sys
 import os
@@ -27,6 +27,30 @@ tracker = SemanticContextTracker()
 inference = TypeInferenceSystem(tracker)
 resolver = AmbiguityResolver(tracker, inference)
 collector = FeedbackCollector()
+
+
+@app.route('/')
+def index():
+    """首页"""
+    # 返回 HTML 页面
+    index_path = os.path.join(os.path.dirname(__file__), 'index.html')
+    if os.path.exists(index_path):
+        return send_from_directory(os.path.dirname(__file__), 'index.html')
+    else:
+        # 如果没有 HTML 文件，返回 API 信息
+        return jsonify({
+            'name': '言律语言 Playground',
+            'version': '2.0.0',
+            'description': '中文编程语言在线体验平台',
+            'endpoints': {
+                'run': '/api/run',
+                'analyze': '/api/analyze',
+                'feedback': '/api/feedback',
+                'stats': '/api/stats',
+                'examples': '/api/examples'
+            },
+            'status': 'running'
+        })
 
 
 @app.route('/api/run', methods=['POST'])

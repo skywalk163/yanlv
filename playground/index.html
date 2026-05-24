@@ -12,7 +12,7 @@
         }
 
         body {
-            font-family: 'Microsoft YaHei', 'SimHei', Arial, sans-serif;
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -22,8 +22,8 @@
             max-width: 1200px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             overflow: hidden;
         }
 
@@ -40,201 +40,148 @@
         }
 
         .header p {
-            font-size: 1.1em;
+            font-size: 1.2em;
             opacity: 0.9;
         }
 
-        .main-content {
+        .main {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0;
-            min-height: 600px;
-        }
-
-        .editor-panel, .output-panel {
+            gap: 20px;
             padding: 30px;
         }
 
-        .editor-panel {
-            background: #f8f9fa;
-            border-right: 1px solid #e0e0e0;
+        .panel {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .panel-title {
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .panel-title .icon {
-            font-size: 1.5em;
-        }
-
-        .editor {
-            width: 100%;
-            height: 400px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+        .panel-header {
+            background: #f5f5f5;
             padding: 15px;
+            font-weight: bold;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .panel-content {
+            padding: 15px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 14px;
-            line-height: 1.6;
             resize: vertical;
-            background: #fff;
-            color: #333;
         }
 
-        .editor:focus {
-            outline: none;
-            border-color: #667eea;
+        .output {
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            min-height: 300px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
         }
 
-        .button-group {
+        .buttons {
             display: flex;
             gap: 10px;
             margin-top: 15px;
         }
 
-        .btn {
-            padding: 12px 24px;
+        button {
+            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
-            font-size: 1em;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
             transition: all 0.3s;
-            font-weight: 500;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .btn-run {
+            background: #667eea;
             color: white;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        .btn-run:hover {
+            background: #5568d3;
         }
 
-        .btn-secondary {
+        .btn-analyze {
+            background: #764ba2;
+            color: white;
+        }
+
+        .btn-analyze:hover {
+            background: #653a8b;
+        }
+
+        .btn-clear {
             background: #f0f0f0;
             color: #333;
         }
 
-        .btn-secondary:hover {
+        .btn-clear:hover {
             background: #e0e0e0;
-        }
-
-        .output {
-            width: 100%;
-            min-height: 400px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            padding: 15px;
-            background: #fff;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            overflow-y: auto;
-            white-space: pre-wrap;
-        }
-
-        .output.success {
-            border-color: #4caf50;
-            background: #f1f8f4;
-        }
-
-        .output.error {
-            border-color: #f44336;
-            background: #fef1f1;
         }
 
         .examples {
             margin-top: 20px;
         }
 
-        .examples-title {
-            font-size: 1.1em;
-            margin-bottom: 10px;
-            color: #555;
-        }
-
-        .example-list {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
         .example-btn {
-            padding: 10px;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.3s;
-            font-size: 0.9em;
+            background: #e8f4f8;
+            color: #333;
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 12px;
         }
 
         .example-btn:hover {
-            border-color: #667eea;
-            background: #f8f9ff;
+            background: #d0e8f0;
         }
 
         .stats {
-            margin-top: 20px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #f0f8ff;
+            border-radius: 4px;
+            font-size: 12px;
         }
 
-        .stats-title {
-            font-size: 1.1em;
-            margin-bottom: 10px;
-            color: #555;
+        .token-list {
+            margin-top: 15px;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+        .token {
+            display: inline-block;
+            margin: 3px;
+            padding: 5px 10px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            font-size: 12px;
         }
 
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 1.8em;
-            font-weight: bold;
+        .token-type {
             color: #667eea;
+            font-weight: bold;
         }
 
-        .stat-label {
-            font-size: 0.9em;
-            color: #777;
-        }
-
-        .footer {
-            background: #f8f9fa;
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            border-top: 1px solid #e0e0e0;
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
         }
 
         @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-            }
-
-            .example-list {
-                grid-template-columns: 1fr;
-            }
-
-            .stats-grid {
+            .main {
                 grid-template-columns: 1fr;
             }
         }
@@ -243,190 +190,151 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎯 言律语言 Playground</h1>
-            <p>一个现代化的中文编程语言 - 在线体验</p>
+            <h1>言律语言 Playground</h1>
+            <p>中文编程语言在线体验平台</p>
         </div>
 
-        <div class="main-content">
-            <div class="editor-panel">
-                <div class="panel-title">
-                    <span class="icon">📝</span>
-                    <span>代码编辑器</span>
-                </div>
-                <textarea class="editor" id="editor" placeholder="在这里输入言律语言代码...
-
-示例：
-如果 条件 成立 则 输出 'Hello World'
+        <div class="main">
+            <div class="panel">
+                <div class="panel-header">代码编辑器</div>
+                <div class="panel-content">
+                    <textarea id="code" placeholder="在这里输入言律语言代码...">输出 "你好，言律语言！"
 定义 变量 x 为 10
-循环 5 次 执行 输出 '测试'"></textarea>
+输出 x</textarea>
 
-                <div class="button-group">
-                    <button class="btn btn-primary" onclick="runCode()">▶ 运行</button>
-                    <button class="btn btn-secondary" onclick="clearEditor()">🗑 清空</button>
-                    <button class="btn btn-secondary" onclick="loadExample()">📋 示例</button>
-                </div>
+                    <div class="buttons">
+                        <button class="btn-run" onclick="runCode()">运行代码</button>
+                        <button class="btn-analyze" onclick="analyzeCode()">分析代码</button>
+                        <button class="btn-clear" onclick="clearCode()">清空</button>
+                    </div>
 
-                <div class="examples">
-                    <div class="examples-title">快速示例：</div>
-                    <div class="example-list">
-                        <button class="example-btn" onclick="loadExample1()">输出语句</button>
-                        <button class="example-btn" onclick="loadExample2()">变量定义</button>
-                        <button class="example-btn" onclick="loadExample3()">条件语句</button>
-                        <button class="example-btn" onclick="loadExample4()">循环语句</button>
+                    <div class="examples">
+                        <strong>示例代码：</strong>
+                        <button class="example-btn" onclick="loadExample(0)">输出语句</button>
+                        <button class="example-btn" onclick="loadExample(1)">变量定义</button>
+                        <button class="example-btn" onclick="loadExample(2)">条件语句</button>
+                        <button class="example-btn" onclick="loadExample(3)">循环语句</button>
+                        <button class="example-btn" onclick="loadExample(4)">函数定义</button>
                     </div>
                 </div>
             </div>
 
-            <div class="output-panel">
-                <div class="panel-title">
-                    <span class="icon">📊</span>
-                    <span>输出结果</span>
-                </div>
-                <div class="output" id="output">等待运行...</div>
-
-                <div class="stats">
-                    <div class="stats-title">执行统计</div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" id="tokenCount">0</div>
-                            <div class="stat-label">词元数量</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="execTime">0ms</div>
-                            <div class="stat-label">执行时间</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="lineCount">0</div>
-                            <div class="stat-label">代码行数</div>
-                        </div>
-                    </div>
+            <div class="panel">
+                <div class="panel-header">输出结果</div>
+                <div class="panel-content">
+                    <div id="output" class="output">等待执行...</div>
+                    <div id="stats" class="stats" style="display:none;"></div>
+                    <div id="tokens" class="token-list"></div>
                 </div>
             </div>
-        </div>
-
-        <div class="footer">
-            <p>言律语言 v2.0.0 | <a href="https://gitcode.com/skywalk163/yanlv" target="_blank">GitCode</a> | MIT License</p>
         </div>
     </div>
 
     <script>
-        // 示例代码
-        const examples = {
-            1: "输出 'Hello, 言律语言！'\n输出 '这是一个中文编程语言'",
-            2: "定义 变量 x 为 10\n定义 变量 y 为 20\n输出 x\n输出 y",
-            3: "如果 条件 成立 则 输出 '条件为真'\n如果 条件 不成立 则 输出 '条件为假'",
-            4: "循环 5 次 执行 输出 '这是循环'\n循环 3 次 执行 输出 '另一个循环'"
-        };
+        const API_BASE = '';
 
-        // 加载示例
-        function loadExample1() { document.getElementById('editor').value = examples[1]; }
-        function loadExample2() { document.getElementById('editor').value = examples[2]; }
-        function loadExample3() { document.getElementById('editor').value = examples[3]; }
-        function loadExample4() { document.getElementById('editor').value = examples[4]; }
+        const examples = [
+            "输出 'Hello, 言律语言！'\n输出 '这是一个中文编程语言'",
+            "定义 变量 x 为 10\n定义 变量 y 为 20\n输出 x\n输出 y",
+            "如果 条件 成立 则 输出 '条件为真'\n如果 条件 不成立 则 输出 '条件为假'",
+            "循环 5 次 执行 输出 '这是循环'\n循环 3 次 执行 输出 '另一个循环'",
+            "函数 加法 参数 a b 返回 a + b\n输出 '函数已定义'"
+        ];
 
-        function loadExample() {
-            const random = Math.floor(Math.random() * 4) + 1;
-            document.getElementById('editor').value = examples[random];
+        function loadExample(index) {
+            document.getElementById('code').value = examples[index];
         }
 
-        // 清空编辑器
-        function clearEditor() {
-            document.getElementById('editor').value = '';
-            document.getElementById('output').textContent = '等待运行...';
-            document.getElementById('output').className = 'output';
-            updateStats(0, 0, 0);
-        }
-
-        // 更新统计
-        function updateStats(tokens, time, lines) {
-            document.getElementById('tokenCount').textContent = tokens;
-            document.getElementById('execTime').textContent = time + 'ms';
-            document.getElementById('lineCount').textContent = lines;
-        }
-
-        // 运行代码（模拟）
-        function runCode() {
-            const code = document.getElementById('editor').value;
+        async function runCode() {
+            const code = document.getElementById('code').value;
             const output = document.getElementById('output');
+            const stats = document.getElementById('stats');
+            const tokens = document.getElementById('tokens');
 
-            if (!code.trim()) {
-                output.textContent = '错误：请输入代码';
-                output.className = 'output error';
-                return;
+            output.textContent = '执行中...';
+            output.classList.add('loading');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/run`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({code})
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    output.textContent = data.output;
+                    stats.style.display = 'block';
+                    stats.innerHTML = `
+                        <strong>统计信息：</strong>
+                        词元数: ${data.stats.tokens} |
+                        行数: ${data.stats.lines} |
+                        执行时间: ${data.stats.exec_time}ms |
+                        变量数: ${data.stats.variables}
+                    `;
+                    tokens.innerHTML = '';
+                } else {
+                    output.textContent = '错误: ' + data.error;
+                    stats.style.display = 'none';
+                }
+            } catch (error) {
+                output.textContent = '网络错误: ' + error.message;
             }
 
-            const startTime = performance.now();
-
-            // 模拟词法分析
-            const lines = code.split('\n').filter(l => l.trim()).length;
-            const tokens = code.split(/[\s\n]+/).filter(t => t).length;
-
-            // 模拟执行
-            let result = [];
-            const codeLines = code.split('\n');
-
-            for (let line of codeLines) {
-                line = line.trim();
-                if (!line) continue;
-
-                // 处理输出语句
-                if (line.startsWith('输出')) {
-                    const match = line.match(/输出\s+'([^']+)'/);
-                    if (match) {
-                        result.push(`=> ${match[1]}`);
-                    } else {
-                        const varMatch = line.match(/输出\s+(\w+)/);
-                        if (varMatch) {
-                            result.push(`=> 变量 ${varMatch[1]}`);
-                        }
-                    }
-                }
-                // 处理变量定义
-                else if (line.startsWith('定义')) {
-                    const match = line.match(/定义\s+变量\s+(\w+)\s+为\s+(\d+)/);
-                    if (match) {
-                        result.push(`=> 定义变量 ${match[1]} = ${match[2]}`);
-                    }
-                }
-                // 处理条件语句
-                else if (line.startsWith('如果')) {
-                    result.push('=> [条件语句]');
-                }
-                // 处理循环语句
-                else if (line.startsWith('循环')) {
-                    const match = line.match(/循环\s+(\d+)\s+次/);
-                    if (match) {
-                        result.push(`=> [循环 ${match[1]} 次]`);
-                    }
-                }
-            }
-
-            const endTime = performance.now();
-            const execTime = Math.round(endTime - startTime);
-
-            // 显示结果
-            if (result.length > 0) {
-                output.textContent = result.join('\n');
-                output.className = 'output success';
-            } else {
-                output.textContent = '代码已分析，但没有输出语句';
-                output.className = 'output';
-            }
-
-            updateStats(tokens, execTime, lines);
+            output.classList.remove('loading');
         }
 
-        // 键盘快捷键
-        document.getElementById('editor').addEventListener('keydown', function(e) {
-            if (e.ctrlKey && e.key === 'Enter') {
-                runCode();
-            }
-        });
+        async function analyzeCode() {
+            const code = document.getElementById('code').value;
+            const output = document.getElementById('output');
+            const stats = document.getElementById('stats');
+            const tokens = document.getElementById('tokens');
 
-        // 页面加载时显示欢迎信息
-        window.onload = function() {
-            loadExample();
-        };
+            output.textContent = '分析中...';
+            output.classList.add('loading');
+
+            try {
+                const response = await fetch(`${API_BASE}/api/analyze`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({code})
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    output.textContent = `分析完成，共 ${data.total_tokens} 个词元`;
+
+                    stats.style.display = 'block';
+                    stats.innerHTML = `<strong>总词元数：</strong>${data.total_tokens}`;
+
+                    tokens.innerHTML = '<strong>词元列表：</strong><br>';
+                    data.tokens.forEach(token => {
+                        tokens.innerHTML += `
+                            <span class="token">
+                                <span class="token-type">${token.type}</span>: "${token.value}"
+                            </span>
+                        `;
+                    });
+                } else {
+                    output.textContent = '错误: ' + data.error;
+                    stats.style.display = 'none';
+                    tokens.innerHTML = '';
+                }
+            } catch (error) {
+                output.textContent = '网络错误: ' + error.message;
+            }
+
+            output.classList.remove('loading');
+        }
+
+        function clearCode() {
+            document.getElementById('code').value = '';
+            document.getElementById('output').textContent = '等待执行...';
+            document.getElementById('stats').style.display = 'none';
+            document.getElementById('tokens').innerHTML = '';
+        }
     </script>
 </body>
 </html>

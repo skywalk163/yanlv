@@ -36,6 +36,13 @@ class TokenType(Enum):
     LOOP = "LOOP"
     FOR_EACH = "FOR_EACH"
     UNTIL = "UNTIL"
+
+    # 言律语言特定关键词
+    OUTPUT = "OUTPUT"      # 输出
+    DEFINE = "DEFINE"      # 定义
+    FUNCTION = "FUNCTION"  # 函数
+    VARIABLE = "VARIABLE"  # 变量
+    PARAMETER = "PARAMETER"  # 参数
     
     # 运算符
     PLUS = "PLUS"
