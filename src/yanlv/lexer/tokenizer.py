@@ -7,7 +7,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional, Dict, Any
 import jieba
-from .constants import DEFAULT_CONFIG, SEGMENTER_CONFIG
+from .constants import DEFAULT_CONFIG, SEGMENTER_CONFIG, KEYWORDS
+import re
 
 
 class ITokenizer(ABC):
@@ -377,14 +378,14 @@ class YanLuTokenizer:
     def create(segmenter: str = "jieba", **kwargs) -> ITokenizer:
         """
         创建分词器实例
-        
+
         Args:
-            segmenter: 分词器类型，可选 "jieba" 或 "thulac"
+            segmenter: 分词器类型，可选 "jieba"、"thulac" 或 "yanlv_nospace"
             **kwargs: 配置参数
-            
+
         Returns:
             分词器实例
-            
+
         Raises:
             ValueError: 不支持的的分词器类型
         """
@@ -392,6 +393,8 @@ class YanLuTokenizer:
             return JiebaTokenizer(**kwargs)
         elif segmenter == "thulac":
             return ThulacTokenizer(**kwargs)
+        elif segmenter == "yanlv_nospace":
+            return YanLuNoSpaceTokenizer(**kwargs)
         else:
             raise ValueError(f"不支持的的分词器类型: {segmenter}")
     
@@ -480,11 +483,147 @@ def get_available_tokenizers() -> List[str]:
 def get_tokenizer_info(segmenter: str) -> Dict[str, Any]:
     """
     获取分词器信息（便捷函数）
-    
+
     Args:
         segmenter: 分词器类型
-        
+
     Returns:
         分词器信息字典
     """
     return YanLuTokenizer.get_tokenizer_info(segmenter)
+
+
+class YanLuNoSpaceTokenizer(ITokenizer):
+    """言律语言无空格分词器 - 支持无空格编程"""
+
+    def __init__(self, **kwargs):
+        """初始化分词器"""
+        self.config = kwargs
+        # 按长度排序关键词（长的优先匹配）
+        self.keywords = sorted(KEYWORDS.keys(), key=len, reverse=True)
+        # 统计信息
+        self._stats = {
+            'total_calls': 0,
+            'total_chars': 0,
+            'total_segments': 0
+        }
+
+    def segment(self, text: str) -> List[str]:
+        """
+        分词无空格的言律语言代码
+
+        Args:
+            text: 输入文本
+
+        Returns:
+            分词结果列表
+        """
+        segments = []
+        i = 0
+        n = len(text)
+
+        while i < n:
+            # 跳过空白字符
+            if text[i].isspace():
+                i += 1
+                continue
+
+            # 1. 尝试匹配字符串字面量
+            if text[i] in ('"', "'"):
+                quote = text[i]
+                j = i + 1
+                while j < n and text[j] != quote:
+                    j += 1
+                if j < n:
+                    segments.append(text[i:j+1])
+                    i = j + 1
+                    continue
+
+            # 2. 尝试匹配数字
+            if text[i].isdigit():
+                j = i
+                while j < n and (text[j].isdigit() or text[j] == '.'):
+                    j += 1
+                segments.append(text[i:j])
+                i = j
+                continue
+
+            # 3. 尝试匹配关键词（优先匹配长的）
+            matched = False
+            for keyword in self.keywords:
+                if text[i:i+len(keyword)] == keyword:
+                    segments.append(keyword)
+                    i += len(keyword)
+                    matched = True
+                    break
+
+            if matched:
+                continue
+
+            # 4. 尝试匹配标识符（中文字符或英文字母）
+            if self._is_identifier_char(text[i]):
+                j = i
+                while j < n and self._is_identifier_char(text[j]):
+                    # 检查是否遇到关键词
+                    found_keyword = False
+                    for keyword in self.keywords:
+                        if text[j:j+len(keyword)] == keyword:
+                            found_keyword = True
+                            break
+                    if found_keyword:
+                        break
+                    j += 1
+
+                if j > i:
+                    segments.append(text[i:j])
+                    i = j
+                    continue
+
+            # 5. 其他字符（运算符、标点等）
+            segments.append(text[i])
+            i += 1
+
+        # 更新统计
+        self._stats['total_calls'] += 1
+        self._stats['total_chars'] += len(text)
+        self._stats['total_segments'] += len(segments)
+
+        return segments
+
+    def _is_identifier_char(self, char: str) -> bool:
+        """检查字符是否可以作为标识符的一部分"""
+        # 中文字符
+        if '\u4e00' <= char <= '\u9fff':
+            return True
+        # 英文字母和下划线
+        if char.isalpha() or char == '_':
+            return True
+        return False
+
+    def get_segmenter_type(self) -> str:
+        """获取分词器类型"""
+        return "yanlv_nospace"
+
+    def get_config(self) -> Dict[str, Any]:
+        """获取配置"""
+        return self.config
+
+    def update_config(self, **kwargs):
+        """更新配置"""
+        self.config.update(kwargs)
+
+    def get_stats(self) -> Dict[str, Any]:
+        """获取统计信息"""
+        return self._stats.copy()
+
+    def reset_stats(self):
+        """重置统计信息"""
+        self._stats = {
+            'total_calls': 0,
+            'total_chars': 0,
+            'total_segments': 0
+        }
+
+    def reset(self):
+        """重置分词器状态"""
+        self.reset_stats()

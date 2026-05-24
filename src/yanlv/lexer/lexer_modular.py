@@ -19,7 +19,7 @@ from .utils import PerformanceMonitor, Logger, normalize_text
 class ModularYanLuLexer(YanLuLexerBase):
     """模块化言律语言词法分析器"""
     
-    def __init__(self, segmenter: Literal["jieba", "thulac"] = "jieba", **kwargs):
+    def __init__(self, segmenter: Literal["jieba", "thulac", "yanlv_nospace"] = "jieba", **kwargs):
         """初始化模块化词法分析器"""
         super().__init__(segmenter)
         
@@ -94,39 +94,39 @@ class ModularYanLuLexer(YanLuLexerBase):
     def tokenize_line(self, line: str, line_num: int) -> List[Token]:
         """将一行源代码转换为词法单元列表"""
         tokens = []
-        
+
         # 跳过空行
         if not line.strip():
             return tokens
-        
+
         # 规范化文本
         normalized_line = normalize_text(line)
-        
-        # 分词
-        segments = self.optimizer.optimize_tokenization(normalized_line)
-        
+
+        # 使用分词器进行分词
+        segments = self.tokenizer.segment(normalized_line)
+
         # 处理每个分词片段
         column = 1
         for segment in segments:
             # 跳过空片段
             if not segment:
                 continue
-            
+
             # 匹配词元类型
             token = self.optimizer.optimize_matching(
                 segment,
                 lambda s: self._match_token(s, column, line_num)
             )
-            
+
             if token:
                 tokens.append(token)
-            
+
             # 更新列位置
             column += len(segment)
-        
+
         # 更新统计
         self.stats['tokens_processed'] += len(tokens)
-        
+
         return tokens
     
     def _match_token(self, segment: str, column: int, line_num: int) -> Optional[Token]:

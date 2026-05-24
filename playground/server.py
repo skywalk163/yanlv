@@ -21,8 +21,8 @@ from yanlv.feedback import FeedbackCollector
 app = Flask(__name__)
 CORS(app)
 
-# 全局实例
-lexer = create_lexer("jieba")
+# 全局实例 - 使用言律语言无空格分词器
+lexer = create_lexer("yanlv_nospace")
 tracker = SemanticContextTracker()
 inference = TypeInferenceSystem(tracker)
 resolver = AmbiguityResolver(tracker, inference)
@@ -248,35 +248,35 @@ def get_examples():
     examples = [
         {
             'name': 'Hello World',
-            'code': '输出 "你好，言律语言！"\n输出 "这是一个中文编程语言"'
+            'code': '输出"你好，言律语言！"'
         },
         {
             'name': '变量定义',
-            'code': '定义 变量 x 为 10\n定义 变量 y 为 20\n输出 x\n输出 y'
+            'code': '定义变量x为10\n输出x'
         },
         {
             'name': '字符串输出',
-            'code': '输出 "言律语言"\n输出 "支持中文编程"\n输出 "让编程更简单"'
+            'code': '输出"言律语言"\n输出"支持中文编程"\n输出"让编程更简单"'
         },
         {
             'name': '数字运算',
-            'code': '定义 变量 a 为 10\n定义 变量 b 为 20\n输出 a\n输出 b\n输出 "计算完成"'
+            'code': '定义变量a为10\n定义变量b为20\n输出a\n输出b\n输出"计算完成"'
         },
         {
             'name': '条件语句',
-            'code': '如果 条件 成立 则\n  输出 "条件为真"\n否则\n  输出 "条件为假"'
+            'code': '如果条件成立则\n输出"条件为真"\n否则\n输出"条件为假"'
         },
         {
             'name': '循环语句',
-            'code': '循环 5 次 执行\n  输出 "这是循环"\n结束'
+            'code': '循环5次执行\n输出"这是循环"\n结束'
         },
         {
             'name': '函数定义',
-            'code': '函数 加法 参数 a b\n  返回 a + b\n结束\n输出 "函数已定义"'
+            'code': '函数加法参数a b\n返回a+b\n结束\n输出"函数已定义"'
         },
         {
             'name': '多行输出',
-            'code': '输出 "第一行"\n输出 "第二行"\n输出 "第三行"\n输出 "完成"'
+            'code': '输出"第一行"\n输出"第二行"\n输出"第三行"\n输出"完成"'
         }
     ]
 

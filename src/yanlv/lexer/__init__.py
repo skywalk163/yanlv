@@ -6,7 +6,7 @@
 
 # 导出主要类和函数
 from .lexer_token import Token, TokenType
-from .tokenizer import YanLuTokenizer, JiebaTokenizer, ThulacTokenizer
+from .tokenizer import YanLuTokenizer, JiebaTokenizer, ThulacTokenizer, YanLuNoSpaceTokenizer
 from .matcher import TokenMatcher, create_token_matcher
 from .error_handler import ErrorHandler, create_error_handler
 from .context_manager import ContextManager, create_context_manager
