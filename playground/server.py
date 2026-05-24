@@ -15,6 +15,7 @@ import time
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src'))
 
 from yanlv.lexer import create_lexer, TokenType
+from yanlv.interpreter import create_interpreter
 from yanlv.semantic import SemanticContextTracker, TypeInferenceSystem, AmbiguityResolver
 from yanlv.feedback import FeedbackCollector
 
@@ -72,55 +73,9 @@ def run_code():
         # 词法分析
         tokens = lexer.tokenize(code)
 
-        # 执行代码
-        output = []
-        variables = {}
-
-        i = 0
-        while i < len(tokens):
-            token = tokens[i]
-
-            # 处理输出语句
-            if token.type == TokenType.OUTPUT:
-                i += 1
-                if i < len(tokens):
-                    if tokens[i].type == TokenType.STRING:
-                        output.append(f"=> {tokens[i].value}")
-                    elif tokens[i].type == TokenType.IDENTIFIER:
-                        var_name = tokens[i].value
-                        if var_name in variables:
-                            output.append(f"=> {variables[var_name]}")
-                        else:
-                            output.append(f"=> 变量 '{var_name}' 未定义")
-
-            # 处理变量定义
-            elif token.type == TokenType.DEFINE:
-                i += 1
-                if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
-                    var_name = tokens[i].value
-                    i += 2  # 跳过 '为'
-                    if i < len(tokens):
-                        if tokens[i].type == TokenType.NUMBER:
-                            variables[var_name] = float(tokens[i].value)
-                        elif tokens[i].type == TokenType.STRING:
-                            variables[var_name] = tokens[i].value
-                        else:
-                            variables[var_name] = tokens[i].value
-                        output.append(f"=> 定义变量 {var_name} = {variables[var_name]}")
-
-            # 处理条件语句
-            elif token.type == TokenType.IF:
-                output.append("=> [条件语句]")
-
-            # 处理循环语句
-            elif token.type == TokenType.LOOP:
-                output.append("=> [循环语句]")
-
-            # 处理函数定义
-            elif token.type == TokenType.FUNCTION:
-                output.append("=> [函数定义]")
-
-            i += 1
+        # 使用解释器执行代码
+        interpreter = create_interpreter()
+        output_list = interpreter.execute(tokens)
 
         # 计算执行时间
         exec_time = round((time.time() - start_time) * 1000, 2)
@@ -130,12 +85,12 @@ def run_code():
             'tokens': len(tokens),
             'lines': len([l for l in code.split('\n') if l.strip()]),
             'exec_time': exec_time,
-            'variables': len(variables)
+            'variables': len(interpreter.variables)
         }
 
         return jsonify({
             'success': True,
-            'output': '\n'.join(output) if output else '代码已分析，但没有输出语句',
+            'output': '\n'.join(output_list) if output_list else '代码已分析，但没有输出语句',
             'stats': stats
         })
 
