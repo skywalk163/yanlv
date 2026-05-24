@@ -117,6 +117,12 @@ KEYWORDS: Dict[str, TokenType] = {
     '函数': TokenType.FUNCTION,
     '参数': TokenType.PARAMETER,
     '为': TokenType.IS,
+    '调用': TokenType.CALL,
+
+    # 比较运算符
+    '大于': TokenType.GREATER_THAN,
+    '小于': TokenType.LESS_THAN,
+    '等于': TokenType.EQUAL_TO,
 }
 
 

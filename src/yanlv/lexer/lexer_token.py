@@ -43,6 +43,7 @@ class TokenType(Enum):
     FUNCTION = "FUNCTION"  # 函数
     VARIABLE = "VARIABLE"  # 变量
     PARAMETER = "PARAMETER"  # 参数
+    CALL = "CALL"          # 调用
     
     # 运算符
     PLUS = "PLUS"
@@ -60,6 +61,11 @@ class TokenType(Enum):
     AND = "AND"
     OR = "OR"
     NOT = "NOT"
+
+    # 比较运算符（中文）
+    GREATER_THAN = "GREATER_THAN"    # 大于
+    LESS_THAN = "LESS_THAN"          # 小于
+    EQUAL_TO = "EQUAL_TO"            # 等于
     
     # 分组符号
     LPAREN = "LPAREN"

@@ -71,8 +71,11 @@ class YanLuInterpreter:
                 i = self._execute_function(tokens, i)
 
             # 处理函数调用
-            elif token.type == TokenType.IDENTIFIER and i + 1 < len(tokens):
-                if tokens[i + 1].type == TokenType.PARAMETER:
+            elif token.type == TokenType.CALL:
+                i = self._execute_call(tokens, i)
+            elif token.type == TokenType.IDENTIFIER:
+                # 检查是否是函数调用
+                if i + 1 < len(tokens) and tokens[i + 1].type == TokenType.PARAMETER:
                     i = self._execute_call(tokens, i)
                 else:
                     i += 1
@@ -144,7 +147,26 @@ class YanLuInterpreter:
         """执行条件语句"""
         i += 1  # 跳过 IF
 
-        # 简化处理：假设条件为真
+        # 计算条件表达式
+        condition_result = True  # 默认为真
+
+        # 简单的条件判断：检查是否有 "大于"、"小于"、"等于" 等
+        condition_tokens = []
+        while i < len(tokens) and tokens[i].type not in (TokenType.NEWLINE, TokenType.THEN):
+            condition_tokens.append(tokens[i])
+            i += 1
+
+        # 跳过 THEN
+        if i < len(tokens) and tokens[i].type == TokenType.THEN:
+            i += 1
+        # 跳过换行
+        while i < len(tokens) and tokens[i].type == TokenType.NEWLINE:
+            i += 1
+
+        # 计算条件
+        if condition_tokens:
+            condition_result = self._evaluate_condition(condition_tokens)
+
         # 找到 END 的位置
         start = i
         depth = 1
@@ -155,10 +177,72 @@ class YanLuInterpreter:
                 depth -= 1
             i += 1
 
-        # 执行条件块内的代码
-        self._execute_tokens(tokens, start, i - 1)
+        # 如果条件为真，执行条件块内的代码
+        if condition_result:
+            self._execute_tokens(tokens, start, i - 1)
 
         return i
+
+    def _evaluate_condition(self, condition_tokens: List[Token]) -> bool:
+        """计算条件表达式"""
+        if not condition_tokens:
+            return True
+
+        # 简单的条件判断
+        # 查找比较运算符
+        for i, token in enumerate(condition_tokens):
+            if token.type == TokenType.GREATER_THAN:
+                # 获取左值和右值
+                left_val = self._get_value(condition_tokens[:i])
+                right_val = self._get_value(condition_tokens[i+1:])
+                return left_val > right_val
+            elif token.type == TokenType.LESS_THAN:
+                left_val = self._get_value(condition_tokens[:i])
+                right_val = self._get_value(condition_tokens[i+1:])
+                return left_val < right_val
+            elif token.type == TokenType.EQUAL_TO:
+                left_val = self._get_value(condition_tokens[:i])
+                right_val = self._get_value(condition_tokens[i+1:])
+                return left_val == right_val
+            elif token.type == TokenType.IDENTIFIER:
+                # 检查是否是比较运算符
+                if '大于' in token.value or '大于等于' in token.value:
+                    # 获取左值和右值
+                    left_val = self._get_value(condition_tokens[:i])
+                    right_val = self._get_value(condition_tokens[i+1:])
+                    return left_val > right_val
+                elif '小于' in token.value or '小于等于' in token.value:
+                    left_val = self._get_value(condition_tokens[:i])
+                    right_val = self._get_value(condition_tokens[i+1:])
+                    return left_val < right_val
+                elif '等于' in token.value:
+                    left_val = self._get_value(condition_tokens[:i])
+                    right_val = self._get_value(condition_tokens[i+1:])
+                    return left_val == right_val
+
+        # 默认返回真
+        return True
+
+    def _get_value(self, tokens: List[Token]) -> Any:
+        """从词元列表获取值"""
+        if not tokens:
+            return 0
+
+        # 过滤掉非值词元
+        value_tokens = [t for t in tokens if t.type in (TokenType.NUMBER, TokenType.IDENTIFIER)]
+
+        if not value_tokens:
+            return 0
+
+        # 获取第一个值
+        token = value_tokens[0]
+        if token.type == TokenType.NUMBER:
+            return float(token.value)
+        elif token.type == TokenType.IDENTIFIER:
+            if token.value in self.variables:
+                return self.variables[token.value]
+
+        return 0
 
     def _execute_loop(self, tokens: List[Token], i: int) -> int:
         """执行循环语句"""
@@ -234,6 +318,10 @@ class YanLuInterpreter:
 
     def _execute_call(self, tokens: List[Token], i: int) -> int:
         """执行函数调用"""
+        # 跳过 CALL
+        if tokens[i].type == TokenType.CALL:
+            i += 1
+
         # 获取函数名
         func_name = tokens[i].value
         i += 1
@@ -242,7 +330,7 @@ class YanLuInterpreter:
         if i < len(tokens) and tokens[i].type == TokenType.PARAMETER:
             i += 1
 
-        # 获取参数值
+        # 获取参数值（支持表达式）
         args = []
         while i < len(tokens):
             if tokens[i].type == TokenType.NUMBER:
@@ -250,10 +338,24 @@ class YanLuInterpreter:
                 i += 1
             elif tokens[i].type == TokenType.IDENTIFIER:
                 if tokens[i].value in self.variables:
-                    args.append(self.variables[tokens[i].value])
+                    # 可能是表达式的一部分
+                    val = self.variables[tokens[i].value]
+                    # 检查后面是否有运算符
+                    if i + 1 < len(tokens) and tokens[i + 1].type in (TokenType.PLUS, TokenType.MINUS):
+                        val, i = self._evaluate_expression(tokens, i)
+                        args.append(val)
+                    else:
+                        args.append(val)
+                        i += 1
                 else:
                     args.append(tokens[i].value)
+                    i += 1
+            elif tokens[i].type in (TokenType.PLUS, TokenType.MINUS):
+                # 处理负数或表达式
                 i += 1
+                if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                    args.append(-float(tokens[i].value))
+                    i += 1
             else:
                 break
 
@@ -274,6 +376,48 @@ class YanLuInterpreter:
             self.variables = old_vars
 
         return i
+
+    def _evaluate_expression(self, tokens: List[Token], i: int) -> Tuple[Any, int]:
+        """计算表达式"""
+        result = None
+
+        # 获取第一个操作数
+        if tokens[i].type == TokenType.NUMBER:
+            result = float(tokens[i].value)
+            i += 1
+        elif tokens[i].type == TokenType.IDENTIFIER:
+            if tokens[i].value in self.variables:
+                result = self.variables[tokens[i].value]
+            else:
+                result = 0
+            i += 1
+
+        # 处理运算符
+        while i < len(tokens):
+            if tokens[i].type == TokenType.PLUS:
+                i += 1
+                if i < len(tokens):
+                    if tokens[i].type == TokenType.NUMBER:
+                        result += float(tokens[i].value)
+                        i += 1
+                    elif tokens[i].type == TokenType.IDENTIFIER:
+                        if tokens[i].value in self.variables:
+                            result += self.variables[tokens[i].value]
+                        i += 1
+            elif tokens[i].type == TokenType.MINUS:
+                i += 1
+                if i < len(tokens):
+                    if tokens[i].type == TokenType.NUMBER:
+                        result -= float(tokens[i].value)
+                        i += 1
+                    elif tokens[i].type == TokenType.IDENTIFIER:
+                        if tokens[i].value in self.variables:
+                            result -= self.variables[tokens[i].value]
+                        i += 1
+            else:
+                break
+
+        return result, i
 
     def _execute_return(self, tokens: List[Token], i: int) -> int:
         """执行返回语句"""
