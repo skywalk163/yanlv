@@ -92,7 +92,7 @@ KEYWORDS: Dict[str, TokenType] = {
     '在': TokenType.IN,
     '一直': TokenType.WHILE,
     '定': TokenType.DEF,
-    '定义': TokenType.DEF,
+    '定义': TokenType.DEFINE,
     '设': TokenType.SET,
     '是': TokenType.IS,
     '等于': TokenType.IS,
@@ -108,6 +108,15 @@ KEYWORDS: Dict[str, TokenType] = {
     '假': TokenType.BOOLEAN,
     '空': TokenType.IDENTIFIER,
     '无': TokenType.IDENTIFIER,
+
+    # 言律语言特定关键词
+    '输出': TokenType.OUTPUT,
+    '打印': TokenType.OUTPUT,
+    '显示': TokenType.OUTPUT,
+    '变量': TokenType.VARIABLE,
+    '函数': TokenType.FUNCTION,
+    '参数': TokenType.PARAMETER,
+    '为': TokenType.IS,
 }
 
 
