@@ -100,6 +100,13 @@ class TokenType(Enum):
     FILE_NAME = "FILE_NAME"        # 文件名
     DIR_NAME = "DIR_NAME"          # 目录名
 
+    # 异常处理
+    TRY = "TRY"                    # 尝试
+    CATCH = "CATCH"                # 捕获
+    THROW = "THROW"                # 抛出
+    EXCEPTION = "EXCEPTION"        # 异常
+    FINALLY = "FINALLY"            # 最终
+
     # 运算符
     PLUS = "PLUS"
     MINUS = "MINUS"

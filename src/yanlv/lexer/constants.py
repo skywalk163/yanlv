@@ -181,6 +181,13 @@ KEYWORDS: Dict[str, TokenType] = {
     '大于等于': TokenType.GREATER_EQUAL,
     '小于等于': TokenType.LESS_EQUAL,
     '不等于': TokenType.NOT_EQUAL,
+
+    # 异常处理
+    '尝试': TokenType.TRY,
+    '捕获': TokenType.CATCH,
+    '抛出': TokenType.THROW,
+    '异常': TokenType.EXCEPTION,
+    '最终': TokenType.FINALLY,
 }
 
 
