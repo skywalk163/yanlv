@@ -108,6 +108,37 @@ class YanLuInterpreter:
             elif token.type == TokenType.RANDOM:
                 i = self._execute_random(tokens, i)
 
+            # 处理数学扩展函数
+            elif token.type == TokenType.SIN:
+                i = self._execute_sin(tokens, i)
+
+            elif token.type == TokenType.COS:
+                i = self._execute_cos(tokens, i)
+
+            elif token.type == TokenType.TAN:
+                i = self._execute_tan(tokens, i)
+
+            elif token.type == TokenType.LOG:
+                i = self._execute_log(tokens, i)
+
+            elif token.type == TokenType.LOG10:
+                i = self._execute_log10(tokens, i)
+
+            elif token.type == TokenType.EXP:
+                i = self._execute_exp(tokens, i)
+
+            elif token.type == TokenType.CEIL:
+                i = self._execute_ceil(tokens, i)
+
+            elif token.type == TokenType.FLOOR:
+                i = self._execute_floor(tokens, i)
+
+            elif token.type == TokenType.ROUND:
+                i = self._execute_round(tokens, i)
+
+            elif token.type == TokenType.FACTORIAL:
+                i = self._execute_factorial(tokens, i)
+
             # 处理数组内置函数
             elif token.type == TokenType.SORT:
                 i = self._execute_sort(tokens, i)
@@ -1677,6 +1708,215 @@ class YanLuInterpreter:
 
             i += 1  # 跳过 END
 
+        return i
+
+    def _execute_sin(self, tokens: List[Token], i: int) -> int:
+        """执行正弦函数"""
+        i += 1  # 跳过 SIN
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            result = math.sin(value)
+            self.output.append(f"=> {result}")
+        return i
+
+    def _execute_cos(self, tokens: List[Token], i: int) -> int:
+        """执行余弦函数"""
+        i += 1  # 跳过 COS
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            result = math.cos(value)
+            self.output.append(f"=> {result}")
+        return i
+
+    def _execute_tan(self, tokens: List[Token], i: int) -> int:
+        """执行正切函数"""
+        i += 1  # 跳过 TAN
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            result = math.tan(value)
+            self.output.append(f"=> {result}")
+        return i
+
+    def _execute_log(self, tokens: List[Token], i: int) -> int:
+        """执行自然对数函数"""
+        i += 1  # 跳过 LOG
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            if value > 0:
+                result = math.log(value)
+                self.output.append(f"=> {result}")
+            else:
+                self.output.append(f"=> 错误：对数函数的参数必须大于0")
+        return i
+
+    def _execute_log10(self, tokens: List[Token], i: int) -> int:
+        """执行常用对数函数"""
+        i += 1  # 跳过 LOG10
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            if value > 0:
+                result = math.log10(value)
+                self.output.append(f"=> {result}")
+            else:
+                self.output.append(f"=> 错误：对数函数的参数必须大于0")
+        return i
+
+    def _execute_exp(self, tokens: List[Token], i: int) -> int:
+        """执行指数函数"""
+        i += 1  # 跳过 EXP
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            result = math.exp(value)
+            self.output.append(f"=> {result}")
+        return i
+
+    def _execute_ceil(self, tokens: List[Token], i: int) -> int:
+        """执行向上取整函数"""
+        i += 1  # 跳过 CEIL
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            result = math.ceil(value)
+            self.output.append(f"=> {result}")
+        return i
+
+    def _execute_floor(self, tokens: List[Token], i: int) -> int:
+        """执行向下取整函数"""
+        i += 1  # 跳过 FLOOR
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            result = math.floor(value)
+            self.output.append(f"=> {result}")
+        return i
+
+    def _execute_round(self, tokens: List[Token], i: int) -> int:
+        """执行四舍五入函数"""
+        i += 1  # 跳过 ROUND
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = float(self.variables[var_name])
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            result = round(value)
+            self.output.append(f"=> {result}")
+        return i
+
+    def _execute_factorial(self, tokens: List[Token], i: int) -> int:
+        """执行阶乘函数"""
+        i += 1  # 跳过 FACTORIAL
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = int(float(tokens[i].value))
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = int(float(self.variables[var_name]))
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+            if value >= 0:
+                result = math.factorial(value)
+                self.output.append(f"=> {result}")
+            else:
+                self.output.append(f"=> 错误：阶乘函数的参数必须是非负整数")
         return i
 
 
