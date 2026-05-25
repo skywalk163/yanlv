@@ -94,6 +94,7 @@ KEYWORDS: Dict[str, TokenType] = {
     '定': TokenType.DEF,
     '定义': TokenType.DEFINE,
     '设': TokenType.SET,
+    '设置': TokenType.SET,  # 添加完整的"设置"关键词
     '是': TokenType.IS,
     '等于': TokenType.IS,
     '返回': TokenType.RETURN,
@@ -118,11 +119,17 @@ KEYWORDS: Dict[str, TokenType] = {
     '参数': TokenType.PARAMETER,
     '为': TokenType.IS,
     '调用': TokenType.CALL,
+    '添加': TokenType.ADD,
+    '删除': TokenType.REMOVE,
+    '长度': TokenType.LENGTH,
 
     # 比较运算符
     '大于': TokenType.GREATER_THAN,
     '小于': TokenType.LESS_THAN,
     '等于': TokenType.EQUAL_TO,
+    '大于等于': TokenType.GREATER_EQUAL,
+    '小于等于': TokenType.LESS_EQUAL,
+    '不等于': TokenType.NOT_EQUAL,
 }
 
 

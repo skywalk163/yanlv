@@ -251,11 +251,11 @@ def get_examples():
         },
         {
             'name': '汉诺塔（完整版）',
-            'code': '函数汉诺塔参数n from to aux\n如果n等于1则\n输出"移动盘子"\n输出from\n输出"到"\n输出to\n否则\n调用汉诺塔参数n-1 from aux to\n输出"移动盘子"\n输出from\n输出"到"\n输出to\n调用汉诺塔参数n-1 aux to from\n结束\n结束\n输出"汉诺塔算法已定义"'
+            'code': '函数汉诺塔参数n from to aux\n如果n大于0则\n调用汉诺塔参数n-1 from aux to\n输出"移动盘子"\n输出n\n输出"从"\n输出from\n输出"到"\n输出to\n调用汉诺塔参数n-1 aux to from\n结束\n结束\n输出"汉诺塔算法已定义"\n调用汉诺塔参数3 A C B'
         },
         {
             'name': '冒泡排序（完整版）',
-            'code': '函数冒泡排序参数arr n\n定义变量i为0\n循环n次执行\n定义变量j为0\n循环n-i-1次执行\n如果arr[j]大于arr[j+1]则\n定义变量temp为arr[j]\n赋值arr[j]为arr[j+1]\n赋值arr[j+1]为temp\n结束\n结束\n结束\n返回arr\n结束\n输出"冒泡排序算法已定义"'
+            'code': '定义变量arr为[5,3,8,1,2]\n输出"原始数组:"\n输出arr\n输出"访问元素:"\n输出arr[0]\n输出arr[1]\n输出arr[2]\n输出arr[3]\n输出arr[4]'
         }
     ]
 
@@ -278,4 +278,5 @@ if __name__ == '__main__':
     print("  GET  /api/examples - 获取示例")
     print()
 
-    app.run(debug=True, port=5000)
+    # 使用threaded模式，禁用debug模式的重载器
+    app.run(host='127.0.0.1', port=5000, debug=False, threaded=True)

@@ -18,6 +18,7 @@ class TokenType(Enum):
     NUMBER = "NUMBER"
     STRING = "STRING"
     BOOLEAN = "BOOLEAN"
+    ARRAY = "ARRAY"  # 数组/列表
     
     # 关键词
     IF = "IF"
@@ -44,6 +45,9 @@ class TokenType(Enum):
     VARIABLE = "VARIABLE"  # 变量
     PARAMETER = "PARAMETER"  # 参数
     CALL = "CALL"          # 调用
+    ADD = "ADD"            # 添加
+    REMOVE = "REMOVE"      # 删除
+    LENGTH = "LENGTH"      # 长度
     
     # 运算符
     PLUS = "PLUS"
