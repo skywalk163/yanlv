@@ -134,6 +134,18 @@ KEYWORDS: Dict[str, TokenType] = {
     '取整': TokenType.INT,
     '随机数': TokenType.RANDOM,
 
+    # 内置函数 - 数学扩展
+    '正弦': TokenType.SIN,
+    '余弦': TokenType.COS,
+    '正切': TokenType.TAN,
+    '自然对数': TokenType.LOG,
+    '常用对数': TokenType.LOG10,
+    '指数': TokenType.EXP,
+    '向上取整': TokenType.CEIL,
+    '向下取整': TokenType.FLOOR,
+    '四舍五入': TokenType.ROUND,
+    '阶乘': TokenType.FACTORIAL,
+
     # 内置函数 - 数组
     '排序': TokenType.SORT,
     '反转': TokenType.REVERSE,

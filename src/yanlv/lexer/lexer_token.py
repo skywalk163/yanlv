@@ -60,6 +60,18 @@ class TokenType(Enum):
     INT = "INT"            # 取整
     RANDOM = "RANDOM"      # 随机数
 
+    # 内置函数 - 数学扩展
+    SIN = "SIN"            # 正弦
+    COS = "COS"            # 余弦
+    TAN = "TAN"            # 正切
+    LOG = "LOG"            # 自然对数
+    LOG10 = "LOG10"        # 常用对数
+    EXP = "EXP"            # 指数
+    CEIL = "CEIL"          # 向上取整
+    FLOOR = "FLOOR"        # 向下取整
+    ROUND = "ROUND"        # 四舍五入
+    FACTORIAL = "FACTORIAL"  # 阶乘
+
     # 内置函数 - 数组
     SORT = "SORT"          # 排序
     REVERSE = "REVERSE"    # 反转
