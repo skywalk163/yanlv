@@ -11,7 +11,7 @@ import unittest
 from typing import List
 
 # 添加项目根目录到Python路径
-project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 sys.path.insert(0, project_root)
 
 # 导入模块
@@ -39,7 +39,8 @@ class TestLexerToken(unittest.TestCase):
     
     def test_token_type_count(self):
         """测试词元类型数量"""
-        self.assertEqual(len(TokenType), 59)
+        # TokenType数量已更新，包含所有新增的类型
+        self.assertEqual(len(TokenType), 125)
     
     def test_token_is_type(self):
         """测试词元类型检查"""
@@ -102,7 +103,8 @@ class TestMatcher(unittest.TestCase):
     def test_match_identifier(self):
         """测试标识符匹配"""
         matcher = TokenMatcher()
-        token = matcher.match_token("变量", 0, 1, 1)
+        # 使用一个不在关键词映射中的标识符
+        token = matcher.match_token("测试标识符", 0, 1, 1)
         self.assertIsNotNone(token)
         self.assertEqual(token.type, TokenType.IDENTIFIER)
     
