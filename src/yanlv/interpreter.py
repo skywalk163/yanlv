@@ -17,6 +17,10 @@ class YanLuInterpreter:
         self.variables: Dict[str, Any] = {}
         self.functions: Dict[str, Dict] = {}
         self.output: List[str] = []
+        # 异常处理
+        self.exception_stack: List[Dict[str, Any]] = []  # 异常栈
+        self.current_exception: Optional[Dict[str, Any]] = None  # 当前异常
+        self.in_try_block: bool = False  # 是否在try块中
 
     def execute(self, tokens: List[Token]) -> List[str]:
         """
@@ -208,6 +212,16 @@ class YanLuInterpreter:
 
             elif token.type == TokenType.DIR_NAME:
                 i = self._execute_dir_name(tokens, i)
+
+            # 处理异常
+            elif token.type == TokenType.TRY:
+                i = self._execute_try(tokens, i)
+
+            elif token.type == TokenType.CATCH:
+                i = self._execute_catch(tokens, i)
+
+            elif token.type == TokenType.THROW:
+                i = self._execute_throw(tokens, i)
 
             # 处理条件语句
             elif token.type == TokenType.IF:
@@ -2147,6 +2161,154 @@ class YanLuInterpreter:
         # 获取目录名
         dirname = os.path.dirname(filepath)
         self.output.append(f"=> {dirname}")
+        
+        return i
+
+    def _execute_try(self, tokens: List[Token], i: int) -> int:
+        """执行try块"""
+        i += 1  # 跳过 TRY
+        
+        # 保存当前异常状态
+        saved_exception = self.current_exception
+        saved_in_try = self.in_try_block
+        
+        # 进入try块
+        self.in_try_block = True
+        self.current_exception = None
+        
+        # 执行try块中的代码，直到遇到CATCH或END
+        while i < len(tokens):
+            token = tokens[i]
+            
+            if token.type == TokenType.CATCH:
+                # 遇到catch，处理异常
+                i = self._execute_catch(tokens, i)
+                break
+            elif token.type == TokenType.END:
+                # try块结束
+                i += 1
+                break
+            else:
+                # 执行try块中的语句
+                i = self._execute_tokens_from(tokens, i)
+        
+        # 恢复异常状态
+        self.current_exception = saved_exception
+        self.in_try_block = saved_in_try
+        
+        return i
+
+    def _execute_catch(self, tokens: List[Token], i: int) -> int:
+        """执行catch块"""
+        i += 1  # 跳过 CATCH
+        
+        # 获取异常类型
+        exception_type = "所有"  # 默认捕获所有异常
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            exception_type = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 获取异常变量名
+        exception_var = None
+        if i < len(tokens) and tokens[i].type == TokenType.IS:
+            i += 1
+            if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+                exception_var = tokens[i].value
+                i += 1
+        
+        # 检查是否匹配当前异常
+        should_execute = False
+        if self.current_exception:
+            if exception_type == "所有":
+                should_execute = True
+            elif self.current_exception.get('type') == exception_type:
+                should_execute = True
+        
+        # 如果匹配，将异常信息赋值给变量
+        if should_execute and exception_var:
+            self.variables[exception_var] = self.current_exception.get('message', '')
+        
+        # 执行catch块中的代码
+        while i < len(tokens):
+            token = tokens[i]
+            
+            if token.type == TokenType.END:
+                i += 1
+                break
+            elif should_execute:
+                # 只有匹配时才执行catch块中的语句
+                i = self._execute_tokens_from(tokens, i)
+            else:
+                # 不匹配时跳过
+                i += 1
+        
+        # 清除当前异常
+        self.current_exception = None
+        
+        return i
+
+    def _execute_tokens_from(self, tokens: List[Token], i: int) -> int:
+        """从指定位置执行tokens"""
+        if i >= len(tokens):
+            return i
+        
+        token = tokens[i]
+        
+        # 处理各种token类型（简化版本）
+        if token.type == TokenType.NEWLINE:
+            i += 1
+        elif token.type == TokenType.DEFINE:
+            i = self._execute_define(tokens, i)
+        elif token.type == TokenType.OUTPUT:
+            i = self._execute_output(tokens, i)
+        elif token.type == TokenType.THROW:
+            i = self._execute_throw(tokens, i)
+        elif token.type == TokenType.IF:
+            i = self._execute_if(tokens, i)
+        elif token.type == TokenType.LOOP:
+            i = self._execute_loop(tokens, i)
+        elif token.type == TokenType.FUNCTION:
+            i = self._execute_function(tokens, i)
+        elif token.type == TokenType.CALL:
+            i = self._execute_call(tokens, i)
+        elif token.type == TokenType.IDENTIFIER:
+            if i + 1 < len(tokens) and tokens[i + 1].type == TokenType.PARAMETER:
+                i = self._execute_call(tokens, i)
+            else:
+                i += 1
+        else:
+            i += 1
+        
+        return i
+
+    def _execute_throw(self, tokens: List[Token], i: int) -> int:
+        """执行抛出异常"""
+        i += 1  # 跳过 THROW
+        
+        # 获取异常消息
+        message = "未知错误"
+        exception_type = "自定义错误"
+        
+        if i < len(tokens):
+            if tokens[i].type == TokenType.STRING:
+                message = tokens[i].value.strip('"\'')
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    message = str(self.variables[var_name])
+                i += 1
+        
+        # 创建异常
+        self.current_exception = {
+            'type': exception_type,
+            'message': message
+        }
+        
+        # 如果在try块中，异常会被捕获
+        # 如果不在try块中，输出错误信息
+        if not self.in_try_block:
+            self.output.append(f"=> 异常：{message}")
         
         return i
 
