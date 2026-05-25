@@ -107,6 +107,15 @@ class TokenType(Enum):
     EXCEPTION = "EXCEPTION"        # 异常
     FINALLY = "FINALLY"            # 最终
 
+    # 模块系统
+    MODULE = "MODULE"              # 模块
+    IMPORT = "IMPORT"              # 导入
+    EXPORT = "EXPORT"              # 导出
+    FROM = "FROM"                  # 从
+    AS = "AS"                      # 为
+    NAMESPACE = "NAMESPACE"        # 命名空间
+    END_MODULE = "END_MODULE"      # 结束模块
+
     # 运算符
     PLUS = "PLUS"
     MINUS = "MINUS"

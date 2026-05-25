@@ -188,6 +188,15 @@ KEYWORDS: Dict[str, TokenType] = {
     '抛出': TokenType.THROW,
     '异常': TokenType.EXCEPTION,
     '最终': TokenType.FINALLY,
+
+    # 模块系统
+    '定义模块': TokenType.MODULE,
+    '导入': TokenType.IMPORT,
+    '导出': TokenType.EXPORT,
+    '从': TokenType.FROM,
+    '为': TokenType.AS,
+    '命名空间': TokenType.NAMESPACE,
+    '结束模块': TokenType.END_MODULE,
 }
 
 
