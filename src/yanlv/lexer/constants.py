@@ -164,6 +164,16 @@ KEYWORDS: Dict[str, TokenType] = {
     '去全部空格': TokenType.TRIM_ALL,
     '遍历字符': TokenType.FOR_EACH_CHAR,
 
+    # 文件操作
+    '读取文件': TokenType.READ_FILE,
+    '读取行': TokenType.READ_LINES,
+    '写入文件': TokenType.WRITE_FILE,
+    '追加文件': TokenType.APPEND_FILE,
+    '文件存在': TokenType.FILE_EXISTS,
+    '文件大小': TokenType.FILE_SIZE,
+    '文件名': TokenType.FILE_NAME,
+    '目录名': TokenType.DIR_NAME,
+
     # 比较运算符
     '大于': TokenType.GREATER_THAN,
     '小于': TokenType.LESS_THAN,

@@ -90,6 +90,16 @@ class TokenType(Enum):
     TRIM_ALL = "TRIM_ALL"          # 去全部空格
     FOR_EACH_CHAR = "FOR_EACH_CHAR"  # 遍历字符
 
+    # 文件操作
+    READ_FILE = "READ_FILE"        # 读取文件
+    READ_LINES = "READ_LINES"      # 读取行
+    WRITE_FILE = "WRITE_FILE"      # 写入文件
+    APPEND_FILE = "APPEND_FILE"    # 追加文件
+    FILE_EXISTS = "FILE_EXISTS"    # 文件存在
+    FILE_SIZE = "FILE_SIZE"        # 文件大小
+    FILE_NAME = "FILE_NAME"        # 文件名
+    DIR_NAME = "DIR_NAME"          # 目录名
+
     # 运算符
     PLUS = "PLUS"
     MINUS = "MINUS"
