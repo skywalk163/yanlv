@@ -4,6 +4,7 @@
 """
 import math
 import random
+import os
 from typing import List, Dict, Any, Optional, Tuple
 from .lexer.lexer_token import Token, TokenType
 
@@ -182,6 +183,31 @@ class YanLuInterpreter:
 
             elif token.type == TokenType.FOR_EACH_CHAR:
                 i = self._execute_for_each_char(tokens, i)
+
+            # 处理文件操作
+            elif token.type == TokenType.READ_FILE:
+                i = self._execute_read_file(tokens, i)
+
+            elif token.type == TokenType.READ_LINES:
+                i = self._execute_read_lines(tokens, i)
+
+            elif token.type == TokenType.WRITE_FILE:
+                i = self._execute_write_file(tokens, i)
+
+            elif token.type == TokenType.APPEND_FILE:
+                i = self._execute_append_file(tokens, i)
+
+            elif token.type == TokenType.FILE_EXISTS:
+                i = self._execute_file_exists(tokens, i)
+
+            elif token.type == TokenType.FILE_SIZE:
+                i = self._execute_file_size(tokens, i)
+
+            elif token.type == TokenType.FILE_NAME:
+                i = self._execute_file_name(tokens, i)
+
+            elif token.type == TokenType.DIR_NAME:
+                i = self._execute_dir_name(tokens, i)
 
             # 处理条件语句
             elif token.type == TokenType.IF:
@@ -1917,6 +1943,211 @@ class YanLuInterpreter:
                 self.output.append(f"=> {result}")
             else:
                 self.output.append(f"=> 错误：阶乘函数的参数必须是非负整数")
+        return i
+
+    def _execute_read_file(self, tokens: List[Token], i: int) -> int:
+        """执行读取文件操作"""
+        i += 1  # 跳过 READ_FILE
+        
+        # 获取文件路径
+        filepath = ""
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            filepath = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 获取目标变量
+        target_var = None
+        if i < len(tokens) and tokens[i].type == TokenType.IS:
+            i += 1
+            if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+                target_var = tokens[i].value
+                i += 1
+        
+        # 读取文件
+        try:
+            if os.path.exists(filepath):
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                if target_var:
+                    self.variables[target_var] = content
+                    self.output.append(f"=> 文件已读取到变量 '{target_var}'")
+                else:
+                    self.output.append(f"=> {content}")
+            else:
+                self.output.append(f"=> 错误：文件 '{filepath}' 不存在")
+        except Exception as e:
+            self.output.append(f"=> 错误：读取文件失败 - {str(e)}")
+        
+        return i
+
+    def _execute_read_lines(self, tokens: List[Token], i: int) -> int:
+        """执行读取文件行操作"""
+        i += 1  # 跳过 READ_LINES
+        
+        # 获取文件路径
+        filepath = ""
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            filepath = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 获取目标变量
+        target_var = None
+        if i < len(tokens) and tokens[i].type == TokenType.IS:
+            i += 1
+            if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+                target_var = tokens[i].value
+                i += 1
+        
+        # 读取文件行
+        try:
+            if os.path.exists(filepath):
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    lines = f.readlines()
+                lines = [line.strip() for line in lines]
+                if target_var:
+                    self.variables[target_var] = lines
+                    self.output.append(f"=> 文件行已读取到变量 '{target_var}'")
+                else:
+                    self.output.append(f"=> {lines}")
+            else:
+                self.output.append(f"=> 错误：文件 '{filepath}' 不存在")
+        except Exception as e:
+            self.output.append(f"=> 错误：读取文件失败 - {str(e)}")
+        
+        return i
+
+    def _execute_write_file(self, tokens: List[Token], i: int) -> int:
+        """执行写入文件操作"""
+        i += 1  # 跳过 WRITE_FILE
+        
+        # 获取文件路径
+        filepath = ""
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            filepath = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 获取内容
+        content = ""
+        if i < len(tokens):
+            if tokens[i].type == TokenType.STRING:
+                content = tokens[i].value.strip('"\'')
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    content = str(self.variables[var_name])
+                i += 1
+        
+        # 写入文件
+        try:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(content)
+            self.output.append(f"=> 文件已写入 '{filepath}'")
+        except Exception as e:
+            self.output.append(f"=> 错误：写入文件失败 - {str(e)}")
+        
+        return i
+
+    def _execute_append_file(self, tokens: List[Token], i: int) -> int:
+        """执行追加文件操作"""
+        i += 1  # 跳过 APPEND_FILE
+        
+        # 获取文件路径
+        filepath = ""
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            filepath = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 获取内容
+        content = ""
+        if i < len(tokens):
+            if tokens[i].type == TokenType.STRING:
+                content = tokens[i].value.strip('"\'')
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    content = str(self.variables[var_name])
+                i += 1
+        
+        # 追加文件
+        try:
+            with open(filepath, 'a', encoding='utf-8') as f:
+                f.write(content)
+            self.output.append(f"=> 内容已追加到 '{filepath}'")
+        except Exception as e:
+            self.output.append(f"=> 错误：追加文件失败 - {str(e)}")
+        
+        return i
+
+    def _execute_file_exists(self, tokens: List[Token], i: int) -> int:
+        """执行文件存在检查"""
+        i += 1  # 跳过 FILE_EXISTS
+        
+        # 获取文件路径
+        filepath = ""
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            filepath = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 检查文件存在
+        exists = os.path.exists(filepath)
+        self.output.append(f"=> {'真' if exists else '假'}")
+        
+        return i
+
+    def _execute_file_size(self, tokens: List[Token], i: int) -> int:
+        """执行获取文件大小"""
+        i += 1  # 跳过 FILE_SIZE
+        
+        # 获取文件路径
+        filepath = ""
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            filepath = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 获取文件大小
+        try:
+            if os.path.exists(filepath):
+                size = os.path.getsize(filepath)
+                self.output.append(f"=> {size}")
+            else:
+                self.output.append(f"=> 错误：文件 '{filepath}' 不存在")
+        except Exception as e:
+            self.output.append(f"=> 错误：获取文件大小失败 - {str(e)}")
+        
+        return i
+
+    def _execute_file_name(self, tokens: List[Token], i: int) -> int:
+        """执行获取文件名"""
+        i += 1  # 跳过 FILE_NAME
+        
+        # 获取文件路径
+        filepath = ""
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            filepath = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 获取文件名
+        filename = os.path.basename(filepath)
+        self.output.append(f"=> {filename}")
+        
+        return i
+
+    def _execute_dir_name(self, tokens: List[Token], i: int) -> int:
+        """执行获取目录名"""
+        i += 1  # 跳过 DIR_NAME
+        
+        # 获取文件路径
+        filepath = ""
+        if i < len(tokens) and tokens[i].type == TokenType.STRING:
+            filepath = tokens[i].value.strip('"\'')
+            i += 1
+        
+        # 获取目录名
+        dirname = os.path.dirname(filepath)
+        self.output.append(f"=> {dirname}")
+        
         return i
 
 
