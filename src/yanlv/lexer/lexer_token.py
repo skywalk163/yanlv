@@ -48,7 +48,36 @@ class TokenType(Enum):
     ADD = "ADD"            # 添加
     REMOVE = "REMOVE"      # 删除
     LENGTH = "LENGTH"      # 长度
-    
+    FIND = "FIND"          # 查找
+    REPLACE = "REPLACE"    # 替换
+    SPLIT = "SPLIT"        # 分割
+    SUBSTRING = "SUBSTRING"  # 子串
+
+    # 内置函数 - 数学
+    ABS = "ABS"            # 绝对值
+    SQRT = "SQRT"          # 平方根
+    POW = "POW"            # 幂
+    INT = "INT"            # 取整
+    RANDOM = "RANDOM"      # 随机数
+
+    # 内置函数 - 数组
+    SORT = "SORT"          # 排序
+    REVERSE = "REVERSE"    # 反转
+    MAX = "MAX"            # 最大值
+    MIN = "MIN"            # 最小值
+    SUM = "SUM"            # 求和
+
+    # 字符串操作增强
+    CONCAT = "CONCAT"              # 连接
+    SLICE = "SLICE"                # 切片
+    FIND_ALL = "FIND_ALL"          # 查找全部
+    REPLACE_ONCE = "REPLACE_ONCE"  # 替换一次
+    UPPER = "UPPER"                # 大写
+    LOWER = "LOWER"                # 小写
+    TRIM = "TRIM"                  # 去空格
+    TRIM_ALL = "TRIM_ALL"          # 去全部空格
+    FOR_EACH_CHAR = "FOR_EACH_CHAR"  # 遍历字符
+
     # 运算符
     PLUS = "PLUS"
     MINUS = "MINUS"

@@ -122,6 +122,35 @@ KEYWORDS: Dict[str, TokenType] = {
     '添加': TokenType.ADD,
     '删除': TokenType.REMOVE,
     '长度': TokenType.LENGTH,
+    '查找': TokenType.FIND,
+    '替换': TokenType.REPLACE,
+    '分割': TokenType.SPLIT,
+    '子串': TokenType.SUBSTRING,
+
+    # 内置函数 - 数学
+    '绝对值': TokenType.ABS,
+    '平方根': TokenType.SQRT,
+    '幂': TokenType.POW,
+    '取整': TokenType.INT,
+    '随机数': TokenType.RANDOM,
+
+    # 内置函数 - 数组
+    '排序': TokenType.SORT,
+    '反转': TokenType.REVERSE,
+    '最大值': TokenType.MAX,
+    '最小值': TokenType.MIN,
+    '求和': TokenType.SUM,
+
+    # 字符串操作增强
+    '连接': TokenType.CONCAT,
+    '切片': TokenType.SLICE,
+    '查找全部': TokenType.FIND_ALL,
+    '替换一次': TokenType.REPLACE_ONCE,
+    '大写': TokenType.UPPER,
+    '小写': TokenType.LOWER,
+    '去空格': TokenType.TRIM,
+    '去全部空格': TokenType.TRIM_ALL,
+    '遍历字符': TokenType.FOR_EACH_CHAR,
 
     # 比较运算符
     '大于': TokenType.GREATER_THAN,

@@ -1,0 +1,29 @@
+"""
+调试测试 - 检查词法分析器是否正确识别新关键词
+"""
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+
+from yanlv.lexer.lexer_modular import ModularYanLuLexer
+from yanlv.interpreter import YanLuInterpreter
+
+# 测试词法分析器
+lexer = ModularYanLuLexer()
+
+code = '''
+定义变量s1为"你好"
+定义变量s2为"世界"
+连接 s1 s2
+'''
+
+tokens = lexer.tokenize(code)
+
+print("词元列表:")
+for i, token in enumerate(tokens):
+    print(f"{i}: {token.type.value:20s} = '{token.value}'")
+
+print("\n执行结果:")
+interpreter = YanLuInterpreter()
+output = interpreter.execute(tokens)
+print(output)

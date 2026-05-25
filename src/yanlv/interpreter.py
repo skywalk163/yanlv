@@ -2,6 +2,8 @@
 言律语言简单解释器
 支持条件、循环、函数等程序块的执行
 """
+import math
+import random
 from typing import List, Dict, Any, Optional, Tuple
 from .lexer.lexer_token import Token, TokenType
 
@@ -73,6 +75,82 @@ class YanLuInterpreter:
             # 处理长度查询
             elif token.type == TokenType.LENGTH:
                 i = self._execute_length(tokens, i)
+
+            # 处理字符串查找
+            elif token.type == TokenType.FIND:
+                i = self._execute_find(tokens, i)
+
+            # 处理字符串替换
+            elif token.type == TokenType.REPLACE:
+                i = self._execute_replace(tokens, i)
+
+            # 处理字符串分割
+            elif token.type == TokenType.SPLIT:
+                i = self._execute_split(tokens, i)
+
+            # 处理子串
+            elif token.type == TokenType.SUBSTRING:
+                i = self._execute_substring(tokens, i)
+
+            # 处理数学内置函数
+            elif token.type == TokenType.ABS:
+                i = self._execute_abs(tokens, i)
+
+            elif token.type == TokenType.SQRT:
+                i = self._execute_sqrt(tokens, i)
+
+            elif token.type == TokenType.POW:
+                i = self._execute_pow(tokens, i)
+
+            elif token.type == TokenType.INT:
+                i = self._execute_int(tokens, i)
+
+            elif token.type == TokenType.RANDOM:
+                i = self._execute_random(tokens, i)
+
+            # 处理数组内置函数
+            elif token.type == TokenType.SORT:
+                i = self._execute_sort(tokens, i)
+
+            elif token.type == TokenType.REVERSE:
+                i = self._execute_reverse(tokens, i)
+
+            elif token.type == TokenType.MAX:
+                i = self._execute_max(tokens, i)
+
+            elif token.type == TokenType.MIN:
+                i = self._execute_min(tokens, i)
+
+            elif token.type == TokenType.SUM:
+                i = self._execute_sum(tokens, i)
+
+            # 处理字符串操作增强
+            elif token.type == TokenType.CONCAT:
+                i = self._execute_concat(tokens, i)
+
+            elif token.type == TokenType.SLICE:
+                i = self._execute_slice(tokens, i)
+
+            elif token.type == TokenType.FIND_ALL:
+                i = self._execute_find_all(tokens, i)
+
+            elif token.type == TokenType.REPLACE_ONCE:
+                i = self._execute_replace_once(tokens, i)
+
+            elif token.type == TokenType.UPPER:
+                i = self._execute_upper(tokens, i)
+
+            elif token.type == TokenType.LOWER:
+                i = self._execute_lower(tokens, i)
+
+            elif token.type == TokenType.TRIM:
+                i = self._execute_trim(tokens, i)
+
+            elif token.type == TokenType.TRIM_ALL:
+                i = self._execute_trim_all(tokens, i)
+
+            elif token.type == TokenType.FOR_EACH_CHAR:
+                i = self._execute_for_each_char(tokens, i)
 
             # 处理条件语句
             elif token.type == TokenType.IF:
@@ -194,18 +272,53 @@ class YanLuInterpreter:
 
             # 获取值
             if i < len(tokens):
-                if tokens[i].type == TokenType.NUMBER:
-                    self.variables[var_name] = float(tokens[i].value)
-                    i += 1
+                # 处理负数
+                if tokens[i].type == TokenType.MINUS:
+                    i += 1  # 跳过负号
+                    if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                        self.variables[var_name] = -float(tokens[i].value)
+                        i += 1
+                elif tokens[i].type == TokenType.NUMBER:
+                    # 检查后面是否有运算符（表达式）
+                    if i + 1 < len(tokens) and tokens[i + 1].type in (TokenType.PLUS, TokenType.MINUS, TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.MODULO):
+                        value, i = self._evaluate_expression(tokens, i)
+                        self.variables[var_name] = value
+                    else:
+                        self.variables[var_name] = float(tokens[i].value)
+                        i += 1
                 elif tokens[i].type == TokenType.STRING:
-                    self.variables[var_name] = tokens[i].value.strip('"\'')
-                    i += 1
+                    # 检查后面是否有加号（字符串连接）
+                    if i + 1 < len(tokens) and tokens[i + 1].type == TokenType.PLUS:
+                        value, i = self._evaluate_expression(tokens, i)
+                        self.variables[var_name] = value
+                    else:
+                        self.variables[var_name] = tokens[i].value.strip('"\'')
+                        i += 1
+                elif tokens[i].type == TokenType.IDENTIFIER:
+                    # 可能是变量引用或表达式
+                    if i + 1 < len(tokens) and tokens[i + 1].type in (TokenType.PLUS, TokenType.MINUS, TokenType.MULTIPLY, TokenType.DIVIDE, TokenType.MODULO):
+                        value, i = self._evaluate_expression(tokens, i)
+                        self.variables[var_name] = value
+                    else:
+                        # 变量引用
+                        ref_name = tokens[i].value
+                        if ref_name in self.variables:
+                            self.variables[var_name] = self.variables[ref_name]
+                        else:
+                            self.variables[var_name] = ref_name
+                        i += 1
                 elif tokens[i].type == TokenType.LBRACKET:
                     # 处理数组 [1, 2, 3]
                     i += 1  # 跳过 [
                     arr = []
                     while i < len(tokens) and tokens[i].type != TokenType.RBRACKET:
-                        if tokens[i].type == TokenType.NUMBER:
+                        # 处理负数
+                        if tokens[i].type == TokenType.MINUS:
+                            i += 1  # 跳过负号
+                            if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                                arr.append(-float(tokens[i].value))
+                                i += 1
+                        elif tokens[i].type == TokenType.NUMBER:
                             arr.append(float(tokens[i].value))
                             i += 1
                         elif tokens[i].type == TokenType.STRING:
@@ -213,6 +326,8 @@ class YanLuInterpreter:
                             i += 1
                         elif tokens[i].type == TokenType.COMMA:
                             i += 1  # 跳过逗号
+                        elif tokens[i].type == TokenType.IDENTIFIER and tokens[i].value == ',':
+                            i += 1  # 跳过逗号（处理为IDENTIFIER的情况）
                         else:
                             i += 1
                     if i < len(tokens) and tokens[i].type == TokenType.RBRACKET:
@@ -393,6 +508,449 @@ class YanLuInterpreter:
                     self.output.append(f"=> 1")
             else:
                 self.output.append(f"=> 0")
+
+        return i
+
+    def _execute_find(self, tokens: List[Token], i: int) -> int:
+        """执行字符串查找"""
+        i += 1  # 跳过 FIND
+
+        # 获取字符串变量名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            str_name = tokens[i].value
+            i += 1
+
+            # 获取要查找的子串
+            if i < len(tokens):
+                if tokens[i].type == TokenType.STRING:
+                    substr = tokens[i].value.strip('"\'')
+                    i += 1
+                elif tokens[i].type == TokenType.IDENTIFIER:
+                    if tokens[i].value in self.variables:
+                        substr = str(self.variables[tokens[i].value])
+                    else:
+                        substr = tokens[i].value
+                    i += 1
+                else:
+                    substr = ""
+
+                # 执行查找
+                if str_name in self.variables:
+                    string = str(self.variables[str_name])
+                    pos = string.find(substr)
+                    self.output.append(f"=> {pos}")
+                else:
+                    self.output.append(f"=> -1")
+
+        return i
+
+    def _execute_replace(self, tokens: List[Token], i: int) -> int:
+        """执行字符串替换"""
+        i += 1  # 跳过 REPLACE
+
+        # 获取字符串变量名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            str_name = tokens[i].value
+            i += 1
+
+            # 获取要替换的子串
+            if i < len(tokens):
+                if tokens[i].type == TokenType.STRING:
+                    old_str = tokens[i].value.strip('"\'')
+                    i += 1
+                elif tokens[i].type == TokenType.IDENTIFIER:
+                    if tokens[i].value in self.variables:
+                        old_str = str(self.variables[tokens[i].value])
+                    else:
+                        old_str = tokens[i].value
+                    i += 1
+                else:
+                    old_str = ""
+
+                # 获取新字符串
+                if i < len(tokens):
+                    if tokens[i].type == TokenType.STRING:
+                        new_str = tokens[i].value.strip('"\'')
+                        i += 1
+                    elif tokens[i].type == TokenType.IDENTIFIER:
+                        if tokens[i].value in self.variables:
+                            new_str = str(self.variables[tokens[i].value])
+                        else:
+                            new_str = tokens[i].value
+                        i += 1
+                    else:
+                        new_str = ""
+
+                    # 执行替换
+                    if str_name in self.variables:
+                        string = str(self.variables[str_name])
+                        result = string.replace(old_str, new_str)
+                        self.variables[str_name] = result
+                        self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_split(self, tokens: List[Token], i: int) -> int:
+        """执行字符串分割"""
+        i += 1  # 跳过 SPLIT
+
+        # 获取字符串变量名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            str_name = tokens[i].value
+            i += 1
+
+            # 获取分隔符
+            if i < len(tokens):
+                if tokens[i].type == TokenType.STRING:
+                    sep = tokens[i].value.strip('"\'')
+                    i += 1
+                elif tokens[i].type == TokenType.IDENTIFIER:
+                    if tokens[i].value in self.variables:
+                        sep = str(self.variables[tokens[i].value])
+                    else:
+                        sep = tokens[i].value
+                    i += 1
+                else:
+                    sep = " "
+
+                # 执行分割
+                if str_name in self.variables:
+                    string = str(self.variables[str_name])
+                    parts = string.split(sep)
+                    self.variables[str_name] = parts
+                    self.output.append(f"=> {parts}")
+
+        return i
+
+    def _execute_substring(self, tokens: List[Token], i: int) -> int:
+        """执行子串提取"""
+        i += 1  # 跳过 SUBSTRING
+
+        # 获取字符串变量名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            str_name = tokens[i].value
+            i += 1
+
+            # 获取起始位置
+            if i < len(tokens):
+                if tokens[i].type == TokenType.NUMBER:
+                    start = int(float(tokens[i].value))
+                    i += 1
+                elif tokens[i].type == TokenType.IDENTIFIER:
+                    if tokens[i].value in self.variables:
+                        start = int(self.variables[tokens[i].value])
+                    else:
+                        start = 0
+                    i += 1
+                else:
+                    start = 0
+
+                # 获取结束位置（可选）
+                end = None
+                if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                    end = int(float(tokens[i].value))
+                    i += 1
+                elif i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+                    if tokens[i].value in self.variables:
+                        end = int(self.variables[tokens[i].value])
+                        i += 1
+
+                # 执行子串提取
+                if str_name in self.variables:
+                    string = str(self.variables[str_name])
+                    if end is not None:
+                        result = string[start:end]
+                    else:
+                        result = string[start:]
+                    self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_abs(self, tokens: List[Token], i: int) -> int:
+        """执行绝对值函数"""
+        i += 1  # 跳过 ABS
+
+        # 获取值
+        if i < len(tokens):
+            # 处理负数
+            if tokens[i].type == TokenType.MINUS:
+                i += 1  # 跳过负号
+                if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                    value = -float(tokens[i].value)
+                    i += 1
+                else:
+                    value = 0
+            elif tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = self.variables[var_name]
+                    # 确保是数字
+                    if isinstance(value, str):
+                        try:
+                            value = float(value)
+                        except ValueError:
+                            self.output.append(f"=> 错误：'{var_name}' 不是数字")
+                            return i
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+
+            result = abs(value)
+            self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_sqrt(self, tokens: List[Token], i: int) -> int:
+        """执行平方根函数"""
+        i += 1  # 跳过 SQRT
+
+        # 获取值
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = self.variables[var_name]
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+
+            if value >= 0:
+                result = math.sqrt(value)
+                self.output.append(f"=> {result}")
+            else:
+                self.output.append(f"=> 错误：不能对负数求平方根")
+
+        return i
+
+    def _execute_pow(self, tokens: List[Token], i: int) -> int:
+        """执行幂函数"""
+        i += 1  # 跳过 POW
+
+        # 获取底数
+        base = 0
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                base = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    base = self.variables[var_name]
+                i += 1
+
+        # 获取指数
+        exp = 1
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                exp = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    exp = self.variables[var_name]
+                i += 1
+
+        result = math.pow(base, exp)
+        self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_int(self, tokens: List[Token], i: int) -> int:
+        """执行取整函数"""
+        i += 1  # 跳过 INT
+
+        # 获取值
+        if i < len(tokens):
+            # 处理负数
+            if tokens[i].type == TokenType.MINUS:
+                i += 1  # 跳过负号
+                if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                    value = -float(tokens[i].value)
+                    i += 1
+                else:
+                    value = 0
+            elif tokens[i].type == TokenType.NUMBER:
+                value = float(tokens[i].value)
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    value = self.variables[var_name]
+                else:
+                    value = 0
+                i += 1
+            else:
+                value = 0
+
+            result = int(value)
+            self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_random(self, tokens: List[Token], i: int) -> int:
+        """执行随机数函数"""
+        i += 1  # 跳过 RANDOM
+
+        # 检查是否有参数（范围）
+        min_val = 0
+        max_val = 1
+
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                min_val = float(tokens[i].value)
+                i += 1
+                # 检查是否有第二个参数
+                if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                    max_val = float(tokens[i].value)
+                    i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                if var_name in self.variables:
+                    min_val = self.variables[var_name]
+                i += 1
+                # 检查是否有第二个参数
+                if i < len(tokens):
+                    if tokens[i].type == TokenType.NUMBER:
+                        max_val = float(tokens[i].value)
+                        i += 1
+                    elif tokens[i].type == TokenType.IDENTIFIER:
+                        var_name = tokens[i].value
+                        if var_name in self.variables:
+                            max_val = self.variables[var_name]
+                        i += 1
+
+        result = random.uniform(min_val, max_val)
+        self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_sort(self, tokens: List[Token], i: int) -> int:
+        """执行排序函数"""
+        i += 1  # 跳过 SORT
+
+        # 获取数组名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            arr_name = tokens[i].value
+            i += 1
+
+            if arr_name in self.variables:
+                arr = self.variables[arr_name]
+                if isinstance(arr, list):
+                    # 尝试排序
+                    try:
+                        sorted_arr = sorted(arr)
+                        self.variables[arr_name] = sorted_arr
+                        self.output.append(f"=> {sorted_arr}")
+                    except TypeError:
+                        self.output.append(f"=> 错误：数组元素类型不一致，无法排序")
+                else:
+                    self.output.append(f"=> 错误：'{arr_name}' 不是数组")
+            else:
+                self.output.append(f"=> 错误：数组 '{arr_name}' 未定义")
+
+        return i
+
+    def _execute_reverse(self, tokens: List[Token], i: int) -> int:
+        """执行反转函数"""
+        i += 1  # 跳过 REVERSE
+
+        # 获取数组名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            arr_name = tokens[i].value
+            i += 1
+
+            if arr_name in self.variables:
+                arr = self.variables[arr_name]
+                if isinstance(arr, list):
+                    reversed_arr = list(reversed(arr))
+                    self.variables[arr_name] = reversed_arr
+                    self.output.append(f"=> {reversed_arr}")
+                else:
+                    self.output.append(f"=> 错误：'{arr_name}' 不是数组")
+            else:
+                self.output.append(f"=> 错误：数组 '{arr_name}' 未定义")
+
+        return i
+
+    def _execute_max(self, tokens: List[Token], i: int) -> int:
+        """执行最大值函数"""
+        i += 1  # 跳过 MAX
+
+        # 获取数组名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            arr_name = tokens[i].value
+            i += 1
+
+            if arr_name in self.variables:
+                arr = self.variables[arr_name]
+                if isinstance(arr, list) and len(arr) > 0:
+                    try:
+                        result = max(arr)
+                        self.output.append(f"=> {result}")
+                    except TypeError:
+                        self.output.append(f"=> 错误：数组元素类型不一致")
+                else:
+                    self.output.append(f"=> 错误：数组为空或不是数组")
+            else:
+                self.output.append(f"=> 错误：数组 '{arr_name}' 未定义")
+
+        return i
+
+    def _execute_min(self, tokens: List[Token], i: int) -> int:
+        """执行最小值函数"""
+        i += 1  # 跳过 MIN
+
+        # 获取数组名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            arr_name = tokens[i].value
+            i += 1
+
+            if arr_name in self.variables:
+                arr = self.variables[arr_name]
+                if isinstance(arr, list) and len(arr) > 0:
+                    try:
+                        result = min(arr)
+                        self.output.append(f"=> {result}")
+                    except TypeError:
+                        self.output.append(f"=> 错误：数组元素类型不一致")
+                else:
+                    self.output.append(f"=> 错误：数组为空或不是数组")
+            else:
+                self.output.append(f"=> 错误：数组 '{arr_name}' 未定义")
+
+        return i
+
+    def _execute_sum(self, tokens: List[Token], i: int) -> int:
+        """执行求和函数"""
+        i += 1  # 跳过 SUM
+
+        # 获取数组名
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            arr_name = tokens[i].value
+            i += 1
+
+            if arr_name in self.variables:
+                arr = self.variables[arr_name]
+                if isinstance(arr, list):
+                    try:
+                        result = sum(arr)
+                        self.output.append(f"=> {result}")
+                    except TypeError:
+                        self.output.append(f"=> 错误：数组元素不是数字")
+                else:
+                    self.output.append(f"=> 错误：'{arr_name}' 不是数组")
+            else:
+                self.output.append(f"=> 错误：数组 '{arr_name}' 未定义")
 
         return i
 
@@ -758,6 +1316,12 @@ class YanLuInterpreter:
             i += 1
             return result, i
         
+        # 处理字符串
+        if tokens[i].type == TokenType.STRING:
+            result = tokens[i].value.strip('"\'')
+            i += 1
+            return result, i
+        
         # 处理变量
         if tokens[i].type == TokenType.IDENTIFIER:
             var_name = tokens[i].value
@@ -820,6 +1384,300 @@ class YanLuInterpreter:
 
         # 返回值和位置
         return return_value, i
+
+    def _execute_concat(self, tokens: List[Token], i: int) -> int:
+        """执行字符串连接操作"""
+        i += 1  # 跳过 CONCAT
+
+        elements = []
+        target_var = None
+
+        # 收集所有要连接的元素
+        while i < len(tokens) and tokens[i].type not in (TokenType.NEWLINE, TokenType.END):
+            if tokens[i].type == TokenType.STRING:
+                elements.append(tokens[i].value.strip('"\''))
+                i += 1
+            elif tokens[i].type == TokenType.NUMBER:
+                elements.append(str(float(tokens[i].value)))
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                var_name = tokens[i].value
+                i += 1
+                if var_name in self.variables:
+                    elements.append(str(self.variables[var_name]))
+                else:
+                    elements.append(var_name)
+            elif tokens[i].type == TokenType.IS:
+                # 后面是目标变量
+                i += 1
+                if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+                    target_var = tokens[i].value
+                    i += 1
+                break
+            else:
+                i += 1
+
+        # 连接所有元素
+        result = ''.join(elements)
+
+        # 输出或赋值
+        if target_var:
+            self.variables[target_var] = result
+        else:
+            self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_slice(self, tokens: List[Token], i: int) -> int:
+        """执行字符串切片操作"""
+        i += 1  # 跳过 SLICE
+
+        # 获取字符串变量
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            var_name = tokens[i].value
+            i += 1
+
+            if var_name not in self.variables:
+                self.output.append(f"错误：变量 '{var_name}' 未定义")
+                return i
+
+            string_value = str(self.variables[var_name])
+
+            # 获取起始位置
+            start = 0
+            if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                start = int(float(tokens[i].value))
+                i += 1
+            elif i < len(tokens) and tokens[i].type == TokenType.MINUS:
+                i += 1
+                if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                    start = -int(float(tokens[i].value))
+                    i += 1
+
+            # 获取结束位置（可选）
+            end = None
+            if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                end = int(float(tokens[i].value))
+                i += 1
+            elif i < len(tokens) and tokens[i].type == TokenType.MINUS:
+                i += 1
+                if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                    end = -int(float(tokens[i].value))
+                    i += 1
+
+            # 获取步长（可选）
+            step = None
+            if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
+                step = int(float(tokens[i].value))
+                i += 1
+
+            # 执行切片
+            if step:
+                result = string_value[start:end:step]
+            elif end is not None:
+                result = string_value[start:end]
+            else:
+                result = string_value[start:]
+
+            self.output.append(f"=> {result}")
+            self.variables[var_name] = result
+
+        return i
+
+    def _execute_find_all(self, tokens: List[Token], i: int) -> int:
+        """执行查找所有位置操作"""
+        i += 1  # 跳过 FIND_ALL
+
+        # 获取字符串变量
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            var_name = tokens[i].value
+            i += 1
+
+            if var_name not in self.variables:
+                self.output.append(f"错误：变量 '{var_name}' 未定义")
+                return i
+
+            string_value = str(self.variables[var_name])
+
+            # 获取要查找的子串
+            substring = ""
+            if i < len(tokens) and tokens[i].type == TokenType.STRING:
+                substring = tokens[i].value.strip('"\'')
+                i += 1
+
+            # 查找所有位置
+            positions = []
+            start = 0
+            while True:
+                pos = string_value.find(substring, start)
+                if pos == -1:
+                    break
+                positions.append(pos)
+                start = pos + 1
+
+            self.output.append(f"=> {positions}")
+
+        return i
+
+    def _execute_replace_once(self, tokens: List[Token], i: int) -> int:
+        """执行单次替换操作"""
+        i += 1  # 跳过 REPLACE_ONCE
+
+        # 获取字符串变量
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            var_name = tokens[i].value
+            i += 1
+
+            if var_name not in self.variables:
+                self.output.append(f"错误：变量 '{var_name}' 未定义")
+                return i
+
+            string_value = str(self.variables[var_name])
+
+            # 获取旧子串
+            old_substring = ""
+            if i < len(tokens) and tokens[i].type == TokenType.STRING:
+                old_substring = tokens[i].value.strip('"\'')
+                i += 1
+
+            # 获取新子串
+            new_substring = ""
+            if i < len(tokens) and tokens[i].type == TokenType.STRING:
+                new_substring = tokens[i].value.strip('"\'')
+                i += 1
+
+            # 执行单次替换
+            result = string_value.replace(old_substring, new_substring, 1)
+            self.variables[var_name] = result
+            self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_upper(self, tokens: List[Token], i: int) -> int:
+        """执行大写转换操作"""
+        i += 1  # 跳过 UPPER
+
+        # 获取字符串变量
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            var_name = tokens[i].value
+            i += 1
+
+            if var_name not in self.variables:
+                self.output.append(f"错误：变量 '{var_name}' 未定义")
+                return i
+
+            string_value = str(self.variables[var_name])
+            result = string_value.upper()
+            self.variables[var_name] = result
+            self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_lower(self, tokens: List[Token], i: int) -> int:
+        """执行小写转换操作"""
+        i += 1  # 跳过 LOWER
+
+        # 获取字符串变量
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            var_name = tokens[i].value
+            i += 1
+
+            if var_name not in self.variables:
+                self.output.append(f"错误：变量 '{var_name}' 未定义")
+                return i
+
+            string_value = str(self.variables[var_name])
+            result = string_value.lower()
+            self.variables[var_name] = result
+            self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_trim(self, tokens: List[Token], i: int) -> int:
+        """执行去除首尾空格操作"""
+        i += 1  # 跳过 TRIM
+
+        # 获取字符串变量
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            var_name = tokens[i].value
+            i += 1
+
+            if var_name not in self.variables:
+                self.output.append(f"错误：变量 '{var_name}' 未定义")
+                return i
+
+            string_value = str(self.variables[var_name])
+            result = string_value.strip()
+            self.variables[var_name] = result
+            self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_trim_all(self, tokens: List[Token], i: int) -> int:
+        """执行去除所有空格操作"""
+        i += 1  # 跳过 TRIM_ALL
+
+        # 获取字符串变量
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            var_name = tokens[i].value
+            i += 1
+
+            if var_name not in self.variables:
+                self.output.append(f"错误：变量 '{var_name}' 未定义")
+                return i
+
+            string_value = str(self.variables[var_name])
+            result = string_value.replace(' ', '').replace('\t', '').replace('\n', '')
+            self.variables[var_name] = result
+            self.output.append(f"=> {result}")
+
+        return i
+
+    def _execute_for_each_char(self, tokens: List[Token], i: int) -> int:
+        """执行字符遍历操作"""
+        i += 1  # 跳过 FOR_EACH_CHAR
+
+        # 获取字符串变量
+        if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+            string_var = tokens[i].value
+            i += 1
+
+            if string_var not in self.variables:
+                self.output.append(f"错误：变量 '{string_var}' 未定义")
+                return i
+
+            string_value = str(self.variables[string_var])
+
+            # 获取循环变量名
+            loop_var = None
+            if i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
+                loop_var = tokens[i].value
+                i += 1
+
+            # 查找循环体（直到"结束"）
+            body_start = i
+            body_end = i
+            depth = 1
+
+            while i < len(tokens) and depth > 0:
+                if tokens[i].type == TokenType.FOR_EACH_CHAR:
+                    depth += 1
+                elif tokens[i].type == TokenType.END:
+                    depth -= 1
+                    if depth == 0:
+                        body_end = i
+                        break
+                i += 1
+
+            # 对每个字符执行循环体
+            if loop_var:
+                for char in string_value:
+                    self.variables[loop_var] = char
+                    self._execute_tokens(tokens, body_start, body_end)
+
+            i += 1  # 跳过 END
+
+        return i
 
 
 def create_interpreter() -> YanLuInterpreter:
