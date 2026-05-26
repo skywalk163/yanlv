@@ -5,10 +5,10 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/yanlv/yanlv)
-[![Tests](https://img.shields.io/badge/tests-200%20passed-brightgreen.svg)](https://github.com/yanlv/yanlv)
+[![Tests](https://img.shields.io/badge/tests-54%20passed-yellow.svg)](https://github.com/yanlv/yanlv)
 [![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/yanlv/yanlv)
 
-**一个功能完整的中文编程语言**
+**一个正在开发中的中文编程语言**
 
 [快速开始](#快速开始) • [功能特性](#功能特性) • [示例](#示例) • [Playground](#playground)
 
@@ -18,7 +18,11 @@
 
 ## 📖 简介
 
-言律语言是一个基于中文语法的编程语言，旨在让中文用户能够使用自然语言进行编程。本项目提供了完整的词法分析、解释执行和Web Playground功能。
+言律语言是一个基于中文语法的编程语言，旨在让中文用户能够使用自然语言进行编程。本项目目前处于**原型验证阶段**，已完成基础语法实现，正在开发四大核心语法特性（因果链、语境省略、状态流、意合式调用）。
+
+**当前状态：** 原型验证阶段  
+**完成度：** 约60%  
+**测试覆盖率：** 19%
 
 ### ✨ 核心特性
 
@@ -361,15 +365,26 @@ yanlv/
 - [x] 括号支持
 - [x] 更多比较运算符
 - [x] Web Playground
+- [x] 元数驱动解析
+- [x] 动词分类词典
 
 ### 进行中 🚧
 
+- [ ] 因果链语法（有示例，实现中）
+- [ ] 语境省略语法（架构已搭建）
+- [ ] 状态流语法（有示例）
+- [ ] 意合式函数调用（部分实现）
 - [ ] 字符串连接
 - [ ] 字符串切片
 - [ ] 更多内置函数
 
 ### 计划中 📋
 
+- [ ] 多轨制支持（Python、JavaScript、SQL）
+- [ ] 编译器架构（AST、代码生成）
+- [ ] VS Code插件
+- [ ] 调试工具
+- [ ] 包管理器
 - [ ] 二维数组
 - [ ] 字典/映射
 - [ ] 文件操作
