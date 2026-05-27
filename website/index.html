@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>言律 - 中文编程语言</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">言律</a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="docs.html">文档</a></li>
+                <li><a href="examples.html">示例</a></li>
+                <li><a href="playground.html">在线体验</a></li>
+                <li><a href="https://github.com/yanlv/yanlv" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 主页内容 -->
+    <main>
+        <!-- Hero区域 -->
+        <section class="hero">
+            <div class="container">
+                <h1>言律编程语言</h1>
+                <p class="subtitle">用中文思考，用中文编程</p>
+                <p class="description">
+                    言律是一门创新的中文编程语言，让每个中文用户都能用母语自然地表达编程思想。
+                </p>
+                <div class="cta-buttons">
+                    <a href="playground.html" class="btn btn-primary">在线体验</a>
+                    <a href="docs/教程.html" class="btn btn-secondary">开始学习</a>
+                </div>
+                <div class="code-preview">
+                    <pre><code>// 言律代码示例
+定义变量x为10
+定义变量y为20
+输出x加y  // 输出: 30
+
+// 条件语句
+如果x大于y则
+  输出"x大于y"
+否则
+  输出"y大于等于x"
+结束</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 特性区域 -->
+        <section class="features">
+            <div class="container">
+                <h2>核心特性</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🇨🇳</div>
+                        <h3>中文优先</h3>
+                        <p>完全使用中文关键字和语法，降低认知负担，让编程更自然。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔗</div>
+                        <h3>因果链语法</h3>
+                        <p>独特的因果链语法，用自然语言描述事件和响应关系。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔄</div>
+                        <h3>状态流语法</h3>
+                        <p>直观的状态机定义，轻松描述复杂的状态转换逻辑。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>意合式调用</h3>
+                        <p>智能参数推断，减少冗余，让代码更简洁优雅。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🛤️</div>
+                        <h3>多轨制支持</h3>
+                        <p>支持嵌入Python、JavaScript、SQL代码，实现混合编程。</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3>高性能</h3>
+                        <p>优化的编译器和运行时，支持缓存和批处理，性能卓越。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 统计区域 -->
+        <section class="stats">
+            <div class="container">
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">9000+</div>
+                        <div class="stat-label">代码行数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">343</div>
+                        <div class="stat-label">测试用例</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">60+</div>
+                        <div class="stat-label">标准库函数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">完成度</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 快速开始 -->
+        <section class="quickstart">
+            <div class="container">
+                <h2>快速开始</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>安装</h3>
+                        <pre><code>pip install yanlv</code></pre>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>创建文件</h3>
+                        <pre><code>// hello.yan
+输出"你好，世界！"</code></pre>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>运行</h3>
+                        <pre><code>yanlv run hello.yan</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 工具链 -->
+        <section class="tools">
+            <div class="container">
+                <h2>完整工具链</h2>
+                <div class="tool-grid">
+                    <div class="tool-card">
+                        <h3>VS Code 插件</h3>
+                        <p>语法高亮、自动补全、错误诊断</p>
+                        <a href="vscode-yanlv/" class="btn btn-small">了解更多</a>
+                    </div>
+                    <div class="tool-card">
+                        <h3>在线 IDE</h3>
+                        <p>无需安装，在线编写和运行代码</p>
+                        <a href="playground.html" class="btn btn-small">立即体验</a>
+                    </div>
+                    <div class="tool-card">
+                        <h3>包管理器</h3>
+                        <p>安装、发布和管理依赖包</p>
+                        <a href="docs/包管理器.html" class="btn btn-small">查看文档</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>言律</h4>
+                    <p>用中文思考，用中文编程</p>
+                </div>
+                <div class="footer-section">
+                    <h4>文档</h4>
+                    <ul>
+                        <li><a href="docs/教程.html">教程</a></li>
+                        <li><a href="docs/API文档.html">API文档</a></li>
+                        <li><a href="docs/示例代码.html">示例代码</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>社区</h4>
+                    <ul>
+                        <li><a href="https://github.com/yanlv/yanlv">GitHub</a></li>
+                        <li><a href="https://github.com/yanlv/yanlv/issues">Issues</a></li>
+                        <li><a href="CONTRIBUTING.md">贡献指南</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>工具</h4>
+                    <ul>
+                        <li><a href="playground.html">在线IDE</a></li>
+                        <li><a href="vscode-yanlv/">VS Code插件</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 言律编程语言. MIT License</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

@@ -12,7 +12,7 @@ simple_output = '输出"测试"'
 tokens = lexer.tokenize(simple_output)
 print("简单输出测试:")
 for token in tokens:
-    print(f"  {token.type.name}: {token.value}")
+print(f"  {token.type.name}: {token.value}")
 
 # 测试条件语句
 condition_code = '''如果条件成立则
@@ -21,7 +21,7 @@ condition_code = '''如果条件成立则
 tokens = lexer.tokenize(condition_code)
 print("\n条件语句测试:")
 for token in tokens:
-    print(f"  {token.type.name}: {token.value}")
+print(f"  {token.type.name}: {token.value}")
 
 # 测试循环语句
 loop_code = '''循环3次执行
@@ -30,7 +30,7 @@ loop_code = '''循环3次执行
 tokens = lexer.tokenize(loop_code)
 print("\n循环语句测试:")
 for token in tokens:
-    print(f"  {token.type.name}: {token.value}")
+print(f"  {token.type.name}: {token.value}")
 
 # 测试函数定义
 function_code = '''函数测试参数x
@@ -39,7 +39,7 @@ function_code = '''函数测试参数x
 tokens = lexer.tokenize(function_code)
 print("\n函数定义测试:")
 for token in tokens:
-    print(f"  {token.type.name}: {token.value}")
+print(f"  {token.type.name}: {token.value}")
 
 print("\n" + "=" * 60)
 print("问题分析:")

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>言律在线IDE</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>言律在线IDE</h1>
+            <div class="toolbar">
+                <button id="runBtn" class="btn btn-primary">运行</button>
+                <button id="compileBtn" class="btn btn-secondary">编译</button>
+                <button id="clearBtn" class="btn btn-secondary">清空</button>
+                <button id="exampleBtn" class="btn btn-secondary">示例</button>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main">
+            <!-- 编辑器 -->
+            <div class="editor-panel">
+                <div class="panel-header">
+                    <span>代码编辑器</span>
+                    <select id="targetSelect">
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                    </select>
+                </div>
+                <textarea id="editor" class="editor" placeholder="在这里输入言律代码..."></textarea>
+            </div>
+
+            <!-- 输出区 -->
+            <div class="output-panel">
+                <div class="panel-header">
+                    <span>输出结果</span>
+                    <button id="clearOutputBtn" class="btn-small">清空</button>
+                </div>
+                <div id="output" class="output"></div>
+            </div>
+        </main>
+
+        <!-- 编译结果区 -->
+        <div class="compiled-panel" id="compiledPanel" style="display: none;">
+            <div class="panel-header">
+                <span>编译结果</span>
+                <button id="copyBtn" class="btn-small">复制</button>
+            </div>
+            <pre id="compiledCode" class="compiled-code"></pre>
+        </div>
+
+        <!-- 示例选择器 -->
+        <div id="exampleModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>选择示例</h2>
+                    <button id="closeModalBtn" class="btn-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="example-list">
+                        <button class="example-item" data-example="hello">Hello World</button>
+                        <button class="example-item" data-example="variables">变量定义</button>
+                        <button class="example-item" data-example="loop">循环示例</button>
+                        <button class="example-item" data-example="function">函数示例</button>
+                        <button class="example-item" data-example="array">数组操作</button>
+                        <button class="example-item" data-example="fibonacci">斐波那契</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

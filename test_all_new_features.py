@@ -28,15 +28,15 @@ print("代码:")
 print(code1)
 
 try:
-    tokens = lexer.tokenize(code1)
-    interpreter = create_interpreter()
-    output = interpreter.execute(tokens)
-    print("\n执行结果:")
-    for line in output:
-        print(line)
-    print("\n[OK] 数组元素修改成功！")
+tokens = lexer.tokenize(code1)
+interpreter = create_interpreter()
+output = interpreter.execute(tokens)
+print("\n执行结果:")
+for line in output:
+print(line)
+print("\n[OK] 数组元素修改成功！")
 except Exception as e:
-    print(f"\n[FAIL] 错误: {e}")
+print(f"\n[FAIL] 错误: {e}")
 
 # 测试2: 动态数组操作 - 添加
 print("\n\n测试2: 动态数组操作 - 添加")
@@ -54,15 +54,15 @@ print("代码:")
 print(code2)
 
 try:
-    tokens = lexer.tokenize(code2)
-    interpreter = create_interpreter()
-    output = interpreter.execute(tokens)
-    print("\n执行结果:")
-    for line in output:
-        print(line)
-    print("\n[OK] 数组添加成功！")
+tokens = lexer.tokenize(code2)
+interpreter = create_interpreter()
+output = interpreter.execute(tokens)
+print("\n执行结果:")
+for line in output:
+print(line)
+print("\n[OK] 数组添加成功！")
 except Exception as e:
-    print(f"\n[FAIL] 错误: {e}")
+print(f"\n[FAIL] 错误: {e}")
 
 # 测试3: 动态数组操作 - 删除
 print("\n\n测试3: 动态数组操作 - 删除")
@@ -80,15 +80,15 @@ print("代码:")
 print(code3)
 
 try:
-    tokens = lexer.tokenize(code3)
-    interpreter = create_interpreter()
-    output = interpreter.execute(tokens)
-    print("\n执行结果:")
-    for line in output:
-        print(line)
-    print("\n[OK] 数组删除成功！")
+tokens = lexer.tokenize(code3)
+interpreter = create_interpreter()
+output = interpreter.execute(tokens)
+print("\n执行结果:")
+for line in output:
+print(line)
+print("\n[OK] 数组删除成功！")
 except Exception as e:
-    print(f"\n[FAIL] 错误: {e}")
+print(f"\n[FAIL] 错误: {e}")
 
 # 测试4: 长度查询
 print("\n\n测试4: 长度查询")
@@ -105,15 +105,15 @@ print("代码:")
 print(code4)
 
 try:
-    tokens = lexer.tokenize(code4)
-    interpreter = create_interpreter()
-    output = interpreter.execute(tokens)
-    print("\n执行结果:")
-    for line in output:
-        print(line)
-    print("\n[OK] 长度查询成功！")
+tokens = lexer.tokenize(code4)
+interpreter = create_interpreter()
+output = interpreter.execute(tokens)
+print("\n执行结果:")
+for line in output:
+print(line)
+print("\n[OK] 长度查询成功！")
 except Exception as e:
-    print(f"\n[FAIL] 错误: {e}")
+print(f"\n[FAIL] 错误: {e}")
 
 # 测试5: 比较运算符
 print("\n\n测试5: 比较运算符")
@@ -124,63 +124,60 @@ code5 = '''定义变量x为10
 定义变量z为5
 
 如果x大于等于y则
-输出"x大于等于y"
-结束
+    输出"x大于等于y"
 
 如果z小于等于y则
-输出"z小于等于y"
-结束
+    输出"z小于等于y"
 
 如果x不等于z则
-输出"x不等于z"
-结束'''
+    输出"x不等于z"
+    结束'''
 
-print("代码:")
-print(code5)
+    print("代码:")
+    print(code5)
 
-try:
+    try:
     tokens = lexer.tokenize(code5)
     interpreter = create_interpreter()
     output = interpreter.execute(tokens)
     print("\n执行结果:")
     for line in output:
-        print(line)
+    print(line)
     print("\n[OK] 比较运算符成功！")
-except Exception as e:
+    except Exception as e:
     print(f"\n[FAIL] 错误: {e}")
 
-# 测试6: 冒泡排序（完整版）
-print("\n\n测试6: 冒泡排序（完整版）")
-print("-" * 80)
+    # 测试6: 冒泡排序（完整版）
+    print("\n\n测试6: 冒泡排序（完整版）")
+    print("-" * 80)
 
-code6 = '''定义变量arr为[5,3,8,1,2]
-输出"原始数组:"
-输出arr
+    code6 = '''定义变量arr为[5,3,8,1,2]
+    输出"原始数组:"
+    输出arr
 
-输出"排序过程:"
-如果arr[0]大于arr[1]则
-输出"交换arr[0]和arr[1]"
-设置arr[0]为3
-设置arr[1]为5
-结束
+    输出"排序过程:"
+    如果arr[0]大于arr[1]则
+        输出"交换arr[0]和arr[1]"
+        设置arr[0]为3
+        设置arr[1]为5
 
-输出"排序后:"
-输出arr'''
+    输出"排序后:"
+    输出arr'''
 
-print("代码:")
-print(code6)
+    print("代码:")
+    print(code6)
 
-try:
+    try:
     tokens = lexer.tokenize(code6)
     interpreter = create_interpreter()
     output = interpreter.execute(tokens)
     print("\n执行结果:")
     for line in output:
-        print(line)
+    print(line)
     print("\n[OK] 冒泡排序演示成功！")
-except Exception as e:
+    except Exception as e:
     print(f"\n[FAIL] 错误: {e}")
 
-print("\n" + "=" * 80)
-print("测试完成")
-print("=" * 80)
+    print("\n" + "=" * 80)
+    print("测试完成")
+    print("=" * 80)

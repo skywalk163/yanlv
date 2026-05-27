@@ -1,6 +1,7 @@
 """
 言律语言简单解释器
 支持条件、循环、函数等程序块的执行
+支持Python风格的缩进语法
 """
 import math
 import random
@@ -21,6 +22,36 @@ class YanLuInterpreter:
         self.exception_stack: List[Dict[str, Any]] = []  # 异常栈
         self.current_exception: Optional[Dict[str, Any]] = None  # 当前异常
         self.in_try_block: bool = False  # 是否在try块中
+        # 缩进语法支持
+        self.use_indent_syntax = True  # 默认使用缩进语法
+
+    def _find_block_end(self, tokens: List[Token], start: int) -> int:
+        """
+        根据缩进级别找到代码块结束位置
+        
+        Args:
+            tokens: 词元列表
+            start: 起始位置
+            
+        Returns:
+            代码块结束位置
+        """
+        # 获取基础缩进级别
+        if start < len(tokens):
+            base_indent = tokens[start].indent
+        else:
+            base_indent = 0
+        
+        # 查找缩进级别降低的位置
+        for i in range(start, len(tokens)):
+            token = tokens[i]
+            # 跳过NEWLINE和EOF
+            if token.type in (TokenType.NEWLINE, TokenType.EOF):
+                continue
+            # 找到缩进级别降低的位置
+            if token.indent < base_indent:
+                return i
+        return len(tokens)
 
     def execute(self, tokens: List[Token]) -> List[str]:
         """
@@ -1171,26 +1202,52 @@ class YanLuInterpreter:
         """执行循环语句"""
         i += 1  # 跳过 LOOP
 
-        # 获取循环次数
+        # 获取循环次数 - 支持数字和表达式
         count = 1
-        if i < len(tokens) and tokens[i].type == TokenType.NUMBER:
-            count = int(tokens[i].value)
-            i += 1
+        if i < len(tokens):
+            if tokens[i].type == TokenType.NUMBER:
+                # 数字直接使用
+                count = int(float(tokens[i].value))
+                i += 1
+            elif tokens[i].type == TokenType.IDENTIFIER:
+                # 可能是变量或表达式,或者包含"次执行"的组合
+                value = tokens[i].value
+                
+                # 检查是否包含"次执行"
+                if '次执行' in value or '次' in value:
+                    # 提取变量部分
+                    var_part = value.replace('次执行', '').replace('次', '').replace('执行', '')
+                    if var_part:
+                        # 尝试解析变量或表达式
+                        try:
+                            if var_part in self.variables:
+                                count = int(float(self.variables[var_part]))
+                            else:
+                                # 尝试作为表达式解析
+                                count = int(float(var_part))
+                        except:
+                            pass
+                    i += 1
+                else:
+                    # 尝试解析表达式
+                    try:
+                        expr_result, new_i = self._parse_expression(tokens, i)
+                        count = int(float(expr_result))
+                        i = new_i  # 只有解析成功才更新i
+                    except:
+                        # 解析失败,使用默认值,i不更新
+                        pass
 
         # 跳过 "次执行"
         while i < len(tokens) and tokens[i].type == TokenType.IDENTIFIER:
-            i += 1
+            if '次' in tokens[i].value or '执行' in tokens[i].value:
+                i += 1
+            else:
+                break
 
-        # 找到 END 的位置
+        # 找到代码块结束位置 - 使用缩进语法
         start = i
-        depth = 1
-        end_pos = i
-        while end_pos < len(tokens) and depth > 0:
-            if tokens[end_pos].type == TokenType.LOOP:
-                depth += 1
-            elif tokens[end_pos].type == TokenType.END:
-                depth -= 1
-            end_pos += 1
+        end_pos = self._find_block_end(tokens, start)
 
         # 执行循环，提供循环变量
         old_vars = self.variables.copy()

@@ -107,15 +107,28 @@ class YanLuLexerBase(ILexer):
         lines = source_code.split('\n')
         
         for line_num, line in enumerate(lines, 1):
+            # 计算缩进级别(前导空格数)
+            indent = len(line) - len(line.lstrip())
+            indent_level = indent // 4  # 每4个空格为一级缩进
+            
             line_tokens = self.tokenize_line(line, line_num)
+            
+            # 为每个token设置缩进级别
+            for token in line_tokens:
+                token.indent = indent_level
+            
             tokens.extend(line_tokens)
             
             # 添加换行符（除非是最后一行）
             if line_num < len(lines):
-                tokens.append(Token(TokenType.NEWLINE, '\n', line_num, len(line) + 1, '\n'))
+                newline_token = Token(TokenType.NEWLINE, '\n', line_num, len(line) + 1, '\n')
+                newline_token.indent = indent_level
+                tokens.append(newline_token)
         
         # 添加文件结束标记
-        tokens.append(Token(TokenType.EOF, '', len(lines) + 1, 1, ''))
+        eof_token = Token(TokenType.EOF, '', len(lines) + 1, 1, '')
+        eof_token.indent = 0
+        tokens.append(eof_token)
         
         # 更新统计
         self.stats['lines_processed'] += len(lines)

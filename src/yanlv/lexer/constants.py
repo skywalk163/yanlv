@@ -194,7 +194,7 @@ KEYWORDS: Dict[str, TokenType] = {
     '导入': TokenType.IMPORT,
     '导出': TokenType.EXPORT,
     '从': TokenType.FROM,
-    '为': TokenType.AS,
+    '作为': TokenType.AS,  # 修改：使用"作为"代替"为"，避免与变量定义冲突
     '命名空间': TokenType.NAMESPACE,
     '结束模块': TokenType.END_MODULE,
 }

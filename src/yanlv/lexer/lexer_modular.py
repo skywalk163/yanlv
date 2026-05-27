@@ -5,6 +5,7 @@
 """
 
 from typing import List, Optional, Dict, Any, Literal
+import time
 from .base import YanLuLexerBase
 from .lexer_token import Token, TokenType
 from .tokenizer import YanLuTokenizer
@@ -14,6 +15,7 @@ from .context_manager import ContextManager, create_context_manager
 from .pattern_manager import PatternManager, create_pattern_manager
 from .performance_optimizer import PerformanceOptimizer, OptimizationConfig, OptimizationLevel
 from .utils import PerformanceMonitor, Logger, normalize_text
+from .token_cache import TokenCache, get_global_cache
 
 
 class ModularYanLuLexer(YanLuLexerBase):
@@ -45,6 +47,14 @@ class ModularYanLuLexer(YanLuLexerBase):
     
     def _init_modules(self):
         """初始化所有模块"""
+        # Token缓存
+        if self.config['enable_cache']:
+            self.token_cache = get_global_cache()
+            if self.token_cache.max_size != self.config['cache_size']:
+                self.token_cache.resize(self.config['cache_size'])
+        else:
+            self.token_cache = None
+        
         # 分词器
         self.tokenizer = YanLuTokenizer.create(
             self.segmenter_type,
@@ -141,8 +151,17 @@ class ModularYanLuLexer(YanLuLexerBase):
         return Token(TokenType.IDENTIFIER, segment, line_num, column, segment)
     
     def tokenize(self, source_code: str) -> List[Token]:
-        """将源代码转换为词法单元列表（重写以添加性能监控）"""
-        # 开始性能监控
+        """将源代码转换为词法单元列表（重写以添加性能监控和Token缓存）"""
+        # 尝试从缓存获取
+        if self.token_cache:
+            cached_tokens = self.token_cache.get(source_code)
+            if cached_tokens is not None:
+                # 缓存命中
+                self.stats['cache_hits'] = self.stats.get('cache_hits', 0) + 1
+                return cached_tokens
+        
+        # 缓存未命中,开始性能监控
+        start_time = time.time()
         self.monitor.start()
         
         try:
@@ -166,6 +185,12 @@ class ModularYanLuLexer(YanLuLexerBase):
             if self.error_handler:
                 self.stats['errors'] = self.error_handler.get_error_count()
                 self.stats['warnings'] = self.error_handler.get_warning_count()
+            
+            # 存入缓存
+            if self.token_cache:
+                elapsed_time = (time.time() - start_time) * 1000  # 转换为毫秒
+                self.token_cache.put(source_code, tokens, time_saved=elapsed_time)
+                self.stats['cache_misses'] = self.stats.get('cache_misses', 0) + 1
             
             return tokens
             
@@ -201,6 +226,14 @@ class ModularYanLuLexer(YanLuLexerBase):
         stats.update(self.monitor.get_stats().to_dict())
         # 最后更新lexer的stats（优先级最高）
         stats.update(self.stats)
+        
+        # 添加Token缓存统计
+        if self.token_cache:
+            cache_stats = self.token_cache.get_stats()
+            stats['token_cache'] = cache_stats.to_dict()
+        else:
+            stats['token_cache'] = None
+        
         return stats
     
     def get_config(self) -> Dict[str, Any]:

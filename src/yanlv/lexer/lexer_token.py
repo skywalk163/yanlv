@@ -179,10 +179,11 @@ class Token:
     line: int
     column: int
     literal: str
+    indent: int = 0  # 新增:缩进级别(空格数/4)
     
     def __str__(self) -> str:
         """返回词元的字符串表示"""
-        return f"Token({self.type.value}, '{self.value}', line={self.line}, col={self.column})"
+        return f"Token({self.type.value}, '{self.value}', line={self.line}, col={self.column}, indent={self.indent})"
     
     def __repr__(self) -> str:
         """返回词元的表示"""
@@ -195,7 +196,8 @@ class Token:
             'value': self.value,
             'line': self.line,
             'column': self.column,
-            'literal': self.literal
+            'literal': self.literal,
+            'indent': self.indent
         }
     
     @classmethod
@@ -206,7 +208,8 @@ class Token:
             value=data['value'],
             line=data['line'],
             column=data['column'],
-            literal=data['literal']
+            literal=data['literal'],
+            indent=data.get('indent', 0)
         )
     
     def is_type(self, token_type: TokenType) -> bool:

@@ -1,0 +1,66 @@
+{
+  "name": "yanlv",
+  "displayName": "言律语言支持",
+  "description": "言律编程语言VS Code插件 - 支持语法高亮、自动补全、错误诊断",
+  "version": "0.1.0",
+  "publisher": "yanlv",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onLanguage:yanlv"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "yanlv",
+        "aliases": ["言律", "YanLv", "yanlv"],
+        "extensions": [".yan", ".yanlv"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "yanlv",
+        "scopeName": "source.yanlv",
+        "path": "./syntaxes/yanlv.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "yanlv",
+        "path": "./snippets/yanlv.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "yanlv.compile",
+        "title": "编译言律代码"
+      },
+      {
+        "command": "yanlv.run",
+        "title": "运行言律代码"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^16.10.0",
+    "@types/vscode": "^1.60.0",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "eslint": "^8.1.0",
+    "typescript": "^4.9.0"
+  }
+}

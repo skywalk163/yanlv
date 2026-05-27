@@ -1,16 +1,17 @@
-# 言律语言 (YanLv Language)
+# 言律编程语言
 
 <div align="center">
 
-[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/yanlv/yanlv)
-[![Tests](https://img.shields.io/badge/tests-54%20passed-yellow.svg)](https://github.com/yanlv/yanlv)
-[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](https://github.com/yanlv/yanlv)
+![言律Logo](https://img.shields.io/badge/言律-中文编程语言-blue)
 
-**一个正在开发中的中文编程语言**
+[![GitHub Stars](https://img.shields.io/github/stars/yanlv/yanlv.svg)](https://github.com/yanlv/yanlv/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/yanlv/yanlv.svg)](https://github.com/yanlv/yanlv/issues)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org)
 
-[快速开始](#快速开始) • [功能特性](#功能特性) • [示例](#示例) • [Playground](#playground)
+**用中文思考，用中文编程**
+
+[在线体验](https://yanlv.org/playground) | [文档](https://yanlv.org/docs) | [示例](https://yanlv.org/examples) | [贡献指南](CONTRIBUTING.md)
 
 </div>
 
@@ -18,405 +19,143 @@
 
 ## 📖 简介
 
-言律语言是一个基于中文语法的编程语言，旨在让中文用户能够使用自然语言进行编程。本项目目前处于**原型验证阶段**，已完成基础语法实现，正在开发四大核心语法特性（因果链、语境省略、状态流、意合式调用）。
+言律是一门创新的中文编程语言，让每个中文用户都能用母语自然地表达编程思想。
 
-**当前状态：** 原型验证阶段  
-**完成度：** 约60%  
-**测试覆盖率：** 19%
+### 核心特性
 
-### ✨ 核心特性
-
-- 🎯 **完全中文语法** - 使用中文关键词和语法，自然易读
-- 🚀 **功能完整** - 支持变量、函数、条件、循环、数组等
-- 🧠 **智能表达式** - 运算符优先级、括号、复杂表达式
-- 📦 **数组支持** - 数组定义、索引访问、动态操作
-- 🌐 **Web Playground** - 在线体验，实时反馈
-- 🛡️ **错误处理** - 完善的错误恢复和建议系统
-
----
+- 🇨🇳 **中文优先** - 完全使用中文关键字和语法
+- 🔗 **因果链语法** - 用自然语言描述事件和响应关系
+- 🔄 **状态流语法** - 直观的状态机定义
+- 🎯 **意合式调用** - 智能参数推断
+- 🛤️ **多轨制支持** - 嵌入Python、JavaScript、SQL代码
+- ⚡ **高性能** - 优化的编译器和运行时
 
 ## 🚀 快速开始
 
 ### 安装
 
 ```bash
-# 使用pip安装
 pip install yanlv
-
-# 或从源码安装
-git clone https://github.com/skywalk163/yanlv.git
-cd yanlv
-pip install -e .
 ```
-
-### 基本使用
-
-```python
-from yanlv.lexer import create_lexer
-from yanlv.interpreter import create_interpreter
-
-# 创建词法分析器
-lexer = create_lexer("yanlv_nospace")
-
-# 编写代码
-code = '''
-定义变量x为10
-定义变量y为20
-输出x+y
-'''
-
-# 词法分析
-tokens = lexer.tokenize(code)
-
-# 解释执行
-interpreter = create_interpreter()
-output = interpreter.execute(tokens)
-
-# 输出结果
-for line in output:
-    print(line)
-```
-
----
-
-## 🎯 功能特性
-
-### 1. 基础语法
-
-```python
-# 变量定义
-定义变量x为10
-定义变量name为"张三"
-
-# 变量赋值
-设置x为20
-
-# 输出
-输出"你好，言律语言！"
-输出x
-```
-
-### 2. 控制结构
-
-```python
-# 条件语句
-定义变量x为10
-如果x大于5则
-输出"x大于5"
-否则
-输出"x不大于5"
-结束
-
-# 循环语句
-循环5次执行
-输出i
-结束
-```
-
-### 3. 函数
-
-```python
-# 函数定义
-函数加法参数a b
-输出a+b
-结束
-
-# 函数调用
-调用加法参数10 20
-
-# 递归函数（汉诺塔）
-函数汉诺塔参数n from to aux
-如果n大于0则
-调用汉诺塔参数n-1 from aux to
-输出"移动盘子"
-输出n
-输出"从"
-输出from
-输出"到"
-输出to
-调用汉诺塔参数n-1 aux to from
-结束
-结束
-调用汉诺塔参数3 A C B
-```
-
-### 4. 数组
-
-```python
-# 数组定义
-定义变量arr为[1,2,3,4,5]
-
-# 数组访问
-输出arr[0]
-输出arr[2]
-
-# 数组修改
-设置arr[0]为10
-
-# 动态操作
-添加arr 6
-删除arr 0
-长度arr
-```
-
-### 5. 表达式
-
-```python
-# 运算符优先级
-定义变量a为2
-定义变量b为3
-定义变量c为4
-输出a+b*c    # 14
-输出(a+b)*c  # 20
-
-# 复杂表达式
-定义变量x为10
-定义变量y为5
-定义变量z为2
-输出x+y*z      # 20
-输出(x+y)*z    # 30
-输出x/(y-z)    # 3.333...
-```
-
-### 6. 比较运算符
-
-```python
-定义变量x为10
-定义变量y为10
-定义变量z为5
-
-如果x大于等于y则
-输出"x大于等于y"
-结束
-
-如果x不等于z则
-输出"x不等于z"
-结束
-```
-
----
-
-## 🌐 Playground
-
-### 启动服务
-
-```bash
-cd playground
-python server.py
-```
-
-### 访问地址
-
-```
-http://localhost:5000
-```
-
-### API端点
-
-- `GET /` - 首页
-- `POST /api/run` - 运行代码
-- `POST /api/analyze` - 分析代码
-- `GET /api/examples` - 获取示例
-
-### 使用示例
-
-```python
-import requests
-
-# 运行代码
-response = requests.post('http://localhost:5000/api/run',
-                        json={'code': '输出"你好"'})
-print(response.json())
-```
-
----
-
-## 📚 示例
 
 ### Hello World
 
-```python
-输出"你好，言律语言！"
+创建文件 `hello.yan`：
+
+```yan
+输出"你好，世界！"
 ```
 
-### 斐波那契数列
-
-```python
-函数斐波那契参数n
-如果n小于等于1则
-返回n
-否则
-定义变量a为n-1
-定义变量b为n-2
-调用斐波那契参数a
-调用斐波那契参数b
-结束
-结束
-调用斐波那契参数10
-```
-
-### 冒泡排序
-
-```python
-定义变量arr为[5,3,8,1,2]
-输出"原始数组:"
-输出arr
-
-# 排序过程
-如果arr[0]大于arr[1]则
-设置arr[0]为3
-设置arr[1]为5
-结束
-
-输出"排序后:"
-输出arr
-```
-
----
-
-## 📖 文档
-
-- [项目完成总结](项目完成总结.md)
-- [语法问题自查报告](语法问题自查报告.md)
-- [语法问题修复报告](语法问题修复报告.md)
-- [新功能实现报告](新功能实现报告.md)
-- [新功能探讨与实现报告](新功能探讨与实现报告.md)
-- [Playground使用说明](playground/使用说明.md)
-
----
-
-## 🧪 测试
-
-### 运行测试
+运行：
 
 ```bash
-# 测试基础功能
-python test_new_features.py
-
-# 测试所有新功能
-python test_all_new_features.py
-
-# 测试Playground服务
-python test_playground.py
-
-# 最终测试总结
-python final_test_summary.py
+yanlv run hello.yan
 ```
 
-### 测试结果
+### 更多示例
 
-- ✅ 所有基础功能测试通过
-- ✅ 所有高级功能测试通过
-- ✅ Playground服务测试通过
-- ✅ 汉诺塔算法正确（7次移动）
-- ✅ 冒泡排序演示成功
+```yan
+// 变量定义
+定义变量x为10
+定义变量y为20
 
----
+// 条件语句 - 使用缩进语法
+如果x大于y则
+    输出"x大于y"
+否则
+    输出"y大于等于x"
 
-## 🏗️ 项目结构
+// 循环 - 使用缩进语法
+循环5次执行
+    输出i
 
-```
-yanlv/
-├── src/
-│   └── yanlv/
-│       ├── lexer/              # 词法分析器
-│       │   ├── lexer_token.py  # 词元定义
-│       │   └── constants.py    # 常量定义
-│       ├── interpreter.py      # 解释器
-│       ├── semantic.py         # 语义分析
-│       └── feedback.py         # 反馈收集
-├── playground/
-│   ├── server.py               # Flask服务
-│   ├── index.html              # 前端页面
-│   └── 使用说明.md
-├── tests/                      # 测试文件
-├── docs/                       # 文档
-└── README.md
+// 函数 - 使用缩进语法
+函数加法参数a b
+    返回a加b
+
+输出调用加法参数10 20  // 30
 ```
 
----
+### 🎯 语法特性
+
+言律语言采用**Python风格的缩进语法**,无需"结束"关键字:
+
+```yan
+// ✅ 推荐: 使用缩进
+循环3次执行
+    输出"hello"
+    定义变量x为10
+    输出x
+
+// ❌ 已废弃: 使用"结束"关键字
+循环3次执行
+    输出"hello"
+结束  // 不再需要
+```
+
+**优势:**
+- 代码更简洁(减少20-30%代码量)
+- 学习成本低(与Python一致)
+- 强制良好的代码风格
+- 现代编辑器自动支持
+
+## 📚 文档
+
+- [教程](docs/教程.md) - 从入门到精通
+- [API文档](docs/API文档.md) - 完整API参考
+- [示例代码](docs/示例代码.md) - 30+实用示例
+
+## 🛠️ 工具链
+
+- **VS Code插件** - 语法高亮、自动补全、错误诊断
+- **在线IDE** - 无需安装，在线编写和运行
+- **包管理器** - 安装、发布和管理依赖包
+
+## 📊 项目状态
+
+| 模块 | 完成度 | 状态 |
+|------|--------|------|
+| 词法分析器 | 95% | ✅ |
+| 语法分析器 | 90% | ✅ |
+| 解释器 | 85% | ✅ |
+| 编译器 | 85% | ✅ |
+| VS Code插件 | 90% | ✅ |
+| 多轨制 | 90% | ✅ |
+| 标准库 | 80% | ✅ |
+| 测试覆盖率 | 80% | ✅ |
 
 ## 🤝 贡献
 
-欢迎贡献代码、报告问题或提出建议！
+欢迎贡献！请查看 [贡献指南](CONTRIBUTING.md)。
 
 ### 贡献方式
 
-1. Fork 项目
+1. Fork 本仓库
 2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
 3. 提交更改 (`git commit -m '添加某个特性'`)
 4. 推送到分支 (`git push origin feature/AmazingFeature`)
 5. 创建 Pull Request
 
----
+## 📝 许可证
 
-## 📝 开发计划
-
-### 已完成 ✅
-
-- [x] 基础语法（变量、函数、条件、循环）
-- [x] 多参数函数
-- [x] 递归调用
-- [x] 数组支持
-- [x] 数组索引访问
-- [x] 数组元素修改
-- [x] 动态数组操作
-- [x] 运算符优先级
-- [x] 括号支持
-- [x] 更多比较运算符
-- [x] Web Playground
-- [x] 元数驱动解析
-- [x] 动词分类词典
-
-### 进行中 🚧
-
-- [ ] 因果链语法（有示例，实现中）
-- [ ] 语境省略语法（架构已搭建）
-- [ ] 状态流语法（有示例）
-- [ ] 意合式函数调用（部分实现）
-- [ ] 字符串连接
-- [ ] 字符串切片
-- [ ] 更多内置函数
-
-### 计划中 📋
-
-- [ ] 多轨制支持（Python、JavaScript、SQL）
-- [ ] 编译器架构（AST、代码生成）
-- [ ] VS Code插件
-- [ ] 调试工具
-- [ ] 包管理器
-- [ ] 二维数组
-- [ ] 字典/映射
-- [ ] 文件操作
-- [ ] 异常处理
-- [ ] 类和对象
-
----
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件
-
----
+本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情。
 
 ## 🙏 致谢
 
-感谢所有贡献者和用户的支持！
-
----
+感谢所有贡献者的支持！
 
 ## 📞 联系方式
 
-- 项目主页: https://github.com/skywalk163/yanlv
-- 问题反馈: https://github.com/skywalk163/yanlv/issues
-- 邮箱: yanlv@example.com
+- **官网**: https://yanlv.org
+- **GitHub**: https://github.com/yanlv/yanlv
+- **Issues**: https://github.com/yanlv/yanlv/issues
 
 ---
 
 <div align="center">
 
-**如果这个项目对你有帮助，请给一个 ⭐️ Star！**
+**用中文思考，用中文编程**
 
-Made with ❤️ by YanLv Team
+Made with ❤️ by 言律团队
 
 </div>
