@@ -4,8 +4,8 @@
 
 ![言律Logo](https://img.shields.io/badge/言律-中文编程语言-blue)
 
-[![GitHub Stars](https://img.shields.io/github/stars/yanlv/yanlv.svg)](https://github.com/yanlv/yanlv/stargazers)
-[![GitHub Issues](https://img.shields.io/github/issues/yanlv/yanlv.svg)](https://github.com/yanlv/yanlv/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/yanlv/yanlv.svg)](https://github.com/skywalk163/yanlv/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/yanlv/yanlv.svg)](https://github.com/skywalk163/yanlv/issues)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org)
 
@@ -146,9 +146,10 @@ yanlv run hello.yan
 
 ## 📞 联系方式
 
-- **官网**: https://yanlv.org
-- **GitHub**: https://github.com/yanlv/yanlv
-- **Issues**: https://github.com/yanlv/yanlv/issues
+- **官网**: https://gitcode.com/skywalk163/yanlv
+- **GitCode**: https://gitcode.com/skywalk163/yanlv
+- **GitHub**: https://github.com/skywalk163/yanlv
+- **Issues**: https://github.com/skywalk163/yanlv/issues
 
 ---
 
