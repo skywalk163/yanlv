@@ -1,279 +1,181 @@
 """
-模块系统测试
-
-测试ModuleManager的功能
+言律语言模块系统功能测试
 """
-
-import pytest
+import sys
 import os
-import tempfile
-from yanlv.module_system import (
-    Module,
-    ModuleManager,
-    ModuleBuilder,
-    get_module_manager
-)
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+
+from yanlv.module_manager import create_module_manager, Module, Namespace
 
 
-class TestModule:
-    """模块测试"""
+def test_module_creation():
+    """测试模块创建"""
+    print("\n=== 测试模块创建 ===")
     
-    def test_module_initialization(self):
-        """测试模块初始化"""
-        module = Module("test_module")
-        assert module.name == "test_module"
-        assert module.path is None
-        assert len(module.exports) == 0
-        assert len(module.imports) == 0
-        assert not module.loaded
+    manager = create_module_manager()
     
-    def test_add_export(self):
-        """测试添加导出项"""
-        module = Module("test_module")
-        
-        module.add_export("func1", lambda x: x * 2)
-        module.add_export("var1", 42)
-        
-        assert "func1" in module.exports
-        assert "var1" in module.exports
-        assert module.exports["var1"] == 42
+    # 创建模块
+    module = manager.create_module("测试模块")
+    print(f"测试1 - 创建模块: {module.name}")
+    assert module.name == "测试模块"
     
-    def test_get_export(self):
-        """测试获取导出项"""
-        module = Module("test_module")
-        module.add_export("value", 100)
-        
-        result = module.get_export("value")
-        assert result == 100
-        
-        # 测试不存在的导出项
-        result = module.get_export("nonexistent")
-        assert result is None
+    # 添加函数
+    module.add_function("测试函数", lambda x: x * 2)
+    print(f"测试2 - 添加函数: {list(module.functions.keys())}")
+    assert "测试函数" in module.functions
     
-    def test_list_exports(self):
-        """测试列出导出项"""
-        module = Module("test_module")
-        module.add_export("a", 1)
-        module.add_export("b", 2)
-        module.add_export("c", 3)
-        
-        exports = module.list_exports()
-        assert len(exports) == 3
-        assert "a" in exports
-        assert "b" in exports
-        assert "c" in exports
+    # 导出函数
+    module.export_item("测试函数")
+    print(f"测试3 - 导出函数: {module.exports}")
+    assert "测试函数" in module.exports
     
-    def test_add_import(self):
-        """测试添加导入"""
-        module1 = Module("module1")
-        module2 = Module("module2")
-        
-        module1.add_import("m2", module2)
-        
-        assert "m2" in module1.imports
-        assert module1.imports["m2"] is module2
+    print("[PASS] 模块创建测试通过")
 
 
-class TestModuleManager:
-    """模块管理器测试"""
+def test_namespace():
+    """测试命名空间"""
+    print("\n=== 测试命名空间 ===")
     
-    def test_manager_initialization(self):
-        """测试管理器初始化"""
-        manager = ModuleManager()
-        assert len(manager.modules) == 0
-        assert len(manager.search_paths) > 0
+    # 创建命名空间
+    global_ns = Namespace("global")
+    local_ns = Namespace("local", global_ns)
     
-    def test_add_search_path(self):
-        """测试添加搜索路径"""
-        manager = ModuleManager()
-        
-        test_path = "/test/path"
-        manager.add_search_path(test_path)
-        
-        assert test_path in manager.search_paths
+    # 添加符号
+    global_ns.add_symbol("全局变量", 100)
+    local_ns.add_symbol("局部变量", 200)
     
-    def test_create_module(self):
-        """测试创建模块"""
-        manager = ModuleManager()
-        
-        module = manager.create_module("test_module")
-        
-        assert module is not None
-        assert module.name == "test_module"
-        assert "test_module" in manager.modules
+    # 查找符号
+    value1 = local_ns.get_symbol("局部变量")
+    print(f"测试1 - 查找局部变量: {value1}")
+    assert value1 == 200
     
-    def test_get_module(self):
-        """测试获取模块"""
-        manager = ModuleManager()
-        
-        # 创建模块
-        manager.create_module("test_module")
-        
-        # 获取模块
-        module = manager.get_module("test_module")
-        assert module is not None
-        
-        # 测试不存在的模块
-        module = manager.get_module("nonexistent")
-        assert module is None
+    value2 = local_ns.get_symbol("全局变量")
+    print(f"测试2 - 查找全局变量: {value2}")
+    assert value2 == 100
     
-    def test_import_module(self):
-        """测试导入模块"""
-        manager = ModuleManager()
-        
-        # 导入json模块(Python标准库)
-        module = manager.import_module("json")
-        assert module is not None
-        assert module.loaded
-        
-        # 测试别名导入
-        module = manager.import_module("os", "myos")
-        assert module is not None
-        assert "myos" in manager.modules
+    # 检查符号存在
+    exists = local_ns.has_symbol("全局变量")
+    print(f"测试3 - 检查符号存在: {exists}")
+    assert exists == True
     
-    def test_import_from(self):
-        """测试从模块导入"""
-        manager = ModuleManager()
-        
-        # 从json模块导入dumps和loads
-        imports = manager.import_from("json", ["dumps", "loads"])
-        
-        assert "dumps" in imports
-        assert "loads" in imports
-        assert callable(imports["dumps"])
-    
-    def test_export_all(self):
-        """测试导出所有内容"""
-        manager = ModuleManager()
-        
-        # 导入模块
-        manager.import_module("json")
-        
-        # 导出所有内容
-        exports = manager.export_all("json")
-        
-        assert len(exports) > 0
-        assert "dumps" in exports
-        assert "loads" in exports
-    
-    def test_list_modules(self):
-        """测试列出模块"""
-        manager = ModuleManager()
-        
-        # 创建几个模块
-        manager.create_module("module1")
-        manager.create_module("module2")
-        manager.create_module("module3")
-        
-        modules = manager.list_modules()
-        
-        assert len(modules) == 3
-        assert "module1" in modules
-        assert "module2" in modules
-        assert "module3" in modules
+    print("[PASS] 命名空间测试通过")
 
 
-class TestModuleBuilder:
-    """模块构建器测试"""
+def test_module_manager():
+    """测试模块管理器"""
+    print("\n=== 测试模块管理器 ===")
     
-    def test_build_module(self):
-        """测试构建模块"""
-        manager = ModuleManager()
-        builder = ModuleBuilder(manager)
-        
-        exports = {
-            "func1": lambda x: x * 2,
-            "var1": 42,
-            "var2": "hello"
-        }
-        
-        module = builder.build_module("custom_module", exports)
-        
-        assert module is not None
-        assert module.loaded
-        assert "func1" in module.exports
-        assert "var1" in module.exports
-        assert module.exports["var1"] == 42
+    manager = create_module_manager()
     
-    def test_build_from_file(self):
-        """测试从文件构建模块"""
-        manager = ModuleManager()
-        builder = ModuleBuilder(manager)
-        
-        # 创建临时Python文件
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
-            f.write("""
-def test_func():
-    return 42
-
-test_var = "hello"
-""")
-            temp_path = f.name
-        
-        try:
-            module = builder.build_from_file("temp_module", temp_path)
-            
-            assert module is not None
-            assert module.loaded
-            assert "test_func" in module.exports
-            assert "test_var" in module.exports
-        finally:
-            os.unlink(temp_path)
-
-
-class TestGlobalManager:
-    """全局管理器测试"""
+    # 创建模块
+    module1 = manager.create_module("模块1")
+    module1.add_function("函数1", lambda x: x + 1)
+    module1.export_item("函数1")
     
-    def test_get_global_manager(self):
-        """测试获取全局管理器"""
-        manager1 = get_module_manager()
-        manager2 = get_module_manager()
-        
-        # 应该是同一个实例
-        assert manager1 is manager2
-
-
-class TestModuleUsage:
-    """模块使用测试"""
+    module2 = manager.create_module("模块2")
+    module2.add_function("函数2", lambda x: x * 2)
+    module2.export_item("函数2")
     
-    def test_module_import_usage(self):
-        """测试模块导入使用"""
-        manager = ModuleManager()
-        
-        # 导入json模块
-        json_module = manager.import_module("json")
-        
-        # 使用导出的函数
-        dumps = json_module.get_export("dumps")
-        loads = json_module.get_export("loads")
-        
-        # 测试功能
-        data = {"name": "张三", "age": 25}
-        json_str = dumps(data, ensure_ascii=False)
-        parsed = loads(json_str)
-        
-        assert parsed["name"] == "张三"
-        assert parsed["age"] == 25
+    # 检查模块存在
+    has_module1 = manager.has_module("模块1")
+    print(f"测试1 - 检查模块存在: {has_module1}")
+    assert has_module1 == True
     
-    def test_module_chain_import(self):
-        """测试模块链式导入"""
-        manager = ModuleManager()
-        
-        # 创建主模块
-        main_module = manager.create_module("main")
-        
-        # 导入其他模块
-        json_module = manager.import_module("json")
-        os_module = manager.import_module("os")
-        
-        # 添加导入关系
-        main_module.add_import("json", json_module)
-        main_module.add_import("os", os_module)
-        
-        # 验证导入关系
-        assert main_module.get_import("json") is json_module
-        assert main_module.get_import("os") is os_module
+    # 获取模块
+    module = manager.get_module("模块1")
+    print(f"测试2 - 获取模块: {module.name}")
+    assert module.name == "模块1"
+    
+    # 导入模块
+    success = manager.import_module("模块1")
+    print(f"测试3 - 导入模块: {success}")
+    assert success == True
+    
+    print("[PASS] 模块管理器测试通过")
 
 
-if __name__ == '__main__':
-    pytest.main([__file__, '-v'])
+def test_import_from_module():
+    """测试从模块导入"""
+    print("\n=== 测试从模块导入 ===")
+    
+    manager = create_module_manager()
+    
+    # 创建模块
+    module = manager.create_module("数学工具")
+    module.add_function("平方", lambda x: x * x)
+    module.add_function("立方", lambda x: x * x * x)
+    module.export_item("平方")
+    module.export_item("立方")
+    
+    # 从模块导入
+    success = manager.import_from_module("数学工具", ["平方", "立方"])
+    print(f"测试1 - 从模块导入: {success}")
+    assert success == True
+    
+    # 获取导入的符号
+    func = manager.get_symbol("平方")
+    print(f"测试2 - 获取导入的函数: {func is not None}")
+    assert func is not None
+    
+    # 测试函数调用
+    result = func(5)
+    print(f"测试3 - 调用导入的函数: 平方(5) = {result}")
+    assert result == 25
+    
+    print("[PASS] 从模块导入测试通过")
+
+
+def test_stdlib_modules():
+    """测试标准库模块"""
+    print("\n=== 测试标准库模块 ===")
+    
+    # 检查标准库文件是否存在
+    stdlib_path = os.path.join(os.path.dirname(__file__), 'stdlib')
+    
+    math_file = os.path.join(stdlib_path, '数学.yan')
+    string_file = os.path.join(stdlib_path, '字符串.yan')
+    array_file = os.path.join(stdlib_path, '数组.yan')
+    file_file = os.path.join(stdlib_path, '文件.yan')
+    
+    print(f"测试1 - 数学模块文件存在: {os.path.exists(math_file)}")
+    assert os.path.exists(math_file)
+    
+    print(f"测试2 - 字符串模块文件存在: {os.path.exists(string_file)}")
+    assert os.path.exists(string_file)
+    
+    print(f"测试3 - 数组模块文件存在: {os.path.exists(array_file)}")
+    assert os.path.exists(array_file)
+    
+    print(f"测试4 - 文件模块文件存在: {os.path.exists(file_file)}")
+    assert os.path.exists(file_file)
+    
+    print("[PASS] 标准库模块测试通过")
+
+
+def run_all_tests():
+    """运行所有测试"""
+    print("\n" + "="*50)
+    print("言律语言模块系统功能测试")
+    print("="*50)
+    
+    try:
+        test_module_creation()
+        test_namespace()
+        test_module_manager()
+        test_import_from_module()
+        test_stdlib_modules()
+        
+        print("\n" + "="*50)
+        print("[PASS] 所有测试通过！")
+        print("="*50)
+        return True
+    except Exception as e:
+        print(f"\n[FAIL] 测试失败: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+if __name__ == "__main__":
+    success = run_all_tests()
+    sys.exit(0 if success else 1)

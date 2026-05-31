@@ -112,14 +112,64 @@ class ModularYanLuLexer(YanLuLexerBase):
         # 规范化文本
         normalized_line = normalize_text(line)
 
+        # 先提取字符串字面量，避免被分词器拆分
+        # 记录字符串的位置和内容
+        string_ranges = []
+        i = 0
+        while i < len(normalized_line):
+            if normalized_line[i] in ('"', "'"):
+                quote = normalized_line[i]
+                j = i + 1
+                while j < len(normalized_line) and normalized_line[j] != quote:
+                    j += 1
+                if j < len(normalized_line):
+                    # 找到完整的字符串字面量
+                    string_ranges.append((i, j+1))
+                    i = j + 1
+                else:
+                    i += 1
+            else:
+                i += 1
+
         # 使用分词器进行分词
-        segments = self.tokenizer.segment(normalized_line)
+        raw_segments = self.tokenizer.segment(normalized_line)
+
+        # 计算每个segment在原始字符串中的位置（包括空格）
+        segment_positions = []
+        pos = 0
+        for segment in raw_segments:
+            if segment:
+                segment_positions.append((segment, pos, pos + len(segment)))
+                pos += len(segment)
+
+        # 过滤掉纯空格的segment
+        segment_positions = [(s, start, end) for s, start, end in segment_positions if s and not s.isspace()]
 
         # 处理每个分词片段
         column = 1
-        for segment in segments:
+        processed_string_ranges = set()  # 记录已处理的字符串范围
+
+        for segment, seg_start, seg_end in segment_positions:
             # 跳过空片段
             if not segment:
+                continue
+
+            # 检查是否在字符串范围内
+            in_string = False
+            for idx, (str_start, str_end) in enumerate(string_ranges):
+                if seg_start >= str_start and seg_end <= str_end:
+                    in_string = True
+                    # 如果这是字符串的开始位置，且还没处理过
+                    if seg_start == str_start and idx not in processed_string_ranges:
+                        string_literal = normalized_line[str_start:str_end]
+                        token = Token(TokenType.STRING, string_literal, line_num, column, string_literal)
+                        tokens.append(token)
+                        column += len(string_literal)
+                        processed_string_ranges.add(idx)
+                    break
+
+            if in_string:
+                # 如果是字符串的一部分，跳过
                 continue
 
             # 匹配词元类型
