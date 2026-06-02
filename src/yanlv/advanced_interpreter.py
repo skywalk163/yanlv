@@ -629,6 +629,14 @@ class AdvancedInterpreter:
                 # 输出语句
                 if line_tokens[1].type == TokenType.STRING:
                     self.output.append(line_tokens[1].value.strip('"\''))
+                elif len(line_tokens) > 2:
+                    # 可能是表达式，使用基础解释器
+                    self.base_interpreter.variables = self.variables
+                    self.base_interpreter.functions = self.functions
+                    result = self.base_interpreter.execute(line_tokens)
+                    self.output.extend(result)
+                    self.variables = self.base_interpreter.variables
+                    self.functions = self.base_interpreter.functions
                 elif line_tokens[1].type == TokenType.IDENTIFIER:
                     var_name = line_tokens[1].value
                     if var_name in self.variables:

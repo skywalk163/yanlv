@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>言律语言示例教程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav {
+            background: #f8f9fa;
+            padding: 15px 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .example-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .example-title {
+            font-size: 1.3em;
+            color: #667eea;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .example-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .run-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .run-button:hover {
+            background: #5568d3;
+        }
+
+        .output {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            white-space: pre-wrap;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .difficulty.easy {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty.medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty.hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .tips {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        .tips-title {
+            font-weight: bold;
+            color: #2196F3;
+            margin-bottom: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 言律语言示例教程</h1>
+            <p>从基础到高级，循序渐进学习言律语言</p>
+        </div>
+
+        <div class="nav">
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="showSection('yanlv')">言律语言</div>
+                <div class="nav-tab" onclick="showSection('python')">Python轨</div>
+                <div class="nav-tab" onclick="showSection('javascript')">JavaScript轨</div>
+                <div class="nav-tab" onclick="showSection('sql')">SQL轨</div>
+                <div class="nav-tab" onclick="showSection('c')">C/C++轨</div>
+                <div class="nav-tab" onclick="showSection('advanced')">高级应用</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <a href="index.html" class="back-link">← 返回Playground</a>
+
+            <!-- 言律语言示例 -->
+            <div id="yanlv" class="section active">
+                <h2 style="margin-bottom: 20px; color: #667eea;">言律语言基础示例</h2>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>1. Hello World</span>
+                        <span class="difficulty easy">入门</span>
+                    </div>
+                    <div class="example-description">
+                        最简单的言律程序，输出"你好世界"。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 这是注释</span>
+<span class="keyword">输出</span> <span class="string">"你好世界"</span>
+                    </div>
+                    <button class="run-button" onclick="runExample('yanlv', 'helloworld')">运行示例</button>
+                    <div id="output-yanlv-helloworld" class="output" style="display:none;"></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>2. 变量定义</span>
+                        <span class="difficulty easy">入门</span>
+                    </div>
+                    <div class="example-description">
+                        定义变量并进行简单的数学运算。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 定义变量</span>
+<span class="keyword">定义变量</span> 年龄 <span class="keyword">为</span> <span class="number">25</span>
+<span class="keyword">定义变量</span> 姓名 <span class="keyword">为</span> <span class="string">"张三"</span>
+
+<span class="comment"># 输出变量</span>
+<span class="keyword">输出</span> 姓名
+<span class="keyword">输出</span> 年龄
+
+<span class="comment"># 数学运算</span>
+<span class="keyword">定义变量</span> 明年 <span class="keyword">为</span> 年龄 <span class="keyword">加</span> <span class="number">1</span>
+<span class="keyword">输出</span> <span class="string">"明年年龄："</span>
+<span class="keyword">输出</span> 明年
+                    </div>
+                    <button class="run-button" onclick="runExample('yanlv', 'variables')">运行示例</button>
+                    <div id="output-yanlv-variables" class="output" style="display:none;"></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>3. 条件判断</span>
+                        <span class="difficulty easy">入门</span>
+                    </div>
+                    <div class="example-description">
+                        使用条件语句进行判断。
+                    </div>
+                    <div class="code-block">
+<span class="keyword">定义变量</span> 分数 <span class="keyword">为</span> <span class="number">85</span>
+
+<span class="keyword">如果</span> 分数 <span class="keyword">大于等于</span> <span class="number">90</span> <span class="keyword">则</span>
+    <span class="keyword">输出</span> <span class="string">"优秀"</span>
+<span class="keyword">否则如果</span> 分数 <span class="keyword">大于等于</span> <span class="number">80</span> <span class="keyword">则</span>
+    <span class="keyword">输出</span> <span class="string">"良好"</span>
+<span class="keyword">否则如果</span> 分数 <span class="keyword">大于等于</span> <span class="number">60</span> <span class="keyword">则</span>
+    <span class="keyword">输出</span> <span class="string">"及格"</span>
+<span class="keyword">否则</span>
+    <span class="keyword">输出</span> <span class="string">"不及格"</span>
+<span class="keyword">结束</span>
+                    </div>
+                    <button class="run-button" onclick="runExample('yanlv', 'condition')">运行示例</button>
+                    <div id="output-yanlv-condition" class="output" style="display:none;"></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>4. 循环</span>
+                        <span class="difficulty medium">基础</span>
+                    </div>
+                    <div class="example-description">
+                        使用循环计算1到100的和。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 计算1到100的和</span>
+<span class="keyword">定义变量</span> 总和 <span class="keyword">为</span> <span class="number">0</span>
+
+<span class="keyword">对于</span> i <span class="keyword">从</span> <span class="number">1</span> <span class="keyword">到</span> <span class="number">100</span>：
+    <span class="keyword">定义变量</span> 总和 <span class="keyword">为</span> 总和 <span class="keyword">加</span> i
+
+<span class="keyword">输出</span> <span class="string">"1到100的和："</span>
+<span class="keyword">输出</span> 总和
+                    </div>
+                    <button class="run-button" onclick="runExample('yanlv', 'loop')">运行示例</button>
+                    <div id="output-yanlv-loop" class="output" style="display:none;"></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>5. 因果链语法</span>
+                        <span class="difficulty medium">进阶</span>
+                    </div>
+                    <div class="example-description">
+                        使用因果链语法表达自然逻辑，这是言律语言的特色语法。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 智能家居控制示例</span>
+<span class="keyword">定义变量</span> 温度 <span class="keyword">为</span> <span class="number">30</span>
+
+<span class="comment"># 因果链：温度条件 → 执行动作</span>
+温度 <span class="keyword">大于</span> <span class="number">28</span>，<span class="keyword">输出</span> <span class="string">"开启空调制冷"</span>。
+温度 <span class="keyword">小于</span> <span class="number">20</span>，<span class="keyword">输出</span> <span class="string">"开启空调制热"</span>。
+温度 <span class="keyword">在</span> <span class="number">20</span> <span class="keyword">到</span> <span class="number">28</span> <span class="keyword">之间</span>，<span class="keyword">输出</span> <span class="string">"温度适宜"</span>。
+                    </div>
+                    <button class="run-button" onclick="runExample('yanlv', 'causal')">运行示例</button>
+                    <div id="output-yanlv-causal" class="output" style="display:none;"></div>
+                </div>
+
+                <div class="tips">
+                    <div class="tips-title">💡 学习提示</div>
+                    <p>言律语言的核心优势是"像说话一样编程"。因果链语法让代码更接近自然语言，易于理解和维护。</p>
+                </div>
+            </div>
+
+            <!-- Python轨示例 -->
+            <div id="python" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">Python轨示例</h2>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>1. 使用Python数学库</span>
+                        <span class="difficulty easy">入门</span>
+                    </div>
+                    <div class="example-description">
+                        在言律中直接使用Python的数学函数。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 使用Python的math库</span>
+<span class="keyword">定义变量</span> 圆周率 <span class="keyword">为</span> {{python
+<span class="keyword">import</span> math
+math.pi
+}}
+
+<span class="keyword">定义变量</span> 根号 <span class="keyword">为</span> {{python
+<span class="keyword">import</span> math
+math.sqrt(<span class="number">16</span>)
+}}
+
+<span class="keyword">输出</span> <span class="string">"圆周率："</span>
+<span class="keyword">输出</span> 圆周率
+<span class="keyword">输出</span> <span class="string">"根号16："</span>
+<span class="keyword">输出</span> 根号
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>2. 数据处理</span>
+                        <span class="difficulty medium">基础</span>
+                    </div>
+                    <div class="example-description">
+                        使用Python进行数据统计和分析。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 使用Python的statistics库</span>
+<span class="keyword">定义变量</span> 统计结果 <span class="keyword">为</span> {{python
+<span class="keyword">import</span> statistics
+data = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">10</span>]
+{
+    <span class="string">'平均值'</span>: statistics.mean(data),
+    <span class="string">'中位数'</span>: statistics.median(data),
+    <span class="string">'标准差'</span>: statistics.stdev(data)
+}
+}}
+
+<span class="keyword">输出</span> 统计结果
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>3. 使用pandas处理数据</span>
+                        <span class="difficulty hard">进阶</span>
+                    </div>
+                    <div class="example-description">
+                        使用pandas进行数据分析（需要安装pandas）。
+                    </div>
+                    <div class="code-block">
+<span class="keyword">定义变量</span> 分析结果 <span class="keyword">为</span> {{python
+<span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># 创建DataFrame</span>
+df = pd.DataFrame({
+    <span class="string">'姓名'</span>: [<span class="string">'张三'</span>, <span class="string">'李四'</span>, <span class="string">'王五'</span>],
+    <span class="string">'年龄'</span>: [<span class="number">25</span>, <span class="number">30</span>, <span class="number">28</span>],
+    <span class="string">'分数'</span>: [<span class="number">85.5</span>, <span class="number">92.0</span>, <span class="number">78.5</span>]
+})
+
+<span class="comment"># 计算平均分</span>
+result = {
+    <span class="string">'平均年龄'</span>: df[<span class="string">'年龄'</span>].mean(),
+    <span class="string">'平均分数'</span>: df[<span class="string">'分数'</span>].mean()
+}
+<span class="keyword">return</span> result
+}}
+                    </div>
+                </div>
+
+                <div class="tips">
+                    <div class="tips-title">💡 Python轨优势</div>
+                    <p>Python轨让你可以直接使用Python丰富的生态系统，包括numpy、pandas、scikit-learn等库，无需学习Python语法。</p>
+                </div>
+            </div>
+
+            <!-- JavaScript轨示例 -->
+            <div id="javascript" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">JavaScript轨示例</h2>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>1. 数组操作</span>
+                        <span class="difficulty easy">入门</span>
+                    </div>
+                    <div class="example-description">
+                        使用JavaScript的数组方法。
+                    </div>
+                    <div class="code-block">
+<span class="keyword">定义变量</span> 平方和 <span class="keyword">为</span> {{javascript
+<span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];
+arr.map(x => x * x).reduce((a, b) => a + b, <span class="number">0</span>);
+}}
+
+<span class="keyword">输出</span> <span class="string">"平方和："</span>
+<span class="keyword">输出</span> 平方和
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>2. JSON处理</span>
+                        <span class="difficulty medium">基础</span>
+                    </div>
+                    <div class="example-description">
+                        使用JavaScript处理JSON数据。
+                    </div>
+                    <div class="code-block">
+<span class="keyword">定义变量</span> 用户数据 <span class="keyword">为</span> {{javascript
+<span class="keyword">const</span> json = <span class="string">'{"name":"张三","age":25,"city":"北京"}'</span>;
+<span class="keyword">const</span> data = JSON.parse(json);
+data.name + <span class="string">"，"</span> + data.age + <span class="string">"岁，来自"</span> + data.city;
+}}
+
+<span class="keyword">输出</span> 用户数据
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>3. 异步HTTP请求</span>
+                        <span class="difficulty hard">进阶</span>
+                    </div>
+                    <div class="example-description">
+                        使用JavaScript的fetch API进行异步请求。
+                    </div>
+                    <div class="code-block">
+<span class="keyword">定义变量</span> API数据 <span class="keyword">为</span> {{javascript
+<span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">'https://api.example.com/data'</span>);
+<span class="keyword">const</span> data = <span class="keyword">await</span> response.json();
+<span class="keyword">return</span> data;
+}}
+                    </div>
+                </div>
+
+                <div class="tips">
+                    <div class="tips-title">💡 JavaScript轨优势</div>
+                    <p>JavaScript轨支持异步操作和npm生态，适合Web开发和API调用场景。</p>
+                </div>
+            </div>
+
+            <!-- SQL轨示例 -->
+            <div id="sql" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">SQL轨示例</h2>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>1. 查询数据</span>
+                        <span class="difficulty easy">入门</span>
+                    </div>
+                    <div class="example-description">
+                        使用SQL查询数据库。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 查询所有用户</span>
+<span class="keyword">定义变量</span> 用户列表 <span class="keyword">为</span> {{sql
+<span class="keyword">SELECT</span> id, name, email <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> age > <span class="number">18</span>
+}}
+
+<span class="comment"># 输出结果</span>
+<span class="keyword">对于</span> 用户 <span class="keyword">在</span> 用户列表：
+    <span class="keyword">输出</span> 用户算<span class="string">"name"</span>
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>2. 参数化查询</span>
+                        <span class="difficulty medium">基础</span>
+                    </div>
+                    <div class="example-description">
+                        使用参数化查询防止SQL注入。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 定义用户ID</span>
+<span class="keyword">定义变量</span> 用户ID <span class="keyword">为</span> <span class="number">123</span>
+
+<span class="comment"># 参数化查询</span>
+<span class="keyword">定义变量</span> 用户信息 <span class="keyword">为</span> {{sql
+<span class="keyword">SELECT</span> * <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id = ?
+}} 参数用户ID
+
+<span class="keyword">输出</span> 用户信息
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>3. 聚合查询</span>
+                        <span class="difficulty medium">基础</span>
+                    </div>
+                    <div class="example-description">
+                        使用SQL聚合函数进行统计。
+                    </div>
+                    <div class="code-block">
+<span class="keyword">定义变量</span> 统计结果 <span class="keyword">为</span> {{sql
+<span class="keyword">SELECT</span> 
+    category,
+    <span class="keyword">COUNT</span>(*) <span class="keyword">as</span> count,
+    <span class="keyword">AVG</span>(price) <span class="keyword">as</span> avg_price,
+    <span class="keyword">SUM</span>(stock) <span class="keyword">as</span> total_stock
+<span class="keyword">FROM</span> products
+<span class="keyword">GROUP BY</span> category
+<span class="keyword">ORDER BY</span> total_stock <span class="keyword">DESC</span>
+}}
+
+<span class="keyword">输出</span> 统计结果
+                    </div>
+                </div>
+
+                <div class="tips">
+                    <div class="tips-title">💡 SQL轨优势</div>
+                    <p>SQL轨支持完整的SQL语法，包括查询、插入、更新、删除，以及事务和聚合函数。</p>
+                </div>
+            </div>
+
+            <!-- C/C++轨示例 -->
+            <div id="c" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">C/C++轨示例</h2>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>1. C语言高性能计算</span>
+                        <span class="difficulty hard">进阶</span>
+                    </div>
+                    <div class="example-description">
+                        使用C语言实现高性能数学计算。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 定义C代码</span>
+<span class="keyword">定义变量</span> C代码 <span class="keyword">为</span> <span class="string">"""
+int factorial(int n) {
+    if (n <= 1) return 1;
+    return n * factorial(n - 1);
+}
+"""</span>
+
+<span class="comment"># 编译并使用</span>
+编译C代码C代码
+注册C函数<span class="string">"factorial"</span> 参数类型列<span class="string">"int"</span> 返回类型<span class="string">"int"</span>
+
+<span class="keyword">定义变量</span> 结果 <span class="keyword">为</span> 调用C函数<span class="string">"factorial"</span> 参数<span class="number">10</span>
+<span class="keyword">输出</span> <span class="string">"10的阶乘："</span>
+<span class="keyword">输出</span> 结果
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>2. C++ STL算法</span>
+                        <span class="difficulty hard">进阶</span>
+                    </div>
+                    <div class="example-description">
+                        使用C++ STL进行高效排序。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># C++代码（使用STL）</span>
+<span class="keyword">定义变量</span> C加代码 <span class="keyword">为</span> <span class="string">"""
+#include <vector>
+#include <algorithm>
+
+extern "C" {
+    void quick_sort(int* arr, int n) {
+        std::vector<int> vec(arr, arr + n);
+        std::sort(vec.begin(), vec.end());
+        for (int i = 0; i < n; i++) {
+            arr[i] = vec[i];
+        }
+    }
+}
+"""</span>
+
+编译C加代码C加代码
+                    </div>
+                </div>
+
+                <div class="tips">
+                    <div class="tips-title">💡 C/C++轨优势</div>
+                    <p>C/C++轨提供100-1000倍的性能提升，适合数值计算、算法优化等高性能场景。需要安装gcc/g++编译器。</p>
+                </div>
+            </div>
+
+            <!-- 高级应用示例 -->
+            <div id="advanced" class="section">
+                <h2 style="margin-bottom: 20px; color: #667eea;">高级应用示例</h2>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>1. 跨语言协作</span>
+                        <span class="difficulty hard">高级</span>
+                    </div>
+                    <div class="example-description">
+                        SQL + Python协作进行数据分析。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 从SQL获取数据</span>
+<span class="keyword">定义变量</span> 商品数据 <span class="keyword">为</span> {{sql <span class="keyword">SELECT</span> * <span class="keyword">FROM</span> products}}
+
+<span class="comment"># 在Python中分析</span>
+<span class="keyword">定义变量</span> 分析结果 <span class="keyword">为</span> {{python
+<span class="keyword">import</span> statistics
+prices = [p[<span class="string">'price'</span>] <span class="keyword">for</span> p <span class="keyword">in</span> 商品数据]
+{
+    <span class="string">'平均价格'</span>: statistics.mean(prices),
+    <span class="string">'总价值'</span>: <span class="keyword">sum</span>(p[<span class="string">'price'</span>] * p[<span class="string">'stock'</span>] <span class="keyword">for</span> p <span class="keyword">in</span> 商品数据)
+}
+}}
+
+<span class="keyword">输出</span> 分析结果
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>2. 智能家居控制</span>
+                        <span class="difficulty medium">应用</span>
+                    </div>
+                    <div class="example-description">
+                        使用因果链语法实现智能家居控制逻辑。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 传感器数据</span>
+<span class="keyword">定义变量</span> 温度 <span class="keyword">为</span> <span class="number">30</span>
+<span class="keyword">定义变量</span> 湿度 <span class="keyword">为</span> <span class="number">75</span>
+<span class="keyword">定义变量</span> 光线 <span class="keyword">为</span> <span class="string">"昏暗"</span>
+
+<span class="comment"># 智能控制逻辑</span>
+温度 <span class="keyword">大于</span> <span class="number">28</span>，<span class="keyword">输出</span> <span class="string">"开启空调制冷"</span>。
+湿度 <span class="keyword">大于</span> <span class="number">70</span>，<span class="keyword">输出</span> <span class="string">"开启除湿机"</span>。
+光线 <span class="keyword">等于</span> <span class="string">"昏暗"</span>，<span class="keyword">输出</span> <span class="string">"开启灯光"</span>。
+                    </div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>3. 机器学习预测</span>
+                        <span class="difficulty hard">高级</span>
+                    </div>
+                    <div class="example-description">
+                        使用Python的scikit-learn进行机器学习预测。
+                    </div>
+                    <div class="code-block">
+<span class="keyword">定义变量</span> 预测结果 <span class="keyword">为</span> {{python
+<span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression
+<span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># 训练数据</span>
+X = np.array([[<span class="number">1</span>], [<span class="number">2</span>], [<span class="number">3</span>], [<span class="number">4</span>], [<span class="number">5</span>]])
+y = np.array([<span class="number">2</span>, <span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>])
+
+<span class="comment"># 训练模型</span>
+model = LinearRegression()
+model.fit(X, y)
+
+<span class="comment"># 预测</span>
+prediction = model.predict([[<span class="number">6</span>]])
+<span class="keyword">return</span> prediction[<span class="number">0</span>]
+}}
+
+<span class="keyword">输出</span> <span class="string">"预测结果："</span>
+<span class="keyword">输出</span> 预测结果
+                    </div>
+                </div>
+
+                <div class="tips">
+                    <div class="tips-title">💡 高级应用提示</div>
+                    <p>言律语言支持跨语言协作，可以结合多种语言的优势。因果链语法特别适合业务逻辑表达，让代码更接近自然语言。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // 隐藏所有section
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 移除所有tab的active状态
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 显示选中的section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 激活对应的tab
+            event.target.classList.add('active');
+        }
+
+        function runExample(lang, example) {
+            const outputId = `output-${lang}-${example}`;
+            const output = document.getElementById(outputId);
+            
+            // 模拟运行结果
+            const results = {
+                'yanlv-helloworld': '你好世界',
+                'yanlv-variables': '张三\n25\n明年年龄：\n26',
+                'yanlv-condition': '良好',
+                'yanlv-loop': '1到100的和：\n5050',
+                'yanlv-causal': '开启空调制冷'
+            };
+            
+            output.style.display = 'block';
+            output.textContent = results[`${lang}-${example}`] || '示例运行成功！';
+        }
+    </script>
+</body>
+</html>

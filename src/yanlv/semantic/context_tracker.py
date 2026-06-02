@@ -84,6 +84,10 @@ class SemanticContextTracker:
         
         # 状态跟踪
         self.states: Dict[str, Any] = {}
+
+        # 歧义消解历史记录
+        self.ambiguity_resolutions: List[Dict[str, Any]] = []
+        self.max_resolutions: int = 100  # 最大消解记录数
         
     def add_node(self, node: SemanticNode) -> None:
         """添加语义节点"""
@@ -177,6 +181,142 @@ class SemanticContextTracker:
     def get_state(self, state_name: str) -> Any:
         """获取状态"""
         return self.states.get(state_name)
+
+    def add_ambiguity_resolution(self, resolution: Dict[str, Any]) -> None:
+        """
+        添加歧义消解记录
+
+        Args:
+            resolution: 消解记录，包含以下字段：
+                - expression: 原始表达式
+                - ambiguity: 歧义信息
+                - resolution: 消解结果
+                - timestamp: 时间戳
+                - context: 上下文信息
+        """
+        # 添加时间戳（如果没有）
+        if "timestamp" not in resolution:
+            from datetime import datetime
+            resolution["timestamp"] = datetime.now().isoformat()
+
+        # 添加到历史记录
+        self.ambiguity_resolutions.append(resolution)
+
+        # 限制历史记录数量
+        if len(self.ambiguity_resolutions) > self.max_resolutions:
+            self.ambiguity_resolutions.pop(0)
+
+    def get_ambiguity_resolutions(self,
+                                  limit: Optional[int] = None,
+                                  ambiguity_type: Optional[str] = None) -> List[Dict[str, Any]]:
+        """
+        获取歧义消解记录
+
+        Args:
+            limit: 返回记录数量限制
+            ambiguity_type: 按歧义类型过滤
+
+        Returns:
+            消解记录列表
+        """
+        resolutions = self.ambiguity_resolutions
+
+        # 按类型过滤
+        if ambiguity_type:
+            filtered_resolutions = []
+            for r in resolutions:
+                amb_type = r.get("ambiguity", {}).get("type")
+                # 处理不同类型的type字段
+                if amb_type is not None:
+                    if hasattr(amb_type, 'value'):
+                        # 如果是枚举类型
+                        type_value = amb_type.value
+                    elif isinstance(amb_type, dict):
+                        # 如果是字典
+                        type_value = amb_type.get("value", "")
+                    else:
+                        # 其他情况，转为字符串
+                        type_value = str(amb_type)
+
+                    if type_value == ambiguity_type:
+                        filtered_resolutions.append(r)
+            resolutions = filtered_resolutions
+
+        # 限制数量
+        if limit:
+            resolutions = resolutions[-limit:]
+
+        return resolutions
+
+    def get_ambiguity_statistics(self) -> Dict[str, Any]:
+        """
+        获取歧义消解统计信息
+
+        Returns:
+            统计信息字典
+        """
+        if not self.ambiguity_resolutions:
+            return {
+                "total_resolutions": 0,
+                "by_type": {},
+                "by_strategy": {},
+                "average_confidence": 0.0,
+                "success_rate": 0.0,
+                "high_confidence_count": 0,
+                "low_confidence_count": 0,
+            }
+
+        # 统计各类型数量
+        type_counts: Dict[str, int] = {}
+        strategy_counts: Dict[str, int] = {}
+        confidences: List[float] = []
+        high_confidence = 0  # 置信度 > 0.7
+        low_confidence = 0   # 置信度 < 0.5
+
+        for resolution in self.ambiguity_resolutions:
+            # 统计类型
+            amb_type = resolution.get("ambiguity", {}).get("type")
+            if amb_type is not None:
+                if hasattr(amb_type, 'value'):
+                    type_value = amb_type.value
+                elif isinstance(amb_type, dict):
+                    type_value = amb_type.get("value", "UNKNOWN")
+                else:
+                    type_value = str(amb_type)
+            else:
+                type_value = "UNKNOWN"
+            type_counts[type_value] = type_counts.get(type_value, 0) + 1
+
+            # 统计策略
+            strategies = resolution.get("resolution", {}).get("strategies", [])
+            for strategy in strategies:
+                strategy_counts[strategy] = strategy_counts.get(strategy, 0) + 1
+
+            # 统计置信度
+            confidence = resolution.get("resolution", {}).get("confidence", 0.5)
+            confidences.append(confidence)
+
+            if confidence > 0.7:
+                high_confidence += 1
+            elif confidence < 0.5:
+                low_confidence += 1
+
+        # 计算平均置信度
+        avg_confidence = sum(confidences) / len(confidences) if confidences else 0.0
+
+        # 计算成功率（置信度 > 0.6 视为成功）
+        success_count = sum(1 for c in confidences if c > 0.6)
+        success_rate = success_count / len(confidences) if confidences else 0.0
+
+        return {
+            "total_resolutions": len(self.ambiguity_resolutions),
+            "by_type": type_counts,
+            "by_strategy": strategy_counts,
+            "average_confidence": avg_confidence,
+            "success_rate": success_rate,
+            "high_confidence_count": high_confidence,
+            "low_confidence_count": low_confidence,
+        }
     
     def find_semantic_relations(self, node_id: str, depth: int = 2) -> Dict[str, List[Tuple[str, SemanticRelation]]]:
         """
@@ -267,6 +407,7 @@ class SemanticContextTracker:
         self.variable_types.clear()
         self.function_signatures.clear()
         self.states.clear()
+        self.ambiguity_resolutions.clear()
     
     def to_dict(self) -> Dict[str, Any]:
         """转换为字典表示"""
@@ -290,7 +431,8 @@ class SemanticContextTracker:
             "variable_types": {k: v.value for k, v in self.variable_types.items()},
             "function_signatures": self.function_signatures,
             "states": self.states,
-            "context_history": self.context_history[-self.max_history:]
+            "context_history": self.context_history[-self.max_history:],
+            "ambiguity_statistics": self.get_ambiguity_statistics(),
         }
 
 

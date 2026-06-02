@@ -285,19 +285,153 @@ def get_category_by_verb(verb: str) -> Optional[str]:
 def resolve_verb_ambiguity(verb: str, context: Dict[str, any]) -> str:
     """
     根据上下文消解动词歧义
-    
+
     Args:
         verb: 动词
         context: 上下文信息
-        
+
     Returns:
         消解后的动词解释
     """
     # 获取动词的基本信息
     interpretation = get_verb_interpretation(verb)
-    
-    # 根据上下文调整解释
-    # TODO: 实现更复杂的歧义消解逻辑
+
+    # 多义动词消解字典
+    multi_meaning_verbs = {
+        "打": {
+            "contexts": {
+                "计算": "calculate",
+                "数学": "calculate",
+                "运算": "calculate",
+                "电话": "call",
+                "通信": "call",
+                "联系": "call",
+                "开": "open",
+                "门": "open",
+                "文件": "open",
+                "印": "print",
+                "输出": "print",
+                "显示": "print",
+                "运动": "hit",
+                "击": "hit",
+                "球": "hit",
+            },
+            "default": "hit"
+        },
+        "行": {
+            "contexts": {
+                "走": "walk",
+                "移动": "walk",
+                "运动": "walk",
+                "为": "behavior",
+                "做法": "behavior",
+                "列": "row",
+                "表格": "row",
+                "程": "journey",
+                "旅途": "journey",
+                "可以": "okay",
+                "能": "okay",
+            },
+            "default": "walk"
+        },
+        "发": {
+            "contexts": {
+                "现": "discover",
+                "找到": "discover",
+                "送": "send",
+                "传输": "send",
+                "消息": "send",
+                "展": "develop",
+                "开发": "develop",
+                "光": "shine",
+                "亮": "shine",
+            },
+            "default": "send"
+        },
+        "开": {
+            "contexts": {
+                "开启": "open",
+                "打开": "open",
+                "门": "open",
+                "文件": "open",
+                "开始": "start",
+                "启动": "start",
+                "开发": "develop",
+                "展开": "develop",
+            },
+            "default": "open"
+        },
+        "关": {
+            "contexts": {
+                "闭": "close",
+                "门": "close",
+                "文件": "close",
+                "联": "relate",
+                "相关": "relate",
+                "于": "about",
+                "关于": "about",
+            },
+            "default": "close"
+        },
+        "设": {
+            "contexts": {
+                "置": "set",
+                "配置": "set",
+                "定": "define",
+                "定义": "define",
+                "计": "design",
+                "设计": "design",
+            },
+            "default": "set"
+        },
+    }
+
+    # 检查是否是多义动词
+    if verb in multi_meaning_verbs:
+        verb_info = multi_meaning_verbs[verb]
+
+        # 从上下文中获取相关信息
+        context_text = context.get("text", "")
+        topic = context.get("topic", "")
+        recent_words = context.get("recent_words", [])
+
+        # 组合所有上下文信息
+        all_context = f"{context_text} {topic} {' '.join(recent_words)}"
+
+        # 匹配上下文关键词
+        best_match = None
+        best_score = 0
+
+        for keyword, meaning in verb_info["contexts"].items():
+            if keyword in all_context:
+                # 计算匹配分数（关键词长度作为权重）
+                score = len(keyword)
+                if score > best_score:
+                    best_score = score
+                    best_match = meaning
+
+        # 如果找到匹配，返回对应含义
+        if best_match:
+            interpretation["resolved_meaning"] = best_match
+            interpretation["confidence"] = min(0.5 + best_score * 0.1, 0.95)
+        else:
+            # 使用默认含义
+            interpretation["resolved_meaning"] = verb_info["default"]
+            interpretation["confidence"] = 0.5
+
+    # 根据动词分类调整解释
+    category = interpretation.get("category")
+    if category:
+        # 基于分类的置信度调整
+        if category in [VerbCategory.TRANSFORMATION, VerbCategory.COMMUNICATION]:
+            interpretation["confidence"] = interpretation.get("confidence", 0.7) * 1.1
+        elif category in [VerbCategory.MOVEMENT, VerbCategory.PERCEPTION]:
+            interpretation["confidence"] = interpretation.get("confidence", 0.7) * 1.05
+
+    # 确保置信度在合理范围
+    interpretation["confidence"] = min(interpretation.get("confidence", 0.7), 0.95)
+
+    return interpretation
     
     return interpretation
 

@@ -109,8 +109,22 @@ class ModularYanLuLexer(YanLuLexerBase):
         if not line.strip():
             return tokens
 
+        # 检查是否是注释行（以#开头）
+        stripped = line.strip()
+        if stripped.startswith('#'):
+            # 整行都是注释，直接返回空列表
+            return tokens
+
         # 规范化文本
         normalized_line = normalize_text(line)
+
+        # 检查行内注释（#后面的内容）
+        comment_pos = normalized_line.find('#')
+        if comment_pos >= 0:
+            # 截断注释部分
+            normalized_line = normalized_line[:comment_pos].strip()
+            if not normalized_line:
+                return tokens
 
         # 先提取字符串字面量，避免被分词器拆分
         # 记录字符串的位置和内容

@@ -187,34 +187,131 @@ class AmbiguityResolver:
         return ambiguities
     
     def _adjust_confidence(self, ambiguity: Dict[str, Any], expression: str) -> float:
-        """根据上下文调整置信度"""
-        confidence = ambiguity["confidence"]
+        """
+        根据上下文调整置信度（优化版）
+
+        采用多因素加权计算：
+        1. 基础置信度（来自模式匹配）
+        2. 上下文相关性
+        3. 类型一致性
+        4. 历史频率
+        5. 用户反馈
+        """
+        base_confidence = ambiguity["confidence"]
         ambiguity_type = ambiguity["type"]
-        
-        # 基于上下文的调整
+        match_text = ambiguity.get("match", "")
+
+        # 初始化各因素权重
+        weights = {
+            "base": 0.3,          # 基础置信度权重
+            "context": 0.25,      # 上下文相关性权重
+            "type": 0.2,          # 类型一致性权重
+            "frequency": 0.15,    # 历史频率权重
+            "feedback": 0.1,      # 用户反馈权重
+        }
+
+        scores = {"base": base_confidence}
+
+        # 1. 上下文相关性评分
+        context_score = 0.5  # 默认中等相关性
         context = self.context.get_recent_context()
         if context:
-            # 如果有相关上下文，提高置信度
-            for ctx in context[-3:]:  # 最近3个上下文
+            # 检查最近的上下文中是否有相关歧义
+            relevant_context_count = 0
+            for ctx in context[-5:]:  # 最近5个上下文
                 if ambiguity_type.value in ctx.get("ambiguity_types", []):
-                    confidence = min(confidence + 0.1, 0.95)
-        
-        # 基于类型的调整
+                    relevant_context_count += 1
+                # 检查主题相关性
+                if "topic" in ctx and ctx["topic"]:
+                    topic = ctx["topic"]
+                    if topic in expression or topic in match_text:
+                        relevant_context_count += 0.5
+
+            # 根据相关上下文数量调整分数
+            if relevant_context_count > 0:
+                context_score = min(0.5 + relevant_context_count * 0.15, 0.95)
+
+        scores["context"] = context_score
+
+        # 2. 类型一致性评分
+        type_score = 0.5  # 默认中等一致性
         type_result = self.type_inference.infer_expression_type(expression)
         if type_result["type"]:
-            # 如果类型推断成功，降低某些歧义的置信度
-            if ambiguity_type in [AmbiguityType.TIME_EXPRESSION, AmbiguityType.QUANTIFIER]:
-                if type_result["type"] in ["NUMBER", "QUANTITY"]:
-                    confidence = max(confidence - 0.2, 0.3)
-        
-        # 基于用户反馈的调整
-        feedback_key = f"{ambiguity_type.value}:{ambiguity['match']}"
+            inferred_type = type_result["type"]
+
+            # 根据歧义类型和推断类型的一致性评分
+            type_consistency = {
+                AmbiguityType.TIME_EXPRESSION: ["TIME", "NUMBER", "QUANTITY"],
+                AmbiguityType.QUANTIFIER: ["NUMBER", "QUANTITY", "COLLECTION"],
+                AmbiguityType.SUBJECT_OMISSION: ["ENTITY", "OBJECT"],
+                AmbiguityType.CONTEXT_DEPENDENT: ["ENTITY", "OBJECT", "REFERENCE"],
+                AmbiguityType.MULTIPLE_MEANING: ["ACTION", "ENTITY"],
+            }
+
+            expected_types = type_consistency.get(ambiguity_type, [])
+            if inferred_type in expected_types:
+                type_score = 0.85  # 高一致性
+            elif inferred_type in ["UNKNOWN", "ANY"]:
+                type_score = 0.6   # 未知类型，中等分数
+            else:
+                type_score = 0.3   # 低一致性
+
+        scores["type"] = type_score
+
+        # 3. 历史频率评分
+        frequency_score = 0.5  # 默认中等频率
+        resolutions = self.context.get_ambiguity_resolutions(limit=20, ambiguity_type=ambiguity_type.value)
+        if resolutions:
+            # 计算最近的成功率
+            recent_confidences = [
+                r.get("resolution", {}).get("confidence", 0.5)
+                for r in resolutions[-10:]
+            ]
+            if recent_confidences:
+                avg_recent = sum(recent_confidences) / len(recent_confidences)
+                # 如果历史表现好，提高分数
+                frequency_score = 0.4 + avg_recent * 0.5
+
+        scores["frequency"] = frequency_score
+
+        # 4. 用户反馈评分
+        feedback_score = 0.5  # 默认无反馈
+        feedback_key = f"{ambiguity_type.value}:{match_text}"
         if feedback_key in self.user_feedback:
             user_confidence = self.user_feedback[feedback_key]
-            # 加权平均
-            confidence = 0.7 * confidence + 0.3 * user_confidence
-        
-        return confidence
+            feedback_score = user_confidence
+            # 用户反馈权重加倍（因为用户反馈最可靠）
+            weights["feedback"] = 0.2
+            weights["base"] = 0.2  # 相应减少基砠权重
+
+        scores["feedback"] = feedback_score
+
+        # 5. 计算加权平均置信度
+        total_weight = sum(weights.values())
+        weighted_confidence = sum(
+            scores[factor] * weights[factor]
+            for factor in scores.keys()
+        ) / total_weight
+
+        # 6. 应用额外调整因子
+
+        # 歧义位置因子（表达式中间的歧义通常更可靠）
+        position = ambiguity.get("start", 0)
+        expression_length = len(expression)
+        if expression_length > 0:
+            position_factor = 1.0 - abs(position - expression_length / 2) / expression_length * 0.2
+            weighted_confidence *= position_factor
+
+        # 匹配长度因子（更长的匹配通常更可靠）
+        match_length = len(match_text)
+        if match_length > 0:
+            length_factor = min(1.0, 0.8 + match_length * 0.02)
+            weighted_confidence *= length_factor
+
+        # 7. 确保置信度在合理范围
+        final_confidence = max(0.1, min(weighted_confidence, 0.98))
+
+        return final_confidence
     
     def resolve_ambiguity(self, expression: str, ambiguity: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -236,15 +333,13 @@ class AmbiguityResolver:
             # 默认消解策略
             resolution = self._resolve_default(expression, ambiguity)
         
-        # 记录消解历史（暂时注释，因为SemanticContextTracker没有这个方法）
-        # TODO: 在SemanticContextTracker中添加add_ambiguity_resolution方法
-        # self.context.add_ambiguity_resolution({
-        #     "expression": expression,
-        #     "ambiguity": ambiguity,
-        #     "resolution": resolution,
-        #     "timestamp": self.context.get_current_time(),
-        # })
-        
+        # 记录消解历史
+        self.context.add_ambiguity_resolution({
+            "expression": expression,
+            "ambiguity": ambiguity,
+            "resolution": resolution,
+        })
+
         return resolution
     
     def _resolve_time_expression(self, expression: str, ambiguity: Dict[str, Any]) -> Dict[str, Any]:
@@ -731,19 +826,7 @@ class AmbiguityResolver:
     
     def get_resolution_statistics(self) -> Dict[str, Any]:
         """获取消解统计信息"""
-        # TODO: 在SemanticContextTracker中添加get_ambiguity_resolutions方法
-        # resolutions = self.context.get_ambiguity_resolutions()
-        
-        # 暂时返回空统计
-        stats = {
-            "total_resolutions": 0,
-            "by_type": {},
-            "by_strategy": {},
-            "average_confidence": 0,
-            "success_rate": 0,
-        }
-        
-        return stats
+        return self.context.get_ambiguity_statistics()
 
 
 # 测试函数

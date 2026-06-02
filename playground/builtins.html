@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>言律语言 - 内置函数学习</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .nav {
+            background: #f8f9fa;
+            padding: 15px 40px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin-right: 30px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav a:hover {
+            color: #764ba2;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .function-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .function-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .function-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .function-name {
+            font-size: 1.3em;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .function-desc {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .function-example {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        
+        .category-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+        
+        .try-it {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        
+        .try-it:hover {
+            background: #218838;
+        }
+        
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e7f3ff;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 内置函数学习中心</h1>
+            <p>掌握言律语言69个内置函数，轻松实现各种功能</p>
+        </div>
+        
+        <div class="nav">
+            <a href="index.html">🏠 首页</a>
+            <a href="builtins.html">📖 内置函数</a>
+            <a href="stdlib.html">📚 标准库</a>
+            <a href="examples.html">💡 示例</a>
+        </div>
+        
+        <div class="content">
+            <!-- 统计信息 -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number">69</div>
+                    <div class="stat-label">内置函数总数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">数学运算函数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <div class="stat-label">类型转换函数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10</div>
+                    <div class="stat-label">序列操作函数</div>
+                </div>
+            </div>
+            
+            <!-- 数学运算函数 -->
+            <div class="section">
+                <h2>🔢 数学运算函数</h2>
+                <div class="function-grid">
+                    <div class="function-card">
+                        <div class="category-badge">数学运算</div>
+                        <div class="function-name">绝对值(数字)</div>
+                        <div class="function-desc">返回数字的绝对值，支持整数、浮点数和复数</div>
+                        <div class="function-example">
+>>> 绝对值(-5)
+5
+>>> 绝对值(-3.14)
+3.14
+>>> 绝对值(complex(3, 4))
+5.0
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">数学运算</div>
+                        <div class="function-name">最大值(*参数)</div>
+                        <div class="function-desc">返回最大值，支持多参数或可迭代对象</div>
+                        <div class="function-example">
+>>> 最大值(1, 2, 3)
+3
+>>> 最大值([1, 2, 3])
+3
+>>> 最大值([], 默认值=0)
+0
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">数学运算</div>
+                        <div class="function-name">幂运算(底数, 指数, 模数)</div>
+                        <div class="function-desc">计算幂运算，支持模运算</div>
+                        <div class="function-example">
+>>> 幂运算(2, 10)
+1024
+>>> 幂运算(2, 10, 100)
+24
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">数学运算</div>
+                        <div class="function-name">求和(可迭代对象, 起始值)</div>
+                        <div class="function-desc">计算可迭代对象中所有元素的和</div>
+                        <div class="function-example">
+>>> 求和([1, 2, 3, 4])
+10
+>>> 求和([1, 2, 3], 10)
+16
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 类型转换函数 -->
+            <div class="section">
+                <h2>🔄 类型转换函数</h2>
+                <div class="function-grid">
+                    <div class="function-card">
+                        <div class="category-badge">类型转换</div>
+                        <div class="function-name">整数(对象, 进制)</div>
+                        <div class="function-desc">转换为整数，支持不同进制</div>
+                        <div class="function-example">
+>>> 整数('123')
+123
+>>> 整数('1010', 进制=2)
+10
+>>> 整数(3.14)
+3
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">类型转换</div>
+                        <div class="function-name">字符串(对象)</div>
+                        <div class="function-desc">转换为字符串表示</div>
+                        <div class="function-example">
+>>> 字符串(123)
+'123'
+>>> 字符串([1, 2, 3])
+'[1, 2, 3]'
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">类型转换</div>
+                        <div class="function-name">列表(可迭代对象)</div>
+                        <div class="function-desc">转换为列表</div>
+                        <div class="function-example">
+>>> 列表((1, 2, 3))
+[1, 2, 3]
+>>> 列表('abc')
+['a', 'b', 'c']
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">类型转换</div>
+                        <div class="function-name">字典(对象)</div>
+                        <div class="function-desc">创建字典</div>
+                        <div class="function-example">
+>>> 字典([('a', 1), ('b', 2)])
+{'a': 1, 'b': 2}
+>>> 字典(a=1, b=2)
+{'a': 1, 'b': 2}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 序列操作函数 -->
+            <div class="section">
+                <h2>📋 序列操作函数</h2>
+                <div class="function-grid">
+                    <div class="function-card">
+                        <div class="category-badge">序列操作</div>
+                        <div class="function-name">排序(可迭代对象, 键函数, 反转)</div>
+                        <div class="function-desc">返回排序后的列表</div>
+                        <div class="function-example">
+>>> 排序([3, 1, 2])
+[1, 2, 3]
+>>> 排序(['abc', 'a', 'abcd'], 键函数=len)
+['a', 'abc', 'abcd']
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">序列操作</div>
+                        <div class="function-name">映射(函数, 可迭代对象)</div>
+                        <div class="function-desc">将函数应用到每个元素</div>
+                        <div class="function-example">
+>>> 列表(映射(lambda x: x**2, [1, 2, 3]))
+[1, 4, 9]
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">序列操作</div>
+                        <div class="function-name">过滤(函数, 可迭代对象)</div>
+                        <div class="function-desc">过滤满足条件的元素</div>
+                        <div class="function-example">
+>>> 列表(过滤(lambda x: x > 0, [-1, 0, 1, 2]))
+[1, 2]
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">序列操作</div>
+                        <div class="function-name">枚举(可迭代对象, 起始)</div>
+                        <div class="function-desc">返回(索引, 值)的迭代器</div>
+                        <div class="function-example">
+>>> 列表(枚举(['a', 'b', 'c']))
+[(0, 'a'), (1, 'b'), (2, 'c')]
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 类型检查函数 -->
+            <div class="section">
+                <h2>🔍 类型检查函数</h2>
+                <div class="function-grid">
+                    <div class="function-card">
+                        <div class="category-badge">类型检查</div>
+                        <div class="function-name">类型(对象)</div>
+                        <div class="function-desc">返回对象的类型</div>
+                        <div class="function-example">
+>>> 类型(123)
+<class 'int'>
+>>> 类型('hello')
+<class 'str'>
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">类型检查</div>
+                        <div class="function-name">是实例(对象, 类型)</div>
+                        <div class="function-desc">检查对象是否是指定类型的实例</div>
+                        <div class="function-example">
+>>> 是实例(123, int)
+True
+>>> 是实例(123, (int, str))
+True
+                        </div>
+                    </div>
+                    
+                    <div class="function-card">
+                        <div class="category-badge">类型检查</div>
+                        <div class="function-name">可调用(对象)</div>
+                        <div class="function-desc">检查对象是否可调用</div>
+                        <div class="function-example">
+>>> 可调用(len)
+True
+>>> 可调用(123)
+False
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

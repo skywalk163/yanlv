@@ -41,7 +41,7 @@ class CompleteInterpreter:
             # 根据token类型处理
             if token.type == TokenType.OUTPUT:
                 i = self._execute_output(tokens, i)
-            elif token.type == TokenType.DEFINE:
+            elif token.type == TokenType.DEFINE or token.type == TokenType.DEF:
                 i = self._execute_define(tokens, i)
             elif token.type == TokenType.SET:
                 i = self._execute_set(tokens, i)
@@ -253,9 +253,9 @@ class CompleteInterpreter:
 
     def _execute_define(self, tokens: List[Token], i: int) -> int:
         """执行变量定义 - 完整版"""
-        i += 1  # 跳过 DEFINE
+        i += 1  # 跳过 DEFINE 或 DEF
 
-        # 跳过 VARIABLE 关键字
+        # 跳过 VARIABLE 关键字（如果有）
         if i < len(tokens) and tokens[i].type == TokenType.VARIABLE:
             i += 1
 

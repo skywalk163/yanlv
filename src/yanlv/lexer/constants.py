@@ -58,6 +58,12 @@ OPERATORS: Dict[str, TokenType] = {
     '或': TokenType.OR,
     '¬': TokenType.NOT,
     '&': TokenType.AND,
+    # 中文运算符
+    '加': TokenType.PLUS,
+    '减': TokenType.MINUS,
+    '乘': TokenType.MULTIPLY,
+    '除': TokenType.DIVIDE,
+    '余': TokenType.MODULO,
     '|': TokenType.OR,
     '!': TokenType.NOT,
 }

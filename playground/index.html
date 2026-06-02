@@ -43,6 +43,29 @@
             font-size: 1.2em;
             opacity: 0.9;
         }
+        
+        .nav {
+            background: #f8f9fa;
+            padding: 15px 30px;
+            border-bottom: 2px solid #e9ecef;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .nav a:hover {
+            background: #667eea;
+            color: white;
+        }
 
         .main {
             display: grid;
@@ -192,6 +215,13 @@
         <div class="header">
             <h1>言律语言 Playground</h1>
             <p>中文编程语言在线体验平台</p>
+        </div>
+        
+        <div class="nav">
+            <a href="index.html">🏠 首页</a>
+            <a href="builtins.html">📖 内置函数</a>
+            <a href="stdlib.html">📚 标准库</a>
+            <a href="examples.html">💡 示例</a>
         </div>
 
         <div class="main">
