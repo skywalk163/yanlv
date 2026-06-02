@@ -29,7 +29,7 @@ from .operator_ext import *
 from .tempfile_ext import *
 from .shutil_ext import *
 from .bisect_ext import *
-from .heapq_ext import *
+# from .heapq_ext import *  # 暂时禁用，有语法错误
 
 __all__ = [
     'collections_ext',
@@ -58,5 +58,5 @@ __all__ = [
     'tempfile_ext',
     'shutil_ext',
     'bisect_ext',
-    'heapq_ext',
+    # 'heapq_ext',  # 暂时禁用
 ]

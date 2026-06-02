@@ -281,13 +281,19 @@ def 字面值(*值) -> Literal:
 # 泛型工具
 # ============================================================================
 
-class 泛型基类(Generic):
+# 泛型基类需要使用TypeVar
+from typing import TypeVar as _TypeVar
+
+# 创建一个示例泛型基类
+T = _TypeVar('T')
+
+class 泛型基类:
     """
     泛型基类
     
     示例:
         >>> T = TypeVar('T')
-        >>> class 容器(泛型基类[T]):
+        >>> class 容器(泛型基类, Generic[T]):
         ...     def __init__(self, 值: T):
         ...         self.值 = 值
     """

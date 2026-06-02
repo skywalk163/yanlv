@@ -5,7 +5,7 @@
 
 from contextlib import (
     contextmanager, closing, suppress,
-    redirect_stdout, redirect_stderr, redirect_stdin,
+    redirect_stdout, redirect_stderr,
     ExitStack, nullcontext, AbstractContextManager
 )
 from typing import Callable, Any, Optional, Type, IO
@@ -122,30 +122,6 @@ class 重定向标准错误:
     def __init__(self, 目标: IO):
         self.目标 = 目标
         self.管理器 = redirect_stderr(目标)
-    
-    def __enter__(self):
-        return self.管理器.__enter__()
-    
-    def __exit__(self, *args):
-        return self.管理器.__exit__(*args)
-
-
-class 重定向标准输入:
-    """
-    重定向标准输入的上下文管理器
-    
-    参数:
-        源: 源文件对象
-        
-    示例:
-        >>> 输入源 = StringIO('hello\\n')
-        >>> with 重定向标准输入(输入源):
-        ...     line = input()
-    """
-    
-    def __init__(self, 源: IO):
-        self.源 = 源
-        self.管理器 = redirect_stdin(源)
     
     def __enter__(self):
         return self.管理器.__enter__()
@@ -335,7 +311,7 @@ __all__ = [
     
     # 上下文管理器类
     '关闭上下文', '忽略异常', '重定向标准输出',
-    '重定向标准错误', '重定向标准输入',
+    '重定向标准错误',
     '退出栈', '空上下文',
     
     # 工具上下文管理器

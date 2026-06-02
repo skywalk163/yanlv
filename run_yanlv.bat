@@ -1,35 +1,32 @@
 @echo off
+setlocal enabledelayedexpansion
+
 echo ========================================
-echo 言律语言 Racket 实现版
+echo Yanlv Language
 echo ========================================
 echo.
 
-if "%1"=="" (
-    echo 用法: run_yanlv.bat 文件名.yan
+if "%~1"=="" (
+    echo Usage: run_yanlv.bat filename.yan
     echo.
-    echo 示例:
-    echo   run_yanlv.bat quick_start.yan
-    echo   run_yanlv.bat test_advanced.yan
-    echo.
-    echo 可用文件:
-    echo   - quick_start.yan      快速开始示例
-    echo   - test_advanced.yan    高级语法测试
-    echo   - test_complete.yan    完整测试套件
+    echo Examples:
+    echo   run_yanlv.bat examples\hello.yan
+    echo   run_yanlv.bat examples\quick_start.yan
     echo.
     pause
     exit /b 1
 )
 
-if not exist "%1" (
-    echo 错误: 文件 %1 不存在
+if not exist "%~1" (
+    echo Error: File %~1 not found
     pause
     exit /b 1
 )
 
-echo 运行文件: %1
+echo Running file: %~1
 echo.
 
-"E:\Program Files\Racket\Racket.exe" run_advanced.rkt
+python -m yanlv 运行 "%~1"
 
 echo.
 pause

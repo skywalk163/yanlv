@@ -15,40 +15,14 @@ __version__ = "2.0.0"
 __author__ = "言律语言项目组"
 __email__ = "yanlv@example.com"
 
-# 导入主要模块
-from . import lexer
-from . import semantic
-from . import feedback
-from . import error_handling
+# 导入CLI模块（主要入口点）
+from . import cli
 
-# 导出常用类和函数
-from .lexer import (
-    create_lexer,
-    tokenize,
-    Token,
-    TokenType,
-    YanLuTokenizer,
-)
+# 导入编译器
+from .compiler import YanLuCompiler
 
-from .semantic import (
-    SemanticContextTracker,
-    TypeInferenceSystem,
-    AmbiguityResolver,
-)
-
-from .feedback import (
-    FeedbackCollector,
-    FeedbackEnabledCompiler,
-    LearningEngine,
-)
-
-from .error_handling import (
-    EnhancedErrorHandler,
-    ErrorCategory,
-    ErrorSeverity,
-    create_error_context,
-)
-
+# 导入标准库扩展
+from . import stdlib
 
 __all__ = [
     # 版本信息
@@ -57,31 +31,9 @@ __all__ = [
     '__email__',
     
     # 模块
-    'lexer',
-    'semantic',
-    'feedback',
-    'error_handling',
+    'cli',
+    'stdlib',
     
-    # 词法分析
-    'create_lexer',
-    'tokenize',
-    'Token',
-    'TokenType',
-    'YanLuTokenizer',
-    
-    # 语义分析
-    'SemanticContextTracker',
-    'TypeInferenceSystem',
-    'AmbiguityResolver',
-    
-    # 反馈系统
-    'FeedbackCollector',
-    'FeedbackEnabledCompiler',
-    'LearningEngine',
-    
-    # 错误处理
-    'EnhancedErrorHandler',
-    'ErrorCategory',
-    'ErrorSeverity',
-    'create_error_context',
+    # 编译器
+    'YanLuCompiler',
 ]
