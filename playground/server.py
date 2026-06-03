@@ -54,6 +54,12 @@ def index():
         })
 
 
+@app.route('/index.html')
+def index_page():
+    """首页（index.html 路由）"""
+    return send_from_directory(os.path.dirname(__file__), 'index.html')
+
+
 @app.route('/builtins.html')
 def builtins():
     """内置函数学习页"""
@@ -290,6 +296,7 @@ if __name__ == '__main__':
     print("="*60)
     print("\n页面路由:")
     print("  GET  /              - 首页")
+    print("  GET  /index.html    - 首页")
     print("  GET  /builtins.html - 内置函数学习页")
     print("  GET  /stdlib.html   - 标准库学习页")
     print("  GET  /examples.html - 示例代码页")
