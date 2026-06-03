@@ -358,6 +358,120 @@
                     <div id="output-yanlv-causal" class="output" style="display:none;"></div>
                 </div>
 
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>6. 汉诺塔算法</span>
+                        <span class="difficulty hard">进阶</span>
+                    </div>
+                    <div class="example-description">
+                        经典递归算法：汉诺塔问题的解决方案。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 汉诺塔递归解法</span>
+<span class="keyword">函数</span> 汉诺塔 <span class="keyword">参数</span> n from to aux
+    <span class="keyword">如果</span> n <span class="keyword">大于</span> <span class="number">0</span> <span class="keyword">则</span>
+        <span class="keyword">调用</span> 汉诺塔 <span class="keyword">参数</span> n<span class="keyword">-</span><span class="number">1</span> from aux to
+        <span class="keyword">输出</span> <span class="string">"移动盘子"</span>
+        <span class="keyword">输出</span> n
+        <span class="keyword">输出</span> <span class="string">"从"</span>
+        <span class="keyword">输出</span> from
+        <span class="keyword">输出</span> <span class="string">"到"</span>
+        <span class="keyword">输出</span> to
+        <span class="keyword">调用</span> 汉诺塔 <span class="keyword">参数</span> n<span class="keyword">-</span><span class="number">1</span> aux to from
+    <span class="keyword">结束</span>
+<span class="keyword">结束</span>
+
+<span class="comment"># 解决3层汉诺塔</span>
+<span class="keyword">输出</span> <span class="string">"汉诺塔算法演示（3层）："</span>
+<span class="keyword">调用</span> 汉诺塔 <span class="keyword">参数</span> <span class="number">3</span> A C B
+                    </div>
+                    <button class="run-button" onclick="runExample('yanlv', 'hanoi')">运行示例</button>
+                    <div id="output-yanlv-hanoi" class="output" style="display:none;"></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>7. 冒泡排序</span>
+                        <span class="difficulty medium">进阶</span>
+                    </div>
+                    <div class="example-description">
+                        经典排序算法：冒泡排序的实现。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 冒泡排序算法</span>
+<span class="keyword">定义变量</span> 数组 <span class="keyword">为</span> [<span class="number">64</span>, <span class="number">34</span>, <span class="number">25</span>, <span class="number">12</span>, <span class="number">22</span>, <span class="number">11</span>, <span class="number">90</span>]
+
+<span class="keyword">输出</span> <span class="string">"原始数组："</span>
+<span class="keyword">输出</span> 数组
+
+<span class="comment"># 冒泡排序过程</span>
+<span class="keyword">定义变量</span> 长度 <span class="keyword">为</span> <span class="number">7</span>
+<span class="keyword">定义变量</span> i <span class="keyword">为</span> <span class="number">0</span>
+
+<span class="keyword">循环</span> 长度 <span class="keyword">次执行</span>
+    <span class="keyword">定义变量</span> j <span class="keyword">为</span> <span class="number">0</span>
+    <span class="keyword">循环</span> 长度<span class="keyword">-</span>i<span class="keyword">-</span><span class="number">1</span> <span class="keyword">次执行</span>
+        <span class="comment"># 比较相邻元素</span>
+        <span class="keyword">如果</span> 数组[j] <span class="keyword">大于</span> 数组[j<span class="keyword">+</span><span class="number">1</span>] <span class="keyword">则</span>
+            <span class="comment"># 交换元素</span>
+            <span class="keyword">定义变量</span> 临时 <span class="keyword">为</span> 数组[j]
+            <span class="keyword">定义变量</span> 数组[j] <span class="keyword">为</span> 数组[j<span class="keyword">+</span><span class="number">1</span>]
+            <span class="keyword">定义变量</span> 数组[j<span class="keyword">+</span><span class="number">1</span>] <span class="keyword">为</span> 临时
+        <span class="keyword">结束</span>
+        <span class="keyword">定义变量</span> j <span class="keyword">为</span> j<span class="keyword">+</span><span class="number">1</span>
+    <span class="keyword">结束</span>
+    <span class="keyword">定义变量</span> i <span class="keyword">为</span> i<span class="keyword">+</span><span class="number">1</span>
+<span class="keyword">结束</span>
+
+<span class="keyword">输出</span> <span class="string">"排序后数组："</span>
+<span class="keyword">输出</span> 数组
+                    </div>
+                    <button class="run-button" onclick="runExample('yanlv', 'bubblesort')">运行示例</button>
+                    <div id="output-yanlv-bubblesort" class="output" style="display:none;"></div>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-title">
+                        <span>8. 素数筛法</span>
+                        <span class="difficulty hard">进阶</span>
+                    </div>
+                    <div class="example-description">
+                        埃拉托斯特尼筛法：高效找出指定范围内的所有素数。
+                    </div>
+                    <div class="code-block">
+<span class="comment"># 素数筛法（埃拉托斯特尼筛法）</span>
+<span class="keyword">定义变量</span> 最大值 <span class="keyword">为</span> <span class="number">50</span>
+<span class="keyword">输出</span> <span class="string">"查找50以内的素数："</span>
+
+<span class="comment"># 初始化标记数组</span>
+<span class="keyword">定义变量</span> 素数列表 <span class="keyword">为</span> []
+
+<span class="keyword">定义变量</span> n <span class="keyword">为</span> <span class="number">2</span>
+<span class="keyword">循环</span> 最大值<span class="keyword">-</span><span class="number">1</span> <span class="keyword">次执行</span>
+    <span class="comment"># 检查n是否为素数</span>
+    <span class="keyword">定义变量</span> 是素数 <span class="keyword">为</span> <span class="keyword">真</span>
+    <span class="keyword">定义变量</span> i <span class="keyword">为</span> <span class="number">2</span>
+    
+    <span class="keyword">循环</span> n<span class="keyword">-</span><span class="number">1</span> <span class="keyword">次执行</span>
+        <span class="keyword">如果</span> n <span class="keyword">取模</span> i <span class="keyword">等于</span> <span class="number">0</span> <span class="keyword">则</span>
+            <span class="keyword">定义变量</span> 是素数 <span class="keyword">为</span> <span class="keyword">假</span>
+        <span class="keyword">结束</span>
+        <span class="keyword">定义变量</span> i <span class="keyword">为</span> i<span class="keyword">+</span><span class="number">1</span>
+    <span class="keyword">结束</span>
+    
+    <span class="keyword">如果</span> 是素数 <span class="keyword">则</span>
+        <span class="keyword">输出</span> n
+    <span class="keyword">结束</span>
+    
+    <span class="keyword">定义变量</span> n <span class="keyword">为</span> n<span class="keyword">+</span><span class="number">1</span>
+<span class="keyword">结束</span>
+
+<span class="keyword">输出</span> <span class="string">"素数筛法完成"</span>
+                    </div>
+                    <button class="run-button" onclick="runExample('yanlv', 'primesieve')">运行示例</button>
+                    <div id="output-yanlv-primesieve" class="output" style="display:none;"></div>
+                </div>
+
                 <div class="tips">
                     <div class="tips-title">💡 学习提示</div>
                     <p>言律语言的核心优势是"像说话一样编程"。因果链语法让代码更接近自然语言，易于理解和维护。</p>
