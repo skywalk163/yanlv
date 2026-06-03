@@ -22,7 +22,9 @@ yanlv/
 ├── playground/           # 在线体验平台
 │   ├── index.html        # 主页
 │   ├── builtins.html     # 内置函数学习页
-│   └── stdlib.html       # 标准库学习页
+│   ├── stdlib.html       # 标准库学习页
+│   ├── server.py         # Web 服务器
+│   └── requirements.txt  # Playground 依赖
 ├── racket/               # Racket相关实现
 ├── src/                  # 源代码
 │   └── yanlv/            # 言律语言核心
@@ -74,8 +76,9 @@ yanlv/
 
 ## 快速开始
 
-### 安装
+### 新手入门三步走
 
+**第一步：安装**
 ```bash
 # 克隆仓库
 git clone https://github.com/yourusername/yanlv.git
@@ -85,14 +88,65 @@ cd yanlv
 pip install -e .
 ```
 
-### 运行
-
-```bash
-# Windows
-run_yanlv.bat
+**第二步：运行示例**
+```powershell
+# Windows PowerShell（推荐）
+python -m yanlv 运行 examples\hello.yan
 
 # Linux/Mac
-python -m yanlv
+python -m yanlv 运行 examples/hello.yan
+```
+
+**第三步：启动 Playground（可选）**
+```bash
+cd playground
+pip install -r requirements.txt  # 安装 Playground 依赖
+python server.py
+# 然后在浏览器打开 http://localhost:5000
+```
+
+### 安装
+
+```bash
+# 克隆仓库
+git clone https://github.com/skywalk163/yanlv.git
+cd yanlv
+
+# 安装依赖
+pip install -e .
+```
+
+### 运行
+
+#### Windows 系统
+
+**推荐方式：使用 PowerShell 直接运行**
+```powershell
+# 设置 UTF-8 编码（如果遇到中文显示问题）
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+# 运行示例文件
+python -m yanlv 运行 examples\hello.yan
+```
+
+**使用批处理文件**
+```powershell
+# 注意：批处理文件可能存在中文编码问题
+.\run_yanlv.bat examples\hello.yan
+```
+
+> **注意**：Windows 批处理文件（.bat）在处理中文字符时可能存在编码问题。如果遇到 `'p' is not recognized` 等错误，请使用 PowerShell 直接运行的方式。
+
+#### Linux/Mac 系统
+
+```bash
+python -m yanlv 运行 examples/hello.yan
+```
+
+#### 交互模式
+
+```bash
+python -m yanlv 交互
 ```
 
 ### 示例代码
@@ -102,6 +156,22 @@ python -m yanlv
 定义 变量 x 为 10
 输出 x
 ```
+
+### 查看所有可用命令
+
+```bash
+# 查看帮助信息
+python -m yanlv 帮助
+
+# 查看可用命令
+python -m yanlv --help
+```
+
+言律语言支持以下命令：
+- `运行` - 运行指定的 .yan 文件
+- `编译` - 编译代码（如果支持）
+- `交互` - 启动交互式 REPL 环境
+- `帮助` - 显示帮助信息
 
 ## 标准库
 
@@ -140,13 +210,162 @@ python -m yanlv
 - bisect_ext - 二分查找
 - heapq_ext - 堆队列
 
+## 常见问题
+
+### Windows 下批处理文件运行失败
+
+**问题现象**：
+```
+'p' is not recognized as an internal or external command
+'o' is not recognized as an internal or external command
+```
+
+**原因**：Windows 批处理文件（.bat）在处理中文字符时存在编码问题，导致命令无法正确解析。
+
+**解决方案**：
+使用 PowerShell 直接运行，而不是使用批处理文件：
+```powershell
+# 设置 UTF-8 编码
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+# 运行程序
+python -m yanlv 运行 examples\hello.yan
+```
+
+### 中文显示乱码
+
+如果遇到中文显示乱码，请在 PowerShell 中设置编码：
+```powershell
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$PSDefaultParameterValues['*:Encoding'] = 'utf8'
+```
+
+### Playground 无法启动
+
+**问题现象 1：缺少依赖模块**
+```
+ModuleNotFoundError: No module named 'flask_cors'
+```
+
+**解决方案**：
+安装 Playground 所需的依赖：
+```bash
+cd playground
+pip install -r requirements.txt
+
+# 或者手动安装
+pip install flask flask-cors jieba
+```
+
+**问题现象 2：无法连接**
+```
+curl: (7) Failed to connect to 127.0.0.1 port 5000
+```
+
+**解决方案**：
+1. 检查端口是否被占用：
+   ```powershell
+   # Windows
+   netstat -ano | findstr :5000
+   
+   # Linux/Mac
+   lsof -i :5000
+   ```
+
+2. 如果端口被占用，停止占用进程或修改 `playground/server.py` 中的端口号
+
+3. 确保已安装所需依赖：
+   ```bash
+   pip install flask flask-cors jieba
+   ```
+
+4. 启动后等待 2-3 秒再访问，服务需要初始化时间
+
 ## 文档
 
 详细文档请查看 [docs](./docs/) 目录。
 
 ## 在线体验
 
-访问 [Playground](./playground/) 在线体验言律语言。
+### Playground Web 界面
+
+Playground 提供了一个 Web 界面，可以在浏览器中交互式地编写和运行言律语言代码。
+
+#### 启动 Playground
+
+**重要：安装 Playground 依赖**
+
+在启动 Playground 之前，需要先安装所需的依赖包：
+
+```bash
+# 进入 playground 目录
+cd playground
+
+# 安装 Playground 依赖
+pip install -r requirements.txt
+
+# 或者手动安装依赖
+pip install flask flask-cors jieba
+```
+
+**Windows 系统：**
+```powershell
+# 方式1：使用批处理脚本（推荐）
+.\start_server.bat
+
+# 方式2：直接启动
+python server.py
+```
+
+**Linux/Mac 系统：**
+```bash
+# 启动服务器
+python server.py
+```
+
+#### 访问 Playground
+
+启动服务器后，在浏览器中打开：
+- **主页**：http://localhost:5000
+- **内置函数学习**：http://localhost:5000/builtins.html
+- **标准库学习**：http://localhost:5000/stdlib.html
+- **示例代码**：http://localhost:5000/examples.html
+
+#### Playground 功能
+
+1. **代码编辑器**：编写言律语言代码
+2. **运行代码**：点击"运行"按钮执行代码
+3. **查看结果**：在右侧查看输出结果
+4. **快速示例**：选择预设示例快速学习
+5. **执行统计**：查看词元数量、执行时间等信息
+
+#### 示例操作
+
+在 Playground 中输入以下代码并点击"运行"：
+
+```yanlv
+输出 "你好，言律语言！"
+定义 变量 x 为 10
+输出 x
+```
+
+### 命令行交互环境 (REPL)
+
+除了 Web 界面，还可以使用命令行交互环境：
+
+```bash
+# 启动交互环境
+python -m yanlv 交互
+
+# 或使用 REPL 模块
+python -m yanlv.repl
+```
+
+**REPL 常用命令：**
+- `帮助` - 显示帮助信息
+- `退出` 或 `exit` - 退出交互环境
+- `清空` 或 `clear` - 清空屏幕
+- `变量` 或 `vars` - 显示所有变量
 
 ## 开发
 
@@ -173,6 +392,6 @@ MIT License
 
 ## 联系方式
 
-- GitHub: [yanlv](https://github.com/yourusername/yanlv)
+- GitHub: [yanlv](https://github.com/skywalk163/yanlv)
 - 文档: [docs](./docs/)
-- 问题反馈: [Issues](https://github.com/yourusername/yanlv/issues)
+- 问题反馈: [Issues](https://github.com/skywalk163/yanlv/issues)

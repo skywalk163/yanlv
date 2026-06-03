@@ -54,6 +54,24 @@ def index():
         })
 
 
+@app.route('/builtins.html')
+def builtins():
+    """内置函数学习页"""
+    return send_from_directory(os.path.dirname(__file__), 'builtins.html')
+
+
+@app.route('/stdlib.html')
+def stdlib():
+    """标准库学习页"""
+    return send_from_directory(os.path.dirname(__file__), 'stdlib.html')
+
+
+@app.route('/examples.html')
+def examples():
+    """示例代码页"""
+    return send_from_directory(os.path.dirname(__file__), 'examples.html')
+
+
 @app.route('/api/run', methods=['POST'])
 def run_code():
     """运行代码"""
@@ -270,6 +288,11 @@ if __name__ == '__main__':
     print("  言律语言 Playground 后端服务")
     print("  访问地址: http://localhost:5000")
     print("="*60)
+    print("\n页面路由:")
+    print("  GET  /              - 首页")
+    print("  GET  /builtins.html - 内置函数学习页")
+    print("  GET  /stdlib.html   - 标准库学习页")
+    print("  GET  /examples.html - 示例代码页")
     print("\nAPI端点:")
     print("  POST /api/run      - 运行代码")
     print("  POST /api/analyze  - 分析代码")
